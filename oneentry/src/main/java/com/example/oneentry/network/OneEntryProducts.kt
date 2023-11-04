@@ -1,7 +1,8 @@
 package com.example.oneentry.network
 
 import com.example.oneentry.model.ConditionMarker
-import com.example.oneentry.model.Filter
+import com.example.oneentry.model.ProductStatus
+import com.example.oneentry.model.ProductsFilter
 import com.example.oneentry.model.ProductsResult
 import com.example.oneentry.model.SortDirection
 import io.ktor.http.HttpMethod
@@ -225,7 +226,7 @@ class OneEntryProducts {
      * @throws IllegalArgumentException if the decoded input is not a valid instance of T or serializer error
      */
     suspend fun filterProducts(
-        body: List<Filter>,
+        body: List<ProductsFilter>,
         offset: Int = 0,
         limit: Int = 30,
         langCode: String,
@@ -265,5 +266,59 @@ class OneEntryProducts {
         )
 
         return core.requestItems("/quick/search", parameters)
+    }
+
+    /**
+     * Search for all product status objects
+     *
+     * @return List<ProductStatus>
+     * @throws RuntimeException if OneEntry application has not been initialized
+     * @throws IllegalArgumentException if the decoded input is not a valid instance of T or serializer error
+     */
+    suspend fun productStatuses(): List<ProductStatus> {
+
+        return core.requestItems("/product-statuses")
+    }
+
+    /**
+     * Search for a product status object by identifier
+     *
+     * @param id Product status id
+     *
+     * @return ProductStatus
+     * @throws RuntimeException if OneEntry application has not been initialized
+     * @throws IllegalArgumentException if the decoded input is not a valid instance of T or serializer error
+     */
+    suspend fun productStatus(id: Int): ProductStatus {
+
+        return core.requestItems("/product-statuses/$id")
+    }
+
+    /**
+     * Search for a product status object by its textual identifier (marker)
+     *
+     * @param marker Textual identifier (marker)
+     *
+     * @return ProductStatus
+     * @throws RuntimeException if OneEntry application has not been initialized
+     * @throws IllegalArgumentException if the decoded input is not a valid instance of T or serializer error
+     */
+    suspend fun productStatus(marker: String): ProductStatus {
+
+        return core.requestItems("/product-statuses/marker/$marker")
+    }
+
+    /**
+     * Check the existence of a textual identifier (marker)
+     *
+     * @param marker Textual identifier (marker)
+     *
+     * @return ProductStatus
+     * @throws RuntimeException if OneEntry application has not been initialized
+     * @throws IllegalArgumentException if the decoded input is not a valid instance of T or serializer error
+     */
+    suspend fun productStatusMarkerValidation(marker: String): Boolean {
+
+        return core.requestItems("/product-statuses/marker-validation/$marker")
     }
 }
