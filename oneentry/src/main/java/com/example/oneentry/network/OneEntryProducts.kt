@@ -1,9 +1,11 @@
 package com.example.oneentry.network
 
 import com.example.oneentry.model.ConditionMarker
+import com.example.oneentry.model.ProductModel
 import com.example.oneentry.model.ProductStatus
 import com.example.oneentry.model.ProductsFilter
 import com.example.oneentry.model.ProductsResult
+import com.example.oneentry.model.SearchProduct
 import com.example.oneentry.model.SortDirection
 import io.ktor.http.HttpMethod
 
@@ -90,7 +92,7 @@ class OneEntryProducts {
     /**
      * Search for all product page objects with pagination for the selected category
      *
-     * @param id page identifier - category.
+     * @param pageId page identifier - category.
      * @param offset parameter for pagination, default is 0.
      * @param limit parameter for pagination, default is 30.
      * @param langCode locale code (used only when searching with a filter (default - en_US)).
@@ -102,7 +104,7 @@ class OneEntryProducts {
      * @throws IllegalArgumentException if the decoded input is not a valid instance of T or serializer error
      */
     suspend fun products(
-        id: Int,
+        pageId: Int,
         offset: Int = 0,
         limit: Int = 30,
         langCode: String,
@@ -118,7 +120,7 @@ class OneEntryProducts {
             "sortOrder" to sortOrder
         )
 
-        return core.requestItems("/products/page/$id", parameters)
+        return core.requestItems("/products/page/$pageId", parameters)
     }
 
     /**
@@ -202,7 +204,7 @@ class OneEntryProducts {
     suspend fun products(
         id: Int,
         langCode: String
-    ): ProductsResult {
+    ): ProductModel {
 
         val parameters: Map<String, Any?> = mapOf(
             "langCode" to langCode
@@ -258,7 +260,7 @@ class OneEntryProducts {
     suspend fun quickSearch(
         name: String,
         langCode: String
-    ): ProductsResult {
+    ): List<SearchProduct> {
 
         val parameters: Map<String, Any?> = mapOf(
             "name" to name,

@@ -6,8 +6,12 @@ plugins {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_7
-    targetCompatibility = JavaVersion.VERSION_1_7
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    kotlinOptions.jvmTarget = "1.8"
 }
 
 dependencies {
@@ -19,5 +23,5 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
 
 //    testImplementation("junit:junit:4.13.2")
-//    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
+//    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
 }

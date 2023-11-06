@@ -6,6 +6,6 @@ import kotlinx.serialization.Serializable
 data class ProductsFilter(
     val attributeMarker: String,
     val conditionMarker: String,
-    val conditionValue: String,
+    val conditionValue: Int,
     val pageId: Int
 )
