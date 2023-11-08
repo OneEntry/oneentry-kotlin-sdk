@@ -9,9 +9,14 @@ import com.example.oneentry.model.SearchProduct
 import com.example.oneentry.model.SortDirection
 import io.ktor.http.HttpMethod
 
-class OneEntryProducts {
+class OneEntryProducts private constructor() {
 
     private val core = OneEntryCore.instance
+
+    companion object {
+
+        val instance: OneEntryProducts = OneEntryProducts()
+    }
 
     /**
      * Search for all products page object with pagination and filtering
@@ -29,6 +34,7 @@ class OneEntryProducts {
      * @return ProductsResult
      * @throws RuntimeException if OneEntry application has not been initialized
      * @throws IllegalArgumentException if the decoded input is not a valid instance of T or serializer error
+     * @throws OneEntryError in case of OneEntry errors
      */
     suspend fun products(
         offset: Int = 0,
@@ -69,6 +75,7 @@ class OneEntryProducts {
      * @return ProductsResult
      * @throws RuntimeException if OneEntry application has not been initialized
      * @throws IllegalArgumentException if the decoded input is not a valid instance of T or serializer error
+     * @throws OneEntryError in case of OneEntry errors
      */
     suspend fun emptyPageProducts(
         offset: Int = 0,
@@ -102,6 +109,7 @@ class OneEntryProducts {
      * @return ProductsResult
      * @throws RuntimeException if OneEntry application has not been initialized
      * @throws IllegalArgumentException if the decoded input is not a valid instance of T or serializer error
+     * @throws OneEntryError in case of OneEntry errors
      */
     suspend fun products(
         pageId: Int,
@@ -136,6 +144,7 @@ class OneEntryProducts {
      * @return ProductsResult
      * @throws RuntimeException if OneEntry application has not been initialized
      * @throws IllegalArgumentException if the decoded input is not a valid instance of T or serializer error
+     * @throws OneEntryError in case of OneEntry errors
      */
     suspend fun products(
         url: String,
@@ -170,6 +179,7 @@ class OneEntryProducts {
      * @return ProductsResult
      * @throws RuntimeException if OneEntry application has not been initialized
      * @throws IllegalArgumentException if the decoded input is not a valid instance of T or serializer error
+     * @throws OneEntryError in case of OneEntry errors
      */
     suspend fun relatedProducts(
         id: Int,
@@ -197,9 +207,10 @@ class OneEntryProducts {
      * @param id product ID.
      * @param langCode locale code (used only when searching with a filter (default - en_US)).
      *
-     * @return ProductsResult
+     * @return ProductModel
      * @throws RuntimeException if OneEntry application has not been initialized
      * @throws IllegalArgumentException if the decoded input is not a valid instance of T or serializer error
+     * @throws OneEntryError in case of OneEntry errors
      */
     suspend fun products(
         id: Int,
@@ -226,6 +237,7 @@ class OneEntryProducts {
      * @return ProductsResult
      * @throws RuntimeException if OneEntry application has not been initialized
      * @throws IllegalArgumentException if the decoded input is not a valid instance of T or serializer error
+     * @throws OneEntryError in case of OneEntry errors
      */
     suspend fun filterProducts(
         body: List<ProductsFilter>,
@@ -253,9 +265,10 @@ class OneEntryProducts {
      * @param name
      * @param langCode locale code (used only when searching with a filter (default - en_US)).
      *
-     * @return ProductsResult
+     * @return List<SearchProduct>
      * @throws RuntimeException if OneEntry application has not been initialized
      * @throws IllegalArgumentException if the decoded input is not a valid instance of T or serializer error
+     * @throws OneEntryError in case of OneEntry errors
      */
     suspend fun quickSearch(
         name: String,
@@ -267,7 +280,7 @@ class OneEntryProducts {
             "langCode" to langCode
         )
 
-        return core.requestItems("/quick/search", parameters)
+        return core.requestItems("/products/quick/search", parameters)
     }
 
     /**
@@ -276,6 +289,7 @@ class OneEntryProducts {
      * @return List<ProductStatus>
      * @throws RuntimeException if OneEntry application has not been initialized
      * @throws IllegalArgumentException if the decoded input is not a valid instance of T or serializer error
+     * @throws OneEntryError in case of OneEntry errors
      */
     suspend fun productStatuses(): List<ProductStatus> {
 
@@ -290,6 +304,7 @@ class OneEntryProducts {
      * @return ProductStatus
      * @throws RuntimeException if OneEntry application has not been initialized
      * @throws IllegalArgumentException if the decoded input is not a valid instance of T or serializer error
+     * @throws OneEntryError in case of OneEntry errors
      */
     suspend fun productStatus(id: Int): ProductStatus {
 
@@ -304,6 +319,7 @@ class OneEntryProducts {
      * @return ProductStatus
      * @throws RuntimeException if OneEntry application has not been initialized
      * @throws IllegalArgumentException if the decoded input is not a valid instance of T or serializer error
+     * @throws OneEntryError in case of OneEntry errors
      */
     suspend fun productStatus(marker: String): ProductStatus {
 
@@ -318,6 +334,7 @@ class OneEntryProducts {
      * @return ProductStatus
      * @throws RuntimeException if OneEntry application has not been initialized
      * @throws IllegalArgumentException if the decoded input is not a valid instance of T or serializer error
+     * @throws OneEntryError in case of OneEntry errors
      */
     suspend fun productStatusMarkerValidation(marker: String): Boolean {
 

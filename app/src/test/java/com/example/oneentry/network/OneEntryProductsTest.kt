@@ -1,175 +1,138 @@
 package com.example.oneentry.network
 
 import com.example.oneentry.model.ProductsFilter
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-import org.junit.Assert.*
 
 class OneEntryProductsTest {
 
     private lateinit var provider: OneEntryProducts
+
     @Before
     fun setUp() {
 
         OneEntryCore.initializeApp("https://testproject.oneentry.cloud")
-        provider = OneEntryProducts()
+        provider = OneEntryProducts.instance
     }
 
     @Test
-    fun testProducts() {
+    fun testProducts() = runBlocking {
 
-        CoroutineScope(Dispatchers.IO).launch {
+        val result = provider.products(langCode = "en_US")
 
-            val result = provider.products(langCode = "en_US")
-
-            assertEquals(result.total, result.items.count())
-        }
+        assertEquals(result.total, result.items.count())
     }
 
     @Test
-    fun emptyPageProducts() {
+    fun emptyPageProducts() = runBlocking {
 
-        CoroutineScope(Dispatchers.IO).launch {
+        val result = provider.emptyPageProducts(langCode = "en_US")
 
-            val result = provider.emptyPageProducts(langCode = "en_US")
-
-            assertEquals(result.total, result.items.count())
-        }
+        assertEquals(result.total, result.items.count())
     }
 
     @Test
-    fun testProductsByPageId() {
+    fun testProductsByPageId() = runBlocking {
 
-        CoroutineScope(Dispatchers.IO).launch {
+        val result = provider.products(
+            pageId = 1,
+            offset = 0,
+            limit = 30,
+            langCode = "en_US",
+            sortKey = null,
+            sortOrder = null
+        )
 
-            val result = provider.products(
-                pageId = 1,
-                offset = 0,
-                limit = 30,
-                langCode = "en_US",
-                sortKey = null,
-                sortOrder = null
+        assertEquals(result.total, result.items.count())
+    }
+
+    @Test
+    fun testProductsByPageUrl() = runBlocking {
+
+        val result = provider.products(
+            url = "heroes",
+            offset = 0,
+            limit = 30,
+            langCode = "en_US",
+            sortKey = null,
+            sortOrder = null
+        )
+
+        assertEquals(result.total, result.items.count())
+    }
+
+    @Test
+    fun relatedProducts() = runBlocking {
+
+        val result = provider.relatedProducts(id = 5, langCode = "en_US")
+
+        assertEquals(result.total, result.items.count())
+    }
+
+    @Test
+    fun testProductById() = runBlocking {
+
+        val result = provider.products(id = 3, langCode = "en_US")
+
+        assertEquals("Ninja", result.localizeInfos["en_US"]?.title)
+    }
+
+    @Test
+    fun filterProducts() = runBlocking {
+
+        val filter = listOf(
+            ProductsFilter(
+                attributeMarker = "price",
+                conditionMarker = "lth",
+                conditionValue = 160,
+                pageId = 1
             )
+        )
 
-            assertEquals(result.total, result.items.count())
-        }
+        val result = provider.filterProducts(filter, langCode = "en_US")
+
+        assertEquals(result.total, result.items.count())
     }
 
     @Test
-    fun testProductsByPageUrl() {
+    fun quickSearch() = runBlocking {
 
-        CoroutineScope(Dispatchers.IO).launch {
+        val result = provider.quickSearch(name = "cat", langCode = "en_US")
 
-            val result = provider.products(
-                url = "heroes",
-                offset = 0,
-                limit = 30,
-                langCode = "en_US",
-                sortKey = null,
-                sortOrder = null
-            )
-
-            assertEquals(result.total, result.items.count())
-        }
+        assertEquals("Cat", result.first().title)
     }
 
     @Test
-    fun relatedProducts() {
+    fun productStatuses() = runBlocking {
 
-        CoroutineScope(Dispatchers.IO).launch {
+        val result = provider.productStatuses()
 
-            val result = provider.relatedProducts(id = 5, langCode = "en_US")
-
-            assertEquals(result.total, result.items.count())
-        }
+        assertEquals("In Stock", result.first().localizeInfos["en_US"]?.title)
     }
 
     @Test
-    fun testProductById() {
+    fun productStatus() = runBlocking {
 
-        CoroutineScope(Dispatchers.IO).launch {
+        val result = provider.productStatus(id = 5)
 
-            val result = provider.products(id = 3, langCode = "en_US")
-
-            assertEquals("Ninja", result.localizeInfos["en_US"]?.title)
-        }
+        assertEquals("In Stock", result.localizeInfos["en_US"]?.title)
     }
 
     @Test
-    fun filterProducts() {
+    fun testProductStatus() = runBlocking {
 
-        CoroutineScope(Dispatchers.IO).launch {
+        val result = provider.productStatus(marker = "inStock")
 
-            val filter = listOf(
-                ProductsFilter(
-                    attributeMarker = "price",
-                    conditionMarker = "lth",
-                    conditionValue = 160,
-                    pageId = 1
-                )
-            )
-
-            val result = provider.filterProducts(filter, langCode = "en_US")
-
-            assertEquals(result.total, result.items.count())
-        }
+        assertEquals("In Stock", result.localizeInfos["en_US"]?.title)
     }
 
     @Test
-    fun quickSearch() {
+    fun productStatusMarkerValidation() = runBlocking {
 
-        CoroutineScope(Dispatchers.IO).launch {
+        val result = provider.productStatusMarkerValidation(marker = "inStock")
 
-            val result = provider.quickSearch(name = "cat", langCode = "en_US")
-
-            assertEquals("cat", result[0].title)
-        }
-    }
-
-    @Test
-    fun productStatuses() {
-
-        CoroutineScope(Dispatchers.IO).launch {
-
-            val result = provider.productStatuses()
-
-            assertEquals("In Stock", result[0].localizeInfos["en_US"]?.title)
-        }
-    }
-
-    @Test
-    fun productStatus() {
-
-        CoroutineScope(Dispatchers.IO).launch {
-
-            val result = provider.productStatus(id = 5)
-
-            assertEquals("In Stock", result.localizeInfos["en_US"]?.title)
-        }
-    }
-
-    @Test
-    fun testProductStatus() {
-
-        CoroutineScope(Dispatchers.IO).launch {
-
-            val result = provider.productStatus(marker = "inStock")
-
-            assertEquals("In Stock", result.localizeInfos["en_US"]?.title)
-        }
-    }
-
-    @Test
-    fun productStatusMarkerValidation() {
-
-        CoroutineScope(Dispatchers.IO).launch {
-
-            val result = provider.productStatusMarkerValidation(marker = "inStock")
-
-            assertEquals(true, result)
-        }
+        assertEquals(true, result)
     }
 }

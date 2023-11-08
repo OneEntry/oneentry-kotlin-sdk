@@ -1,13 +1,18 @@
 package com.example.oneentry.network
 
+import com.example.oneentry.model.OneEntryError
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
+import io.ktor.client.plugins.ClientRequestException
+import io.ktor.client.plugins.HttpResponseValidator
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.request
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.HttpMethod
+import io.ktor.http.HttpStatusCode
+import io.ktor.http.contentType
 import io.ktor.serialization.gson.gson
 import kotlinx.serialization.json.Json
 
@@ -25,14 +30,28 @@ class OneEntryCore private constructor() {
 
     internal var domain: String? = null
     internal val api = "/api/content"
-    internal val client = HttpClient(CIO) {
-        install(ContentNegotiation) {
-            gson(ContentType("application", "json;charset=utf-8"))
-        }
-    }
     internal val serializer = Json {
         ignoreUnknownKeys = true
         encodeDefaults = true
+    }
+    internal val client = HttpClient(CIO) {
+        expectSuccess = true
+        install(ContentNegotiation) {
+            gson()
+        }
+        HttpResponseValidator {
+            handleResponseExceptionWithRequest { exception, request ->
+
+                val clientException = exception as? ClientRequestException ?: return@handleResponseExceptionWithRequest
+                val exceptionResponse = clientException.response
+
+                if (exceptionResponse.status == HttpStatusCode.NotFound) {
+
+                    val exceptionResponseText = serializer.decodeFromString<OneEntryError>(exceptionResponse.bodyAsText())
+                    throw Exception("Message: ${exceptionResponseText.message}")
+                }
+            }
+        }
     }
 
     companion object {
@@ -75,11 +94,11 @@ class OneEntryCore private constructor() {
         val url = domain + api + link + parameters.query
 
         val response = client.request(url) {
-            this.method = method
+            contentType(ContentType.Application.Json)
             setBody(body)
+            this.method = method
         }
 
         return serializer.decodeFromString(response.bodyAsText())
     }
 }
-

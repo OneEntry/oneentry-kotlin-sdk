@@ -4,11 +4,11 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class LocalizeInfo(
-    val title: String?,
-    val content: InfoContent?,
-    val menuTitle: String?,
-    val htmlContent: String?,
-    val plainContent: String?
+    val title: String? = null,
+    val content: InfoContent? = null,
+    val menuTitle: String? = null,
+    val htmlContent: String? = null,
+    val plainContent: String? = null
 )
 
 @Serializable
