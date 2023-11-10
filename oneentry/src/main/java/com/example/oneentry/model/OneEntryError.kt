@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 data class OneEntryError(
     val statusCode: Int,
     val message: String,
-    val error: String?
+    val error: String? = null
 )

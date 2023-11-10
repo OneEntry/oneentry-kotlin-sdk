@@ -13,7 +13,7 @@ class OneEntryProductsTest {
     @Before
     fun setUp() {
 
-        OneEntryCore.initializeApp("https://testproject.oneentry.cloud")
+        OneEntryCore.initializeApp("https://hummel-mobile.oneentry.cloud")
         provider = OneEntryProducts.instance
     }
 
@@ -26,7 +26,7 @@ class OneEntryProductsTest {
     }
 
     @Test
-    fun emptyPageProducts() = runBlocking {
+    fun testEmptyPageProducts() = runBlocking {
 
         val result = provider.emptyPageProducts(langCode = "en_US")
 
@@ -64,7 +64,7 @@ class OneEntryProductsTest {
     }
 
     @Test
-    fun relatedProducts() = runBlocking {
+    fun testRelatedProducts() = runBlocking {
 
         val result = provider.relatedProducts(id = 5, langCode = "en_US")
 
@@ -74,19 +74,19 @@ class OneEntryProductsTest {
     @Test
     fun testProductById() = runBlocking {
 
-        val result = provider.products(id = 3, langCode = "en_US")
+        val result = provider.products(id = 1, langCode = "en_US")
 
-        assertEquals("Ninja", result.localizeInfos["en_US"]?.title)
+        assertEquals("Doll", result.localizeInfos["en_US"]?.title)
     }
 
     @Test
-    fun filterProducts() = runBlocking {
+    fun testFilterProducts() = runBlocking {
 
         val filter = listOf(
             ProductsFilter(
                 attributeMarker = "price",
                 conditionMarker = "lth",
-                conditionValue = 160,
+                conditionValue = 260,
                 pageId = 1
             )
         )
@@ -97,41 +97,41 @@ class OneEntryProductsTest {
     }
 
     @Test
-    fun quickSearch() = runBlocking {
+    fun testQuickSearch() = runBlocking {
 
         val result = provider.quickSearch(name = "cat", langCode = "en_US")
 
-        assertEquals("Cat", result.first().title)
+        assertEquals("Cat1", result.first().title)
     }
 
     @Test
-    fun productStatuses() = runBlocking {
+    fun testProductStatuses() = runBlocking {
 
         val result = provider.productStatuses()
 
-        assertEquals("In Stock", result.first().localizeInfos["en_US"]?.title)
-    }
-
-    @Test
-    fun productStatus() = runBlocking {
-
-        val result = provider.productStatus(id = 5)
-
-        assertEquals("In Stock", result.localizeInfos["en_US"]?.title)
+        assertEquals("Storage", result.first().localizeInfos["en_US"]?.title)
     }
 
     @Test
     fun testProductStatus() = runBlocking {
 
-        val result = provider.productStatus(marker = "inStock")
+        val result = provider.productStatus(id = 2)
 
-        assertEquals("In Stock", result.localizeInfos["en_US"]?.title)
+        assertEquals("Storage", result.localizeInfos["en_US"]?.title)
+    }
+
+    @Test
+    fun testProductStatusByMarker() = runBlocking {
+
+        val result = provider.productStatus(marker = "storage")
+
+        assertEquals("Storage", result.localizeInfos["en_US"]?.title)
     }
 
     @Test
     fun productStatusMarkerValidation() = runBlocking {
 
-        val result = provider.productStatusMarkerValidation(marker = "inStock")
+        val result = provider.productStatusMarkerValidation(marker = "storage")
 
         assertEquals(true, result)
     }

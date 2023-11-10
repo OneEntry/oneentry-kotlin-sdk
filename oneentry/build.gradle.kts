@@ -20,6 +20,7 @@ dependencies {
     implementation("io.ktor:ktor-client-cio:2.2.3")
     implementation("io.ktor:ktor-serialization-gson:2.2.3")
     implementation("io.ktor:ktor-client-content-negotiation:2.2.3")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:2.2.3")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
 
 //    testImplementation("junit:junit:4.13.2")

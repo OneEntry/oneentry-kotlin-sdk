@@ -2,6 +2,7 @@ package com.example.oneentry.network
 
 import com.example.oneentry.model.OneEntryError
 import io.ktor.client.HttpClient
+import io.ktor.client.call.body
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.plugins.HttpResponseValidator
@@ -13,7 +14,7 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
-import io.ktor.serialization.gson.gson
+import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
 internal val Map<String, Any?>.query: String
@@ -37,15 +38,20 @@ class OneEntryCore private constructor() {
     internal val client = HttpClient(CIO) {
         expectSuccess = true
         install(ContentNegotiation) {
-            gson()
+            json(
+                Json {
+                    ignoreUnknownKeys
+                }
+            )
         }
         HttpResponseValidator {
-            handleResponseExceptionWithRequest { exception, request ->
+
+            handleResponseExceptionWithRequest { exception, _ ->
 
                 val clientException = exception as? ClientRequestException ?: return@handleResponseExceptionWithRequest
                 val exceptionResponse = clientException.response
 
-                if (exceptionResponse.status == HttpStatusCode.NotFound) {
+                if (exceptionResponse.status != HttpStatusCode.OK) {
 
                     val exceptionResponseText = serializer.decodeFromString<OneEntryError>(exceptionResponse.bodyAsText())
                     throw Exception("Message: ${exceptionResponseText.message}")
