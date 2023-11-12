@@ -40,9 +40,7 @@ class OneEntryCore private constructor() {
         expectSuccess = true
         install(ContentNegotiation) {
             json(
-                Json {
-                    ignoreUnknownKeys
-                }
+                serializer
             )
         }
         HttpResponseValidator {
