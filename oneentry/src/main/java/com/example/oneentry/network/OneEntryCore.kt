@@ -39,37 +39,26 @@ class OneEntryCore private constructor() {
     internal val client = HttpClient(CIO) {
         expectSuccess = true
         install(ContentNegotiation) {
-            json(
-                serializer
-            )
+            json(serializer)
         }
         HttpResponseValidator {
 
             handleResponseExceptionWithRequest { exception, _ ->
 
-                val clientException = (exception as? ClientRequestException)
-                    ?: return@handleResponseExceptionWithRequest
-                val exceptionClientResponse = clientException.response
-
-                if (!exceptionClientResponse.status.isSuccess()) {
-
-                    val exceptionResponseText = serializer
-                        .decodeFromString<OneEntryError>(exceptionClientResponse.bodyAsText())
-                    throw Exception("Message: ${exceptionResponseText.message}, Status: ${exceptionResponseText.statusCode}")
+                val response = when (exception) {
+                    is ClientRequestException -> exception.response
+                    is ServerResponseException -> exception.response
+                    else -> null
                 }
-            }
 
-            handleResponseExceptionWithRequest { exception, _ ->
-
-                val serverException = (exception as? ServerResponseException)
-                    ?: return@handleResponseExceptionWithRequest
-                val exceptionServerResponse = serverException.response
-
-                if (!exceptionServerResponse.status.isSuccess()) {
-
-                    val exceptionResponseText = serializer
-                        .decodeFromString<OneEntryError>(exceptionServerResponse.bodyAsText())
-                    throw Exception("Message: ${exceptionResponseText.message}, Status: ${exceptionResponseText.statusCode}")
+                response?.let {
+                    if (!it.status.isSuccess()) {
+                        val exceptionResponseText = serializer.decodeFromString<OneEntryError>(it.bodyAsText())
+                        throw OneEntryError(
+                            message = "Message ${exceptionResponseText.message}",
+                            statusCode = exceptionResponseText.statusCode
+                        )
+                    }
                 }
             }
         }

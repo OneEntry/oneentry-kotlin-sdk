@@ -18,7 +18,7 @@ class OneEntrySystem private constructor() {
      * @throws IllegalArgumentException if the decoded input is not a valid instance of T or serializer error
      * @throws OneEntryError in case of OneEntry errors
      */
-    suspend fun test404(): OneEntryError {
+    suspend fun test404() {
 
         return core.requestItems("/system/test404")
     }
@@ -30,7 +30,7 @@ class OneEntrySystem private constructor() {
      * @throws IllegalArgumentException if the decoded input is not a valid instance of T or serializer error
      * @throws OneEntryError in case of OneEntry errors
      */
-    suspend fun test500(): OneEntryError {
+    suspend fun test500() {
 
         return core.requestItems("/system/test500")
     }
