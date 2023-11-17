@@ -2,7 +2,6 @@ package com.example.oneentry.network
 
 import com.example.oneentry.model.OneEntryError
 import kotlinx.coroutines.runBlocking
-import kotlinx.serialization.json.Json
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -10,15 +9,14 @@ import org.junit.Test
 class OneEntrySystemTest {
 
     private lateinit var provider: OneEntrySystem
-    private val serializer = Json {
-        ignoreUnknownKeys = true
-        encodeDefaults = true
-    }
 
     @Before
     fun setUp() {
 
-        OneEntryCore.initializeApp("https://hummel-mobile.oneentry.cloud")
+        OneEntryCore.initializeApp(
+            "https://hummel-mobile.oneentry.cloud",
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiS290bGluIFNkayIsInNlcmlhbE51bWJlciI6MiwiaWF0IjoxNzAwMjE3ODU2LCJleHAiOjE3MzE3NTM4NDR9.0F4D0rgAM9nqpFEpbJqxiUaNNxik_wpI70QPFXoYSzk"
+        )
         provider = OneEntrySystem.instance
     }
 
@@ -26,9 +24,9 @@ class OneEntrySystemTest {
     fun test404() = runBlocking {
         try {
             provider.test404()
-        } catch (e: Exception) {
-            val error = serializer.decodeFromString<OneEntryError>(e.toString())
+        } catch (error: OneEntryError) {
             assertEquals(404, error.statusCode)
+            throw error
         }
     }
 
@@ -36,9 +34,9 @@ class OneEntrySystemTest {
     fun test500() = runBlocking {
         try {
             provider.test500()
-        } catch (e: Exception) {
-            val error = serializer.decodeFromString<OneEntryError>(e.toString())
+        } catch (error: OneEntryError) {
             assertEquals(500, error.statusCode)
+            throw error
         }
     }
 }

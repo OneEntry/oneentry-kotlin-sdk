@@ -7,4 +7,4 @@ data class OneEntryError(
     val statusCode: Int,
     override val message: String,
     val error: String? = null
-): Exception(message)
+): Exception()
