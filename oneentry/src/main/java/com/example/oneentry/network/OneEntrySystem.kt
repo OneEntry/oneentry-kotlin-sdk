@@ -1,6 +1,6 @@
 package com.example.oneentry.network
 
-import com.example.oneentry.model.OneEntryError
+import com.example.oneentry.model.OneEntryException
 
 class OneEntrySystem private constructor() {
 
@@ -16,7 +16,7 @@ class OneEntrySystem private constructor() {
      *
      * @throws RuntimeException if OneEntry application has not been initialized
      * @throws IllegalArgumentException if the decoded input is not a valid instance of T or serializer error
-     * @throws OneEntryError in case of OneEntry errors
+     * @throws OneEntryException in case of OneEntry errors
      */
     suspend fun test404() {
 
@@ -28,7 +28,7 @@ class OneEntrySystem private constructor() {
      *
      * @throws RuntimeException if OneEntry application has not been initialized
      * @throws IllegalArgumentException if the decoded input is not a valid instance of T or serializer error
-     * @throws OneEntryError in case of OneEntry errors
+     * @throws OneEntryException in case of OneEntry errors
      */
     suspend fun test500() {
 

@@ -1,6 +1,6 @@
 package com.example.oneentry.network
 
-import com.example.oneentry.model.OneEntryError
+import com.example.oneentry.model.OneEntryException
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -24,9 +24,8 @@ class OneEntrySystemTest {
     fun test404() = runBlocking {
         try {
             provider.test404()
-        } catch (error: OneEntryError) {
+        } catch (error: OneEntryException) {
             assertEquals(404, error.statusCode)
-            throw error
         }
     }
 
@@ -34,9 +33,8 @@ class OneEntrySystemTest {
     fun test500() = runBlocking {
         try {
             provider.test500()
-        } catch (error: OneEntryError) {
+        } catch (error: OneEntryException) {
             assertEquals(500, error.statusCode)
-            throw error
         }
     }
 }

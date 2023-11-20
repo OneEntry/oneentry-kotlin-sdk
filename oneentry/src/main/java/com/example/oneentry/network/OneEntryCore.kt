@@ -1,6 +1,6 @@
 package com.example.oneentry.network
 
-import com.example.oneentry.model.OneEntryError
+import com.example.oneentry.model.OneEntryException
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.HttpResponseValidator
@@ -12,7 +12,6 @@ import io.ktor.client.request.setBody
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.HttpMethod
-import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.decodeFromString
@@ -46,17 +45,19 @@ class OneEntryCore private constructor() {
 
             validateResponse { response ->
 
-                val error: OneEntryError = serializer.decodeFromString(response.bodyAsText())
+                try {
 
-                if (error.statusCode != HttpStatusCode.OK.value)
+                    val error = serializer.decodeFromString<OneEntryException>(response.bodyAsText())
                     throw error
+
+                } catch (e: Exception) { return@validateResponse }
             }
 
             handleResponseExceptionWithRequest { exception, _ ->
 
                 val responseException = exception as? ResponseException ?: return@handleResponseExceptionWithRequest
                 val response = responseException.response
-                val oneEntryException = serializer.decodeFromString<OneEntryError>(response.bodyAsText())
+                val oneEntryException = serializer.decodeFromString<OneEntryException>(response.bodyAsText())
 
                 throw oneEntryException
             }
@@ -87,9 +88,7 @@ class OneEntryCore private constructor() {
         val response = client.request(url) {
             this.method = method
             this.headers {
-                token?.let {
-                    append("x-app-token", it)
-                }
+                append("x-app-token", token!!)
             }
         }
 
@@ -113,9 +112,7 @@ class OneEntryCore private constructor() {
             setBody(body)
             this.method = method
             this.headers {
-                token?.let {
-                    append("x-app-token", it)
-                }
+                append("x-app-token", token!!)
             }
         }
 
@@ -133,15 +130,11 @@ class OneEntryCore private constructor() {
 
         val url = domain + api + link + parameters.query
 
-        val response = client.request(url) {
+        client.request(url) {
             this.method = method
             this.headers {
-                token?.let {
-                    append("x-app-token", it)
-                }
+                append("x-app-token", token!!)
             }
         }
-
-        return serializer.decodeFromString(response.bodyAsText())
     }
 }
