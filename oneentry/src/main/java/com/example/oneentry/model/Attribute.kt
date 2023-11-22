@@ -6,7 +6,7 @@ import kotlinx.serialization.json.JsonElement
 @Serializable
 data class AttributeModel(
     val type: AttributeType,
-    val value: JsonElement
+    val value: JsonElement?
 )
 
 enum class AttributeType {
