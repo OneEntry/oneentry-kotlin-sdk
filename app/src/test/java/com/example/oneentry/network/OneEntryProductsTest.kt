@@ -69,7 +69,7 @@ class OneEntryProductsTest {
     @Test
     fun testRelatedProducts() = runBlocking {
 
-        val result = provider.relatedProducts(id = 5, langCode = "en_US")
+        val result = provider.relatedProducts(id = 8, langCode = "en_US")
 
         assertEquals(result.total, result.items.count())
     }
@@ -77,9 +77,9 @@ class OneEntryProductsTest {
     @Test
     fun testProductById() = runBlocking {
 
-        val result = provider.products(id = 1, langCode = "en_US")
+        val result = provider.products(id = 8, langCode = "en_US")
 
-        assertEquals("Doll", result.localizeInfos["en_US"]?.title)
+        assertEquals("iPhone 14 Pro", result.localizeInfos["en_US"]?.title)
     }
 
     @Test

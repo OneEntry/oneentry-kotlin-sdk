@@ -43,18 +43,6 @@ class OneEntryCore private constructor() {
         }
         HttpResponseValidator {
 
-            validateResponse { response ->
-
-                try {
-                    val error = serializer.decodeFromString<OneEntryException>(response.bodyAsText())
-                    throw error
-                } catch (e: OneEntryException) {
-                    throw e
-                } catch (e: Exception) {
-                    return@validateResponse
-                }
-            }
-
             handleResponseExceptionWithRequest { exception, _ ->
 
                 val responseException = exception as? ResponseException ?: return@handleResponseExceptionWithRequest

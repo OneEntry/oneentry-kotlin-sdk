@@ -22,6 +22,7 @@ dependencies {
     implementation("io.ktor:ktor-client-content-negotiation:2.2.3")
     implementation("io.ktor:ktor-serialization-kotlinx-json:2.2.3")
 
+    implementation("org.jsoup:jsoup:1.16.1")
 //    testImplementation("junit:junit:4.13.2")
 //    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
 }
