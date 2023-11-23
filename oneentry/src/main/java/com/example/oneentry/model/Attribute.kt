@@ -1,12 +1,11 @@
 package com.example.oneentry.model
 
+import com.example.oneentry.network.OneEntryCore.Companion.instance
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
+import kotlinx.serialization.json.decodeFromJsonElement
+import java.util.Date
 
 /**
  * OneEntry entity attribute
@@ -17,61 +16,33 @@ import java.util.Locale
 @Serializable
 data class AttributeModel(
     var type: AttributeType,
-    var value: JsonElement?
+    var value: JsonElement
 ) {
 
-    init {
+    val asInt: Int?
+        get() = instance.serializer.decodeFromJsonElementOrNull(value)
 
-        val dateFormatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.getDefault())
-        val serializer = Json {
-            ignoreUnknownKeys = true
-            encodeDefaults = true
-        }
+    val asString: String?
+        get() = instance.serializer.decodeFromJsonElementOrNull(value)
 
-        when (type) {
+    val asText: List<OneEntryText>?
+        get() = instance.serializer.decodeFromJsonElementOrNull(value)
 
-            AttributeType.real, AttributeType.float, AttributeType.string, AttributeType.date,
-                AttributeType.time, AttributeType.integer -> value.toString()
+    val asImage: List<OneEntryImage>?
+        get() = instance.serializer.decodeFromJsonElementOrNull(value)
 
-            AttributeType.text -> serializer.decodeFromString<List<OneEntryText>>(value.toString())
+    val asDateTime: OneEntryDateTime?
+        get() = instance.serializer.decodeFromJsonElementOrNull(value)
 
-            AttributeType.dateTime -> {
+    val asTextWithHeader: List<OneEntryTextWithHeader>?
+        get() = instance.serializer.decodeFromJsonElementOrNull(value)
+}
 
-                val model = serializer.decodeFromString<Map<String, String>>(value.toString())
-                val stringDate = model["date"] ?: ""
-                val stringTime = model["time"] ?: ""
-
-                val date = dateFormatter.parse(stringDate)
-                val time = dateFormatter.parse(stringTime)
-
-                if (date == null || time == null) {
-                    value = null
-                } else {
-
-                    val calendar = Calendar.getInstance()
-                    val dateComponents = calendar.get(Calendar.DAY_OF_MONTH)
-                    val monthComponents = calendar.get(Calendar.MONTH)
-                    val yearComponents = calendar.get(Calendar.YEAR)
-                    val hourComponents = calendar.get(Calendar.HOUR_OF_DAY)
-                    val minuteComponents = calendar.get(Calendar.MINUTE)
-                    val secondComponents = calendar.get(Calendar.SECOND)
-
-                    val newComponents = calendar.apply {
-                        timeZone = calendar.timeZone
-                        set(Calendar.DAY_OF_MONTH, dateComponents)
-                        set(Calendar.MONTH, monthComponents)
-                        set(Calendar.YEAR, yearComponents)
-                        set(Calendar.HOUR_OF_DAY, hourComponents)
-                        set(Calendar.MINUTE, minuteComponents)
-                        set(Calendar.SECOND, secondComponents)
-                    }
-
-                    newComponents.time
-                }
-            }
-
-            else -> value = null
-        }
+inline fun <reified T> Json.decodeFromJsonElementOrNull(json: JsonElement): T? {
+    return try {
+        decodeFromJsonElement(json)
+    } catch (e: Exception) {
+        null
     }
 }
 
