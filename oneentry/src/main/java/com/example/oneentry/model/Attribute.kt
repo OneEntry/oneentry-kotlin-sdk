@@ -1,11 +1,11 @@
 package com.example.oneentry.model
 
 import com.example.oneentry.network.OneEntryCore.Companion.instance
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.decodeFromJsonElement
-import java.util.Date
 
 /**
  * OneEntry entity attribute
@@ -66,22 +66,39 @@ inline fun <reified T> Json.decodeFromJsonElementOrNull(json: JsonElement): T? {
  * @param groupOfImages Group of image attribute
  * @param radioButton Radio button attribute
  */
+@Serializable
 enum class AttributeType {
 
-    integer,
-    date,
-    file,
-    list,
-    real,
-    spam,
-    text,
-    time,
-    float,
-    button,
-    image,
-    string,
-    dateTime,
-    textWithHeader,
-    groupOfImages,
-    radioButton
+    @SerialName("integer")
+    INTEGER,
+    @SerialName("date")
+    DATE,
+    @SerialName("file")
+    FILE,
+    @SerialName("list")
+    LIST,
+    @SerialName("real")
+    REAL,
+    @SerialName("spam")
+    SPAM,
+    @SerialName("text")
+    TEXT,
+    @SerialName("time")
+    TIME,
+    @SerialName("float")
+    FLOAT,
+    @SerialName("button")
+    BUTTON,
+    @SerialName("image")
+    IMAGE,
+    @SerialName("string")
+    STRING,
+    @SerialName("dateTime")
+    DATE_TIME,
+    @SerialName("textWithHeader")
+    TEXT_WITH_HEADER,
+    @SerialName("groupOfImages")
+    GROUP_OF_IMAGES,
+    @SerialName("radioButton")
+    RADIO_BUTTON
 }

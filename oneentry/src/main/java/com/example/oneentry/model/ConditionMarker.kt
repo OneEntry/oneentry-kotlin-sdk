@@ -1,6 +1,7 @@
 package com.example.oneentry.model
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 /**
  * OneEntry conditional operators
@@ -14,13 +15,23 @@ import com.google.gson.annotations.SerializedName
  * @param exs Marker for the operator "exists"
  * @param nexs Marker for the operator "does not exist"
  */
+@Serializable
 enum class ConditionMarker {
-    `in`,
-    nin,
-    eq,
-    neq,
-    mth,
-    lth,
-    exs,
-    nexs
+
+    @SerialName("in")
+    IN,
+    @SerialName("nin")
+    NIN,
+    @SerialName("eq")
+    EQ,
+    @SerialName("neq")
+    NEQ,
+    @SerialName("mth")
+    MTH,
+    @SerialName("lth")
+    LTH,
+    @SerialName("exs")
+    EXS,
+    @SerialName("nexs")
+    NEXS
 }
