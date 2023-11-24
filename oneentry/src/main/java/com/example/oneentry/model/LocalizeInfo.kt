@@ -6,6 +6,15 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.decodeFromJsonElement
 
+/**
+ * Localized information about the object
+ *
+ * @param title Object title
+ * @param content Object content
+ * @param menuTitle Object menu title
+ * @param htmlContent Object content as html text
+ * @param plainContent Object content as markdown text
+ */
 @Serializable
 data class LocalizeInfo(
     val title: String? = null,
@@ -27,6 +36,12 @@ inline fun <reified T> Json.decodeFromJsonElementOrNull(json: JsonElement): T? {
     }
 }
 
+/**
+ * Object content
+ *
+ * @param value Value of object content
+ * @param isEditorDisabled Whether the content is editable
+ */
 @Serializable
 data class InfoContent(
     val value: String,
