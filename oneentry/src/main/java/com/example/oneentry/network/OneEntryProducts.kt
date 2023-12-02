@@ -7,6 +7,7 @@ import com.example.oneentry.model.ProductsFilter
 import com.example.oneentry.model.ProductsResult
 import com.example.oneentry.model.SearchProduct
 import com.example.oneentry.model.SortDirection
+import com.example.oneentry.network.core.OneEntryCore
 import io.ktor.http.HttpMethod
 
 class OneEntryProducts private constructor() {

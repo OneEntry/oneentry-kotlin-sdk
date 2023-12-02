@@ -1,6 +1,7 @@
 package com.example.oneentry.network
 
 import com.example.oneentry.model.OneEntryException
+import com.example.oneentry.network.core.OneEntryCore
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Before

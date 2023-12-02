@@ -1,4 +1,4 @@
-package com.example.oneentry.network
+package com.example.oneentry.network.core
 
 import com.example.oneentry.model.OneEntryException
 import io.ktor.client.HttpClient
