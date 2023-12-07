@@ -1,6 +1,6 @@
 package com.example.oneentry.network
 
-import com.example.oneentry.model.Page
+import com.example.oneentry.model.OneEntryPage
 import com.example.oneentry.model.PageConfig
 import com.example.oneentry.model.SearchPage
 
@@ -23,7 +23,7 @@ class OneEntryPages private constructor() {
      * @throws IllegalArgumentException if the decoded input is not a valid instance of T or serializer error
      * @throws OneEntryError in case of OneEntry errors
      */
-    suspend fun rootPages(langCode: String): List<Page> {
+    suspend fun rootPages(langCode: String): List<OneEntryPage> {
 
         val parameters: Map<String, Any?> = mapOf(
             "langCode" to langCode
@@ -48,7 +48,7 @@ class OneEntryPages private constructor() {
         langCode: String,
         limit: Int? = null,
         offset: Int? = null
-    ): List<Page> {
+    ): List<OneEntryPage> {
 
         val parameters: Map<String, Any?> = mapOf(
             "langCode" to langCode,
@@ -69,7 +69,7 @@ class OneEntryPages private constructor() {
      * @throws IllegalArgumentException if the decoded input is not a valid instance of T or serializer error
      * @throws OneEntryError in case of OneEntry errors
      */
-    suspend fun pages(langCode: String): List<Page> {
+    suspend fun pages(langCode: String): List<OneEntryPage> {
 
         val parameters: Map<String, Any?> = mapOf(
             "langCode" to langCode
@@ -92,7 +92,7 @@ class OneEntryPages private constructor() {
     suspend fun page(
         id: Int,
         langCode: String
-    ): Page {
+    ): OneEntryPage {
 
         val parameters: Map<String, Any?> = mapOf(
             "langCode" to langCode
@@ -115,7 +115,7 @@ class OneEntryPages private constructor() {
     suspend fun pagesChildren(
         url: String,
         langCode: String
-    ): List<Page> {
+    ): List<OneEntryPage> {
 
         val parameters: Map<String, Any?> = mapOf(
             "langCode" to langCode
@@ -138,7 +138,7 @@ class OneEntryPages private constructor() {
     suspend fun page(
         url: String,
         langCode: String
-    ): Page {
+    ): OneEntryPage {
 
         val parameters: Map<String, Any?> = mapOf(
             "langCode" to langCode
@@ -161,7 +161,7 @@ class OneEntryPages private constructor() {
     suspend fun pagesForms(
         url: String,
         langCode: String
-    ): List<Page> {
+    ): List<OneEntryPage> {
 
         val parameters: Map<String, Any?> = mapOf(
             "langCode" to langCode
@@ -184,7 +184,7 @@ class OneEntryPages private constructor() {
     suspend fun pagesBlocks(
         url: String,
         langCode: String
-    ): List<Page> {
+    ): List<OneEntryPage> {
 
         val parameters: Map<String, Any?> = mapOf(
             "langCode" to langCode

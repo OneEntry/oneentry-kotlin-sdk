@@ -3,7 +3,7 @@ package com.example.oneentry.model
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Page(
+data class OneEntryPage(
     val id: Int,
     val parentId: Int?,
     val pageUrl: String,
