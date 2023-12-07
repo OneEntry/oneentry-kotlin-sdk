@@ -51,11 +51,35 @@ class OneEntryPagesTest {
     }
 
     @Test
+    fun testPageUrlChildren() = runBlocking {
+
+        val result = provider.pagesChildren("heroes", "en_US")
+
+        assertFalse(result.isEmpty())
+    }
+
+    @Test
     fun testPageUrl() = runBlocking {
 
         val result = provider.page("heroes", "en_US")
 
         assertEquals("heroes", result.pageUrl)
+    }
+
+    @Test
+    fun testPageUrlForms() = runBlocking {
+
+        val result = provider.pagesForms("heroes", "en_US")
+
+        assertFalse(result.isEmpty())
+    }
+
+    @Test
+    fun testPageUrlBlocks() = runBlocking {
+
+        val result = provider.pagesBlocks("heroes", "en_US")
+
+        assertFalse(result.isEmpty())
     }
 
     @Test

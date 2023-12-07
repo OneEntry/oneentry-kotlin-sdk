@@ -102,6 +102,29 @@ class OneEntryPages private constructor() {
     }
 
     /**
+     * Get child pages with product information as an array.
+     *
+     * @param url Page URL
+     * @param langCode locale code (used only when searching with a filter (default - en_US))
+     *
+     * @return List<Page>
+     * @throws RuntimeException if OneEntry application has not been initialized
+     * @throws IllegalArgumentException if the decoded input is not a valid instance of T or serializer error
+     * @throws OneEntryError in case of OneEntry errors
+     */
+    suspend fun pagesChildren(
+        url: String,
+        langCode: String
+    ): List<Page> {
+
+        val parameters: Map<String, Any?> = mapOf(
+            "langCode" to langCode
+        )
+
+        return core.requestItems("/pages/$url/children", parameters)
+    }
+
+    /**
      * Get one page object with information about forms, blocks, menus, linked to the page
      *
      * @param url Page URL
@@ -122,6 +145,52 @@ class OneEntryPages private constructor() {
         )
 
         return core.requestItems("/pages/url/$url", parameters)
+    }
+
+    /**
+     * Get ContentPageFormDto objects for the related form by URL
+     *
+     * @param url Page URL
+     * @param langCode locale code (used only when searching with a filter (default - en_US))
+     *
+     * @return List<Page>
+     * @throws RuntimeException if OneEntry application has not been initialized
+     * @throws IllegalArgumentException if the decoded input is not a valid instance of T or serializer error
+     * @throws OneEntryError in case of OneEntry errors
+     */
+    suspend fun pagesForms(
+        url: String,
+        langCode: String
+    ): List<Page> {
+
+        val parameters: Map<String, Any?> = mapOf(
+            "langCode" to langCode
+        )
+
+        return core.requestItems("/pages/$url/forms", parameters)
+    }
+
+    /**
+     * Get ContentPageBlockDto objects for the related block by URL
+     *
+     * @param url Page URL
+     * @param langCode locale code (used only when searching with a filter (default - en_US))
+     *
+     * @return List<Page>
+     * @throws RuntimeException if OneEntry application has not been initialized
+     * @throws IllegalArgumentException if the decoded input is not a valid instance of T or serializer error
+     * @throws OneEntryError in case of OneEntry errors
+     */
+    suspend fun pagesBlocks(
+        url: String,
+        langCode: String
+    ): List<Page> {
+
+        val parameters: Map<String, Any?> = mapOf(
+            "langCode" to langCode
+        )
+
+        return core.requestItems("/pages/$url/blocks", parameters)
     }
 
     /**
