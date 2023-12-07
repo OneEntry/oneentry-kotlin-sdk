@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Assertions.*
 
 class OneEntryPagesTest {
 
-    private lateinit var provider: OneEntryPages
+    private val provider = OneEntryPages.instance
 
     @Before
     fun setUp() {
@@ -16,7 +16,6 @@ class OneEntryPagesTest {
             "https://hummel-mobile.oneentry.cloud",
             "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiS290bGluIFNkayIsInNlcmlhbE51bWJlciI6MiwiaWF0IjoxNzAwMjE3ODU2LCJleHAiOjE3MzE3NTM4NDR9.0F4D0rgAM9nqpFEpbJqxiUaNNxik_wpI70QPFXoYSzk"
         )
-        provider = OneEntryPages.instance
     }
 
     @Test
