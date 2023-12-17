@@ -31,7 +31,7 @@ class OneEntryPagesTest {
 
         val result = provider.catalogPages("en_US")
 
-        assertEquals("heroes", result.first().pageUrl)
+        assertEquals("xml", result.first().pageUrl)
     }
 
     @Test
@@ -39,7 +39,7 @@ class OneEntryPagesTest {
 
         val result = provider.pages("en_US")
 
-        assertEquals("heroes", result.first().pageUrl)
+        assertEquals("xml", result.first().pageUrl)
     }
 
     @Test
@@ -53,9 +53,9 @@ class OneEntryPagesTest {
     @Test
     fun testPageUrlChildren() = runBlocking {
 
-        val result = provider.pagesChildren("heroes", "en_US")
+        val result = provider.pagesChildren("xml", "en_US")
 
-        assertFalse(result.isEmpty())
+        assertFalse(result.isNotEmpty())
     }
 
     @Test
@@ -69,17 +69,17 @@ class OneEntryPagesTest {
     @Test
     fun testPageUrlForms() = runBlocking {
 
-        val result = provider.pagesForms("heroes", "en_US")
+        val result = provider.pagesForms("xml", "en_US")
 
-        assertFalse(result.isEmpty())
+        assertFalse(result.isNotEmpty())
     }
 
     @Test
     fun testPageUrlBlocks() = runBlocking {
 
-        val result = provider.pagesBlocks("heroes", "en_US")
+        val result = provider.pagesBlocks("xml", "en_US")
 
-        assertFalse(result.isEmpty())
+        assertFalse(result.isNotEmpty())
     }
 
     @Test

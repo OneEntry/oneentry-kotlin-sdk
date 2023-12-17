@@ -38,9 +38,9 @@ data class AttributeModel(
         get() = instance.serializer.decodeFromJsonElementOrNull(value)
 }
 
-inline fun <reified T> Json.decodeFromJsonElementOrNull(json: JsonElement): T? {
+inline fun <reified T> Json.decodeFromJsonElementOrNull(json: JsonElement?): T? {
     return try {
-        decodeFromJsonElement(json)
+        json?.let { decodeFromJsonElement(it) }
     } catch (e: Exception) {
         null
     }

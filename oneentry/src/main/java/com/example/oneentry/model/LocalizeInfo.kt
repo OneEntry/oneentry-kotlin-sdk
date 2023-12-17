@@ -16,7 +16,7 @@ import kotlinx.serialization.json.JsonElement
 @Serializable
 data class LocalizeInfo(
     val title: String? = null,
-    private val content: JsonElement,
+    private val content: JsonElement? = null,
     val menuTitle: String? = null,
     val htmlContent: String? = null,
     val plainContent: String? = null
