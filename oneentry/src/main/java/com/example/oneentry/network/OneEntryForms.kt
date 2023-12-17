@@ -94,9 +94,9 @@ class OneEntryForms private constructor() {
      * @throws IllegalArgumentException if the decoded input is not a valid instance of T or serializer error
      * @throws OneEntryError in case of OneEntry errors
      */
-    suspend fun data(): List<OneEntryFormDataResponse> {
+    suspend fun data(): OneEntryFormDataResponse {
 
-        return core.requestItems("form-data")
+        return core.requestItems("/form-data")
     }
 
     /**

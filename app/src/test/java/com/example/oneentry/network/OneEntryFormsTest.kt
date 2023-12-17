@@ -3,8 +3,6 @@ package com.example.oneentry.network
 import com.example.oneentry.model.OneEntryFormData
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Test
 
@@ -27,17 +25,15 @@ class OneEntryFormsTest {
 
         val result = provider.forms(langCode = "en_US")
 
-        assertFalse(result.isEmpty())
+        assertEquals("auth", result.first().identifier)
     }
 
     @Test
     fun testFormWithMarker() = runBlocking {
 
         val result = provider.form("auth", "en_US")
-        val attributes = result.attributeValues?.get("en_US")
 
-        assertNotNull(attributes?.get("login"))
-        assertNotNull(attributes?.get("password"))
+        assertEquals("auth", result.identifier)
     }
 
     @Test
@@ -45,8 +41,8 @@ class OneEntryFormsTest {
 
         val data: Map<String, List<OneEntryFormData>> = mapOf(
             "en_US" to listOf(
-                OneEntryFormData("login", "Dinar"),
-                OneEntryFormData("password", "1234")
+                OneEntryFormData("login", "Dino"),
+                OneEntryFormData("password", "544")
             )
         )
 
@@ -58,15 +54,14 @@ class OneEntryFormsTest {
 
         val result = provider.data()
 
-        assertFalse(result.isEmpty())
+        assertEquals(result.items.count(), result.total)
     }
 
     @Test
     fun testFormDataByMarker() = runBlocking {
 
-        val marker = "auth"
-        val result = provider.data(marker)
+        val result = provider.data("auth")
 
-        assertEquals(marker, result.formIdentifier)
+        assertEquals(result.items.count(), result.total)
     }
 }

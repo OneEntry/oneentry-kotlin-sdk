@@ -26,6 +26,12 @@ data class OneEntryFormData(
     val value: String
 )
 
+@Serializable
+data class OneEntryFormDataResponse(
+    val items: List<OneEntryFormDataResponseBody>,
+    val total: Int
+)
+
 /**
  * Represents a response containing form data for a single entry with an identity and time
  *
@@ -35,7 +41,7 @@ data class OneEntryFormData(
  * @param formData Form data organized as a dictionary of arrays of OneEntryFormData
  */
 @Serializable
-data class OneEntryFormDataResponse(
+data class OneEntryFormDataResponseBody(
     val id: Int,
     val time: String,
     val formIdentifier: String,

@@ -15,7 +15,7 @@ import kotlinx.serialization.Serializable
 data class OneEntryForm(
     val id: Int,
     val localizeInfos: Map<String, LocalizeInfo>?,
-    val attributeValues: Map<String, Map<String, AttributeModel>>?,
+    val attributeValues: Map<String, Map<String, AttributeModel>>? = null,
     val version: Int,
     val identifier: String,
     val processingType: String?
