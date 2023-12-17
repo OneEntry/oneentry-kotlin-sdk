@@ -2,11 +2,12 @@ package com.example.oneentry.network.core
 
 import com.example.oneentry.model.OneEntryException
 import io.ktor.client.HttpClient
+import io.ktor.client.plugins.auth.*
+import io.ktor.client.plugins.auth.providers.*
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.HttpResponseValidator
 import io.ktor.client.plugins.ResponseException
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.client.request.headers
 import io.ktor.client.request.request
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.bodyAsText
@@ -14,7 +15,6 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpMethod
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 
 internal val Map<String, Any?>.query: String
@@ -30,7 +30,6 @@ internal val Map<String, Any?>.query: String
 class OneEntryCore private constructor() {
 
     internal var domain: String? = null
-    internal var token: String? = null
     internal val api = "/api/content"
     internal val serializer = Json {
         ignoreUnknownKeys = true
@@ -40,6 +39,11 @@ class OneEntryCore private constructor() {
         expectSuccess = true
         install(ContentNegotiation) {
             json(serializer)
+        }
+        engine {
+            https {
+                trustManager = credential?.trustManager
+            }
         }
         HttpResponseValidator {
 
@@ -57,10 +61,18 @@ class OneEntryCore private constructor() {
     companion object {
 
         val instance: OneEntryCore = OneEntryCore()
+        var credential: OneEntryCredential? = null
+
         fun initializeApp(domain: String, token: String) {
 
             instance.domain = domain
-            instance.token = token
+            credential = OneEntryCredential(token)
+        }
+
+        fun initializeApp(domain: String, certificateName: String, password: String, filePath: String) {
+
+            instance.domain = domain
+            credential = OneEntryCredential(certificateName, password, filePath)
         }
     }
 
@@ -70,17 +82,18 @@ class OneEntryCore private constructor() {
         method: HttpMethod = HttpMethod.Get
     ): T {
 
-        if (domain == null || token == null)
+        if (domain == null || credential == null)
             throw RuntimeException("OneEntry application has not been initialized")
 
         val url = domain + api + link + parameters.query
+        val headers = credential!!.headers.build()
 
         val response = client.request(url) {
             this.method = method
-            this.headers {
-                append("x-app-token", token!!)
-            }
+            this.headers.appendAll(headers)
         }
+
+        println("Pis " + response.bodyAsText())
 
         return serializer.decodeFromString(response.bodyAsText())
     }
@@ -92,18 +105,17 @@ class OneEntryCore private constructor() {
         body: G
     ): T {
 
-        if (domain == null || token == null)
+        if (domain == null || credential == null)
             throw RuntimeException("OneEntry application has not been initialized")
 
         val url = domain + api + link + parameters.query
+        val headers = credential!!.headers.build()
 
         val response = client.request(url) {
             contentType(ContentType.Application.Json)
             setBody(body)
             this.method = method
-            this.headers {
-                append("x-app-token", token!!)
-            }
+            this.headers.appendAll(headers)
         }
 
         return serializer.decodeFromString(response.bodyAsText())
@@ -115,16 +127,15 @@ class OneEntryCore private constructor() {
         method: HttpMethod = HttpMethod.Get
     ) {
 
-        if (domain == null || token == null)
+        if (domain == null || credential == null)
             throw RuntimeException("OneEntry application has not been initialized")
 
         val url = domain + api + link + parameters.query
+        val headers = credential!!.headers.build()
 
         client.request(url) {
             this.method = method
-            this.headers {
-                append("x-app-token", token!!)
-            }
+            this.headers.appendAll(headers)
         }
     }
 }
