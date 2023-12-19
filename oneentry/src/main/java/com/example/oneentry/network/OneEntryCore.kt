@@ -82,6 +82,8 @@ class OneEntryCore private constructor() {
             }
         }
 
+        println(response.bodyAsText())
+
         return serializer.decodeFromString(response.bodyAsText())
     }
 

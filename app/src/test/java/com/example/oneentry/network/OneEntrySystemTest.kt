@@ -8,7 +8,7 @@ import org.junit.Test
 
 class OneEntrySystemTest {
 
-    private lateinit var provider: OneEntrySystem
+    private val provider = OneEntrySystem.instance
 
     @Before
     fun setUp() {
@@ -17,7 +17,6 @@ class OneEntrySystemTest {
             "https://hummel-mobile.oneentry.cloud",
             "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiS290bGluIFNkayIsInNlcmlhbE51bWJlciI6MiwiaWF0IjoxNzAwMjE3ODU2LCJleHAiOjE3MzE3NTM4NDR9.0F4D0rgAM9nqpFEpbJqxiUaNNxik_wpI70QPFXoYSzk"
         )
-        provider = OneEntrySystem.instance
     }
 
     @Test

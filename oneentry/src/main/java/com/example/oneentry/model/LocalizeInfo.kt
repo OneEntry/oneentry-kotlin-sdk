@@ -1,6 +1,8 @@
 package com.example.oneentry.model
 
+import com.example.oneentry.network.OneEntryCore.Companion.instance
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonElement
 
 /**
  * Localized information about the object
@@ -14,11 +16,15 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class LocalizeInfo(
     val title: String? = null,
-    val content: InfoContent? = null,
+    private val content: JsonElement? = null,
     val menuTitle: String? = null,
     val htmlContent: String? = null,
     val plainContent: String? = null
-)
+) {
+
+    val contentAsLocalizeInfo: InfoContent?
+        get() = instance.serializer.decodeFromJsonElementOrNull(content)
+}
 
 /**
  * Object content
