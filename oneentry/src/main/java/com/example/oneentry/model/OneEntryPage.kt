@@ -2,6 +2,20 @@ package com.example.oneentry.model
 
 import kotlinx.serialization.Serializable
 
+/**
+ * OneEntry page object
+ *
+ * @param id Page id
+ * @param parentId Page parent id
+ * @param pageUrl Page url
+ * @param depth Page depth
+ * @param isVisible Is the page active
+ * @param position Page position
+ * @param type Page type
+ * @param templateIdentifier Page template marker
+ * @param localizeInfos Page localize content
+ * @param attributeValues Page attributes
+ */
 @Serializable
 data class OneEntryPage(
     val id: Int,
@@ -16,8 +30,14 @@ data class OneEntryPage(
     val attributeValues: Map<String, Map<String, AttributeModel>>?
 )
 
+/**
+ * OneEntry page search dto
+ *
+ * @param id Page id
+ * @param title Page title
+ */
 @Serializable
-data class SearchPage(
+data class OneEntrySearchPage(
     val id: Int,
     val title: String
 )

@@ -7,6 +7,25 @@
   - [Step 2: Register your app with OneEntry (In Development)](#step-2-register-your-app-with-oneentry)
   - [Step 3: Add OneEntry SDK to your app](#step-3-add-oneentry-sdk-to-your-app)
 - [Using OneEntry Kotlin SDK](#using-oneentry-kotlin-sdk)
+  - [Working with forms](#working-with-forms)
+    - [Getting all forms](#getting-all-forms)
+    - [Getting a form by its marker](#getting-a-form-by-its-marker)
+    - [Sending data to the form](#sending-data-to-the-form)
+    - [Getting all form data](#getting-all-form-data)
+    - [Getting form data from its marker](#getting-form-data-from-its-marker)
+  - [Working with attributes](#working-with-attributes)
+    - [Introduction](#introduction)
+    - [Available data types](#available-data-types)
+    - [Receiving attributes](#receiving-attributes)
+      - [Custom processing](#custom-processing)
+      - [Processing of numerical values](#processing-of-numerical-values)
+      - [Date and time processing](#date-and-time-processing)
+      - [Files processing](#files-processing)
+      - [Images processing](#images-processing)
+      - [Text data types](#text-data-types)
+        - [String](#string)
+        - [Text](#text)
+        - [Text with header](#text-with-header)
   - [OneEntryProducts](#oneentryproducts)
     - [Receiving all products with pagination](#receiving-all-products-with-pagination)
     - [Getting all products uncategorized, with pagination](#getting-all-products-uncategorized-with-pagination)
@@ -23,10 +42,315 @@
       - [Status by marker](#status-by-marker)
       - [Status marker validation](#status-marker-validation)
   - [OneEntryPages](#oneentrypages)
-    - 
+    - [Getting the root pages](#getting-the-root-pages)
+    - [Getting all pages within the catalog](#getting-all-pages-within-the-catalog)
+    - [Getting all the pages](#getting-all-the-pages)
+    - [Getting child pages with product information as an array](#getting-child-pages-with-product-information-as-an-array)
+    - [Getting pages for the related form by URL](#getting-pages-for-the-related-form-by-url)
+    - [Getting pages for the related block by URL](#getting-pages-for-the-related-block-by-url)
+    - [Getting one page with all the information](#getting-one-page-with-all-the-information)
+      - [Receiving by id](#receiving-by-id)
+      - [Receiving by URL](#receiving-by-url)
+    - [Getting a page config](#getting-a-page-config)
+      - [Receiving by URL](#receiving-by-url)
+    - [Quick search page](#quick-search-page)
+  - [OneEntryProject](#oneentryproject)
+    - [File uploading](#file-uploading)
+    - [Deleting files](#deleting-files)
+    - [Getting all administrators](#getting-all-administrators)
+    - [Getting all active locales](#getting-all-active-locales)
+    - [Getting all general types](#getting-all-general-types)
+    - [Getting a menu item by its marker](#getting-a-menu-item-by-its-marker)
+  - [OneEntrySystem](#oneentrysystem)
+    - [Testing error 404](#testing-error-404)
+    - [Testing error 500](#testing-error-500)
+  - [OneEntryTemplates](#oneentrytemplates)
+    - [Getting all templates](#getting-all-templates)
+      - [Available types by properties](#available-types-by-properties)
+    - [Request templates by type](#request-templates-by-type)
+  - [OneEntryTemplatePreviews](#oneentrytemplatepreviews)
+    - [Getting all preview templates](#getting-all-preview-templates)
+    - [Getting a preview template by its id](#getting-preview-template-by-its-id)
+    - [Getting a preview template by its marker](#getting-preview-template-by-its-marker)
 
 
 ## Using OneEntry Kotlin SDK
+
+### Working with forms
+
+OneEntry forms allow you to send all kinds of data to the admin application
+
+#### Getting all forms
+
+```kotlin
+val forms: List<OneEntryForm> = OneEntryForms.instance.forms(langCode = "en_US")
+```
+
+**OneEntryForm** array will return as a result`
+
+```kotlin
+/**
+ * OneEntry form model
+ *
+ * @param id Form id
+ * @param localizeInfos Form localize info
+ * @param attributeValues Form attributes
+ * @param version Form status version number
+ * @param identifier Form status marker
+ */
+@Serializable
+data class OneEntryForm(
+    val id: Int,
+    val localizeInfos: Map<String, LocalizeInfo>?,
+    val attributeValues: Map<String, Map<String, AttributeModel>>? = null,
+    val version: Int,
+    val identifier: String,
+    val processingType: String?
+)
+```
+
+#### Getting a form by its marker
+
+```kotlin
+val form: OneEntryForm = OneEntryForms.instance.form(marker = "auth", langCode = "en_US")
+```
+
+**OneEntryForm** array will return as a result`
+
+```kotlin
+/**
+ * OneEntry form model
+ *
+ * @param id Form id
+ * @param localizeInfos Form localize info
+ * @param attributeValues Form attributes
+ * @param version Form status version number
+ * @param identifier Form status marker
+ */
+@Serializable
+data class OneEntryForm(
+    val id: Int,
+    val localizeInfos: Map<String, LocalizeInfo>?,
+    val attributeValues: Map<String, Map<String, AttributeModel>>? = null,
+    val version: Int,
+    val identifier: String,
+    val processingType: String?
+)
+```
+
+#### Sending data to the form
+
+```kotlin
+val data: Map<String, List<OneEntryFormData>> = mapOf(
+    "en_US" to listOf(
+        OneEntryFormData("login", "Dino"),
+        OneEntryFormData("password", "544")
+    )
+)
+
+val response = OneEntryForms.instance.sendData(identifier = "auth", data = data)
+```
+
+**OneEntryFormDataResponse** will return as a response
+
+```kotlin
+@Serializable
+data class OneEntryFormDataResponse(
+    val items: List<OneEntryFormDataResponseBody>,
+    val total: Int
+)
+
+/**
+ * Represents a response containing form data for a single entry with an identity and time
+ *
+ * @param id Unique identifier for the form data response
+ * @param time Time when the form data was submitted
+ * @param formIdentifier Identifier for the form
+ * @param formData Form data organized as a dictionary of arrays of OneEntryFormData
+ */
+@Serializable
+data class OneEntryFormDataResponseBody(
+    val id: Int,
+    val time: String,
+    val formIdentifier: String,
+    val formData: Map<String, List<OneEntryFormData>>
+)
+```
+
+#### Getting all form data
+
+```kotlin
+val data: OneEntryFormDataResponse = OneEntryForms.instance.data()
+```
+
+**OneEntryFormDataResponse** array will return as a response
+
+```kotlin
+@Serializable
+data class OneEntryFormDataResponse(
+    val items: List<OneEntryFormDataResponseBody>,
+    val total: Int
+)
+
+/**
+ * Represents a response containing form data for a single entry with an identity and time
+ *
+ * @param id Unique identifier for the form data response
+ * @param time Time when the form data was submitted
+ * @param formIdentifier Identifier for the form
+ * @param formData Form data organized as a dictionary of arrays of OneEntryFormData
+ */
+@Serializable
+data class OneEntryFormDataResponseBody(
+    val id: Int,
+    val time: String,
+    val formIdentifier: String,
+    val formData: Map<String, List<OneEntryFormData>>
+)
+```
+
+#### Getting form data from its marker
+
+```kotlin
+val data: OneEntryFormDataResponse = OneEntryForms.instance.data(marker = "marker")
+```
+
+**OneEntryFormDataResponse** array will return as a response
+
+```kotlin
+@Serializable
+data class OneEntryFormDataResponse(
+    val items: List<OneEntryFormDataResponseBody>,
+    val total: Int
+)
+
+/**
+ * Represents a response containing form data for a single entry with an identity and time
+ *
+ * @param id Unique identifier for the form data response
+ * @param time Time when the form data was submitted
+ * @param formIdentifier Identifier for the form
+ * @param formData Form data organized as a dictionary of arrays of OneEntryFormData
+ */
+@Serializable
+data class OneEntryFormDataResponseBody(
+    val id: Int,
+    val time: String,
+    val formIdentifier: String,
+    val formData: Map<String, List<OneEntryFormData>>
+)
+```
+
+### Working with attributes
+
+#### Introduction
+
+The **OneEntryAttribute** data structure is provided to work with attributes in OneEntry
+
+```kotlin
+/**
+ * OneEntry entity attribute
+ *
+ * @param type Type of attribute
+ * @param value Value of attribute
+ */
+@Serializable
+data class AttributeModel(
+    var type: AttributeType,
+    var value: JsonElement
+) {
+
+    val asInt: Int?
+        get() = instance.serializer.decodeFromJsonElementOrNull(value)
+
+    val asString: String?
+        get() = instance.serializer.decodeFromJsonElementOrNull(value)
+
+    val asText: List<OneEntryText>?
+        get() = instance.serializer.decodeFromJsonElementOrNull(value)
+
+    val asImage: List<OneEntryImage>?
+        get() = instance.serializer.decodeFromJsonElementOrNull(value)
+
+    val asDateTime: OneEntryDateTime?
+        get() = instance.serializer.decodeFromJsonElementOrNull(value)
+
+    val asTextWithHeader: List<OneEntryTextWithHeader>?
+        get() = instance.serializer.decodeFromJsonElementOrNull(value)
+}
+```
+
+**value** - Attribute value
+**type** - Attribute data type
+
+#### Available data types
+
+```kotlin
+/**
+ * Type of attribute
+ *
+ * @param integer Integer attribute
+ * @param date Date attribute without time
+ * @param file File attribute
+ * @param list List attribute
+ * @param real Attribute with floating point
+ * @param spam Spam attribute
+ * @param text Text attribute
+ * @param time Time attribute without date
+ * @param float Attribute with floating point
+ * @param button Button attribute
+ * @param image Image attribute
+ * @param string String attribute
+ * @param dateTime Date & time attribute
+ * @param textWithHeader Text attribute with header
+ * @param groupOfImages Group of image attribute
+ * @param radioButton Radio button attribute
+ */
+@Serializable
+enum class AttributeType {
+
+    @SerialName("integer")
+    INTEGER,
+    @SerialName("date")
+    DATE,
+    @SerialName("file")
+    FILE,
+    @SerialName("list")
+    LIST,
+    @SerialName("real")
+    REAL,
+    @SerialName("spam")
+    SPAM,
+    @SerialName("text")
+    TEXT,
+    @SerialName("time")
+    TIME,
+    @SerialName("float")
+    FLOAT,
+    @SerialName("button")
+    BUTTON,
+    @SerialName("image")
+    IMAGE,
+    @SerialName("string")
+    STRING,
+    @SerialName("dateTime")
+    DATE_TIME,
+    @SerialName("textWithHeader")
+    TEXT_WITH_HEADER,
+    @SerialName("groupOfImages")
+    GROUP_OF_IMAGES,
+    @SerialName("radioButton")
+    RADIO_BUTTON
+}
+```
+
+#### Receiving attributes
+
+Let's try to get the attributes from the page, for products and other entities the process will be similar
+
+```kotlin
+val page
+```
 
 ### OneEntryProducts
 
@@ -336,4 +660,558 @@ You can check the validation of the token either using the appropriate method
 ```kotlin
 val valid: Boolean = OneEntryProducts.instance.productStatusMarkerValidation(marker = "storage")
 ```
+
+
+### OneEntryPages
+
+#### Getting the root pages
+
+Getting top-level pages. These are the pages whose **parentId** is equal to **null**
+
+```kotlin
+val root: List<OneEntryPage> = OneEntryPages.instance.rootPages(langCode = "en_US")
+```
+
+The **OneEntryPage** array will be returned as an answer
+
+```kotlin
+/**
+ * OneEntry page object
+ *
+ * @param id Page id
+ * @param parentId Page parent id
+ * @param pageUrl Page url
+ * @param depth Page depth
+ * @param isVisible Is the page active
+ * @param position Page position
+ * @param type Page type
+ * @param templateIdentifier Page template marker
+ * @param localizeInfos Page localize content
+ * @param attributeValues Page attributes
+ */
+@Serializable
+data class OneEntryPage(
+    val id: Int,
+    val parentId: Int?,
+    val pageUrl: String,
+    val depth: Int?,
+    val isVisible: Boolean?,
+    val position: Int? = null,
+    val type: String?,
+    val templateIdentifier: String?,
+    val localizeInfos: Map<String, LocalizeInfo>?,
+    val attributeValues: Map<String, Map<String, AttributeModel>>?
+)
+```
+
+#### Getting all pages within the catalog
+
+All pages that are contained in the 'catalog' tab. In other words, the categories of products.
+
+| Parameter | Description                       |
+|-----------|-----------------------------------|
+| langCode  | Language code. For example: en_US |
+| limit     | Limit of pagination elements      |
+| offset    | Pagination offset                 |
+
+```kotlin
+val catalog: List<OneEntryPage> = OneEntryPages.instance.catalogPages(langCode = "en_US")
+```
+
+The **OneEntryPage** array will be returned as an answer
+
+```kotlin
+/**
+ * OneEntry page object
+ *
+ * @param id Page id
+ * @param parentId Page parent id
+ * @param pageUrl Page url
+ * @param depth Page depth
+ * @param isVisible Is the page active
+ * @param position Page position
+ * @param type Page type
+ * @param templateIdentifier Page template marker
+ * @param localizeInfos Page localize content
+ * @param attributeValues Page attributes
+ */
+@Serializable
+data class OneEntryPage(
+    val id: Int,
+    val parentId: Int?,
+    val pageUrl: String,
+    val depth: Int?,
+    val isVisible: Boolean?,
+    val position: Int? = null,
+    val type: String?,
+    val templateIdentifier: String?,
+    val localizeInfos: Map<String, LocalizeInfo>?,
+    val attributeValues: Map<String, Map<String, AttributeModel>>?
+)
+```
+
+#### Getting all the pages
+
+Getting all OneEntry pages
+
+```kotlin
+val pages: List<OneEntryPage> = OneEntryPages.instance.catalogPages(langCode = "en_US")
+```
+
+The **OneEntryPage** array will be returned as an answer
+
+```kotlin
+/**
+ * OneEntry page object
+ *
+ * @param id Page id
+ * @param parentId Page parent id
+ * @param pageUrl Page url
+ * @param depth Page depth
+ * @param isVisible Is the page active
+ * @param position Page position
+ * @param type Page type
+ * @param templateIdentifier Page template marker
+ * @param localizeInfos Page localize content
+ * @param attributeValues Page attributes
+ */
+@Serializable
+data class OneEntryPage(
+    val id: Int,
+    val parentId: Int?,
+    val pageUrl: String,
+    val depth: Int?,
+    val isVisible: Boolean?,
+    val position: Int? = null,
+    val type: String?,
+    val templateIdentifier: String?,
+    val localizeInfos: Map<String, LocalizeInfo>?,
+    val attributeValues: Map<String, Map<String, AttributeModel>>?
+)
+```
+
+#### Getting child pages with product information as an array
+
+```kotlin
+val pages: List<OneEntryPage> = OneEntryPages.instance.pagesChildren(url = "heroes")
+```
+
+The **OneEntryPage** will be returned as an answer
+
+```kotlin
+/**
+ * OneEntry page object
+ *
+ * @param id Page id
+ * @param parentId Page parent id
+ * @param pageUrl Page url
+ * @param depth Page depth
+ * @param isVisible Is the page active
+ * @param position Page position
+ * @param type Page type
+ * @param templateIdentifier Page template marker
+ * @param localizeInfos Page localize content
+ * @param attributeValues Page attributes
+ */
+@Serializable
+data class OneEntryPage(
+    val id: Int,
+    val parentId: Int?,
+    val pageUrl: String,
+    val depth: Int?,
+    val isVisible: Boolean?,
+    val position: Int? = null,
+    val type: String?,
+    val templateIdentifier: String?,
+    val localizeInfos: Map<String, LocalizeInfo>?,
+    val attributeValues: Map<String, Map<String, AttributeModel>>?
+)
+```
+
+#### Getting pages for the related form by URL
+
+```kotlin
+val pages: List<OneEntryPage> = OneEntryPages.instance.pagesForms(url = "heroes")
+```
+
+The **OneEntryPage** will be returned as an answer
+
+```kotlin
+/**
+ * OneEntry page object
+ *
+ * @param id Page id
+ * @param parentId Page parent id
+ * @param pageUrl Page url
+ * @param depth Page depth
+ * @param isVisible Is the page active
+ * @param position Page position
+ * @param type Page type
+ * @param templateIdentifier Page template marker
+ * @param localizeInfos Page localize content
+ * @param attributeValues Page attributes
+ */
+@Serializable
+data class OneEntryPage(
+    val id: Int,
+    val parentId: Int?,
+    val pageUrl: String,
+    val depth: Int?,
+    val isVisible: Boolean?,
+    val position: Int? = null,
+    val type: String?,
+    val templateIdentifier: String?,
+    val localizeInfos: Map<String, LocalizeInfo>?,
+    val attributeValues: Map<String, Map<String, AttributeModel>>?
+)
+```
+
+#### Getting pages for the related block by URL
+
+```kotlin
+val pages: List<OneEntryPage> = OneEntryPages.instance.pagesBlocks(url = "heroes")
+```
+
+The **OneEntryPage** will be returned as an answer
+
+```kotlin
+/**
+ * OneEntry page object
+ *
+ * @param id Page id
+ * @param parentId Page parent id
+ * @param pageUrl Page url
+ * @param depth Page depth
+ * @param isVisible Is the page active
+ * @param position Page position
+ * @param type Page type
+ * @param templateIdentifier Page template marker
+ * @param localizeInfos Page localize content
+ * @param attributeValues Page attributes
+ */
+@Serializable
+data class OneEntryPage(
+    val id: Int,
+    val parentId: Int?,
+    val pageUrl: String,
+    val depth: Int?,
+    val isVisible: Boolean?,
+    val position: Int? = null,
+    val type: String?,
+    val templateIdentifier: String?,
+    val localizeInfos: Map<String, LocalizeInfo>?,
+    val attributeValues: Map<String, Map<String, AttributeModel>>?
+)
+```
+
+#### Getting one page with all the information
+
+##### Receiving by id
+
+```kotlin
+val page: OneEntryPage = OneEntryPages.instance.page(id = 12, langcode = "en_US")
+```
+
+The **OneEntryPage** will be returned as an answer
+
+```kotlin
+/**
+ * OneEntry page object
+ *
+ * @param id Page id
+ * @param parentId Page parent id
+ * @param pageUrl Page url
+ * @param depth Page depth
+ * @param isVisible Is the page active
+ * @param position Page position
+ * @param type Page type
+ * @param templateIdentifier Page template marker
+ * @param localizeInfos Page localize content
+ * @param attributeValues Page attributes
+ */
+@Serializable
+data class OneEntryPage(
+    val id: Int,
+    val parentId: Int?,
+    val pageUrl: String,
+    val depth: Int?,
+    val isVisible: Boolean?,
+    val position: Int? = null,
+    val type: String?,
+    val templateIdentifier: String?,
+    val localizeInfos: Map<String, LocalizeInfo>?,
+    val attributeValues: Map<String, Map<String, AttributeModel>>?
+)
+```
+
+##### Receiving by URL
+
+```kotlin
+val page: OneEntryPage = OneEntryPages.instance.page(url = "heroes", langcode = "en_US")
+```
+
+The **OneEntryPage** will be returned as an answer
+
+```kotlin
+/**
+ * OneEntry page object
+ *
+ * @param id Page id
+ * @param parentId Page parent id
+ * @param pageUrl Page url
+ * @param depth Page depth
+ * @param isVisible Is the page active
+ * @param position Page position
+ * @param type Page type
+ * @param templateIdentifier Page template marker
+ * @param localizeInfos Page localize content
+ * @param attributeValues Page attributes
+ */
+@Serializable
+data class OneEntryPage(
+    val id: Int,
+    val parentId: Int?,
+    val pageUrl: String,
+    val depth: Int?,
+    val isVisible: Boolean?,
+    val position: Int? = null,
+    val type: String?,
+    val templateIdentifier: String?,
+    val localizeInfos: Map<String, LocalizeInfo>?,
+    val attributeValues: Map<String, Map<String, AttributeModel>>?
+)
+```
+
+#### Getting a page config
+
+##### Receiving by URL
+
+```kotlin
+val config: OneEntryPageConfig = OneEntryPages.instance.config(url = "heroes")
+```
+
+The **OneEntryPageConfig** will be returned as an answer
+
+```kotlin
+/**
+ * Page config
+ *
+ * @param rowsPerPage Rows value per page
+ * @param productsPerRow Products value per row
+ */
+@Serializable
+data class OneEntryPageConfig(
+    val rowsPerPage: Int?,
+    val productsPerRow: Int?
+)
+```
+
+#### Quick search page
+
+This method searches for pages by keywords
+
+```kotlin
+val result: List<OneEntrySearchPage> = OneEntryPages.instance.quickSearch(name = "heroes", langCode = "en_US")
+```
+
+The **OneEntrySearchPage** array will be returned as an answer
+
+```kotlin
+/**
+ * OneEntry page search dto
+ *
+ * @param id Page id
+ * @param title Page title
+ */
+@Serializable
+data class OneEntrySearchPage(
+    val id: Int,
+    val title: String
+)
+```
+
+
+### OneEntryProject
+
+#### File uploading
+
+OneEntry supports the ability to save your files to storage. To do this, you need to specify additional information about the file.
+
+| Field    | Description                                                                                         |
+|----------|-----------------------------------------------------------------------------------------------------|
+| fileURL  | Path to the file you want to save                                                                   |
+| type     | Type, determines the folder name in the storage                                                     |
+| entity   | Entity name from which the file is uploaded, determines the folder name in the storage              |
+| id       | Identifier of the object from which the file is uploaded, determines the folder name in the storage |
+| width    | Width parameter                                                                                     |
+| height   | Height parameter                                                                                    |
+| compress | Boolean flag of optimization (compression) for images                                               |
+
+
+
+#### Deleting files
+
+This SDK method allows you to delete saved files. Additional fields must also be specified for it.
+
+| Field  | Description                                                                                         |
+|--------|-----------------------------------------------------------------------------------------------------|
+| name   | File name                                                                                           |
+| type   | Type, determines the folder name in the storage                                                     |
+| entity | Entity name from which the file is uploaded, determines the folder name in the storage              |
+| id     | Identifier of the object from which the file is uploaded, determines the folder name in the storage |
+
+
+
+#### Getting all administrators
+
+
+
+#### Getting all active locales
+
+
+
+#### Getting all general types
+
+
+
+#### Getting a menu item by its marker
+
+
+
+### OneEntrySystem
+
+#### Testing error 404
+
+```kotlin
+try { 
+    OneEntrySystem.instance.test404()
+} catch (error: OneEntryException) { 
+    assertEquals(404, error.statusCode)
+}
+```
+
+#### Testing error 500
+
+```kotlin
+try { 
+    OneEntrySystem.instance.test500()
+} catch (error: OneEntryException) { 
+    assertEquals(500, error.statusCode)
+}
+```
+
+### OneEntryTemplates
+
+#### Getting all templates
+
+##### Available types by properties
+
+* forCatalogProducts
+* forBasketPage
+* forErrorPage
+* forCatalogPages
+* forProductPreview
+* forProductPage
+* forSimilarProductBlock
+* forStatisticProductBlock
+* forProductBlock
+* forForm
+* forFormField
+* forNewsPage
+* forNewsBlock
+* forNewsPreview
+* forOneNewsPage
+* forUsualPage
+* forTextBlock
+* forSlider
+* service
+
+#### Request templates by type
+
+
+
+### OneEntryTemplatePreviews
+
+#### Getting all preview templates
+
+```kotlin
+val previews: List<OneEntryTemplatePreview> = OneEntryTemplatePreviews.instance.templates()
+```
+
+The **OneEntryTemplatePreview** array will be responsed
+
+```kotlin
+/**
+ * Represents a template preview for a single entry, with support for localization
+ *
+ * @param id Unique identifier for the preview
+ * @param version Version of the template, if available
+ * @param identifier Identifier for the template
+ * @param localizeInfos Localization information organized as a dictionary of LocalizeInfo objects, if available
+ */
+@Serializable
+data class OneEntryTemplatePreview(
+    val id: Int,
+    val version: Int,
+    val identifier: String,
+    val localizeInfos: Map<String, LocalizeInfo>?
+)
+```
+
+#### Getting a preview template by its id
+
+```kotlin
+val preview: OneEntryTemplatePreview = OneEntryTemplatePreviews.instance.template(id = 1)
+```
+
+The **OneEntryTemplatePreview** model will be responsed
+
+```kotlin
+/**
+ * Represents a template preview for a single entry, with support for localization
+ *
+ * @param id Unique identifier for the preview
+ * @param version Version of the template, if available
+ * @param identifier Identifier for the template
+ * @param localizeInfos Localization information organized as a dictionary of LocalizeInfo objects, if available
+ */
+@Serializable
+data class OneEntryTemplatePreview(
+    val id: Int,
+    val version: Int,
+    val identifier: String,
+    val localizeInfos: Map<String, LocalizeInfo>?
+)
+```
+
+#### Getting a preview template by its marker
+
+```kotlin
+val preview: OneEntryTemplatePreview = OneEntryTemplatePreviews.instance.template(marker = "preview")
+```
+
+The **OneEntryTemplatePreview** model will be responsed
+
+```kotlin
+/**
+ * Represents a template preview for a single entry, with support for localization
+ *
+ * @param id Unique identifier for the preview
+ * @param version Version of the template, if available
+ * @param identifier Identifier for the template
+ * @param localizeInfos Localization information organized as a dictionary of LocalizeInfo objects, if available
+ */
+@Serializable
+data class OneEntryTemplatePreview(
+    val id: Int,
+    val version: Int,
+    val identifier: String,
+    val localizeInfos: Map<String, LocalizeInfo>?
+)
+```
+
+
+
+
+
 

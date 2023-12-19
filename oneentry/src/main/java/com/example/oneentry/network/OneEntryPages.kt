@@ -1,8 +1,8 @@
 package com.example.oneentry.network
 
 import com.example.oneentry.model.OneEntryPage
-import com.example.oneentry.model.PageConfig
-import com.example.oneentry.model.SearchPage
+import com.example.oneentry.model.OneEntryPageConfig
+import com.example.oneentry.model.OneEntrySearchPage
 
 class OneEntryPages private constructor() {
 
@@ -203,7 +203,7 @@ class OneEntryPages private constructor() {
      * @throws IllegalArgumentException if the decoded input is not a valid instance of T or serializer error
      * @throws OneEntryError in case of OneEntry errors
      */
-    suspend fun config(url: String): PageConfig {
+    suspend fun config(url: String): OneEntryPageConfig {
 
         return core.requestItems("/pages/$url/config")
     }
@@ -222,7 +222,7 @@ class OneEntryPages private constructor() {
     suspend fun quickSearch(
         name: String,
         langCode: String
-    ): List<SearchPage> {
+    ): List<OneEntrySearchPage> {
 
         val parameters: Map<String, Any?> = mapOf(
             "name" to name,
