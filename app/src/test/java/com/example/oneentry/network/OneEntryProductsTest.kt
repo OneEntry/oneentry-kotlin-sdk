@@ -1,7 +1,6 @@
 package com.example.oneentry.network
 
 import com.example.oneentry.model.ProductsFilter
-import com.example.oneentry.network.core.OneEntryCore
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -9,13 +8,12 @@ import org.junit.Test
 
 class OneEntryProductsTest {
 
-    private lateinit var provider: OneEntryProducts
+    private val provider = OneEntryProducts.instance
 
     @Before
     fun setUp() {
 
         TestConfig().configure(TestConfig.AuthType.CERTIFICATE)
-        provider = OneEntryProducts.instance
     }
 
     @Test
