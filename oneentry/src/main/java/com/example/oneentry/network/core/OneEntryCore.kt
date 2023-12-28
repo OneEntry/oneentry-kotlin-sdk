@@ -97,6 +97,8 @@ class OneEntryCore private constructor() {
             this.headers.appendAll(headers)
         }
 
+        println(response.bodyAsText())
+
         return serializer.decodeFromString(response.bodyAsText())
     }
 
