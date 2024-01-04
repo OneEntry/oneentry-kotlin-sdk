@@ -4,6 +4,7 @@ import com.example.oneentry.model.OneEntryForm
 import com.example.oneentry.model.OneEntryFormData
 import com.example.oneentry.model.OneEntryFormDataRequest
 import com.example.oneentry.model.OneEntryFormDataResponse
+import com.example.oneentry.network.core.OneEntryCore
 import io.ktor.http.HttpMethod
 
 class OneEntryForms private constructor() {

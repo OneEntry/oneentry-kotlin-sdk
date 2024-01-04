@@ -3,6 +3,7 @@ package com.example.oneentry.network
 import com.example.oneentry.model.OneEntryPage
 import com.example.oneentry.model.PageConfig
 import com.example.oneentry.model.SearchPage
+import com.example.oneentry.network.core.OneEntryCore
 
 class OneEntryPages private constructor() {
 

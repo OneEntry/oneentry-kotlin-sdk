@@ -1,7 +1,6 @@
 package com.example.oneentry.network
 
 import com.example.oneentry.network.core.OneEntryCore
-import com.example.oneentry.network.core.OneEntryCore.Companion.instance
 
 class TestConfig {
 
@@ -21,8 +20,8 @@ class TestConfig {
 
         when (authType) {
 
-            AuthType.TOKEN -> OneEntryCore.initializeApp(domain, token, instance.serializer)
-            AuthType.CERTIFICATE -> OneEntryCore.initializeApp(domain, certificateName, password, filePath, instance.serializer)
+            AuthType.TOKEN -> OneEntryCore.initializeApp(domain, token)
+            AuthType.CERTIFICATE -> OneEntryCore.initializeApp(domain, certificateName, password, filePath)
         }
     }
 }
