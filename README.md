@@ -74,6 +74,67 @@
     - [Getting a preview template by its marker](#getting-preview-template-by-its-marker)
 
 
+### Step 1: Create OneEntry project
+
+In order to create a OneEntry project, you need to create an account on our [site](https://account.oneentry.cloud/).
+After that, go to the projects tab and create a new [project](https://account.oneentry.cloud/projects).
+
+### Step 2: Register your app with OneEntry (In Development)
+
+### Step 3: Add OneEntry SDK to your app
+
+This is the final step you need to take in order to add OneEntry to your application.
+> Before using SDK classes and methods, you need to go through initialization. Otherwise there will be an error
+
+#### Initialization with an authentication token
+
+1. To initialize with an authorization token, you need to get a link to the project and the token. You can do this in the project settings in the tab **App tokens**
+2. Import the OneEntry module: 
+```kotlin
+import OneEntry
+
+// ...
+``` 
+3. Configure a OneEntryCore shared instance, before using SDK methods
+```kotlin
+val token = "..."
+val domain = "https://sample.oneentry.cloud"
+
+OneEntryCore.initializeApp(domain, token)
+```
+
+#### Initialization with certificates
+
+> Android Sdk OneEntry uses .p12(PKCS#12) certificates for authorization. Such a certificate can be generated independently from the key & certificate pair or use the one provided by OneEntry
+
+In any case, you need to download the archive with certificates. You can do this in the project settings, in the Application Certificates tab
+The following files will be inside:
+* `.cert` - Certificate, encrypted in base64
+* `.csr` - Certificate request
+* `.key` - Key, encrypted in base64
+* `.p12` - The Certificate & Key bundle, encrypted in PKCS#12
+
+##### Using the built-in certificate
+
+1. Move the .p12 file to the project, make sure it is included in Target Membership
+2. Initialize the application
+```kotlin
+private val domain = "https://sample.oneentry.cloud"
+private val certificateName = "sample"
+private val password = "sample"
+private val filePath = "C:\\Users\\..."
+
+OneEntryCore.initializeApp(domain, certificateName, password, filePath)
+```
+
+##### Generation of your .p12 certificate
+
+1. To do this, you will need a key(`.key`) and certificate(`.cert`) file, download them
+2. Generate .p12 with `openSSL`
+..openssl pkcs12 -legacy -export -out certificate.p12 -inkey key.key -in cert.cert
+3. Move the .p12 file to the project
+4. Using the certificate and password you specified when creating it, initialize the application
+
 ## Using OneEntry Kotlin SDK
 
 ### Working with forms
@@ -349,7 +410,7 @@ enum class AttributeType {
 Let's try to get the attributes from the page, for products and other entities the process will be similar
 
 ```kotlin
-val page
+val page = OneEntryPages.instance.rootPages("en_US")
 ```
 
 ### OneEntryProducts
@@ -1209,9 +1270,5 @@ data class OneEntryTemplatePreview(
     val localizeInfos: Map<String, LocalizeInfo>?
 )
 ```
-
-
-
-
 
 
