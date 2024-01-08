@@ -257,7 +257,7 @@ class OneEntryProducts private constructor() {
             "sortOrder" to sortOrder
         )
 
-        return core.requestItems("/products/conditions-filter", parameters, HttpMethod.Post, body)
+        return core.requestItems("/products/conditions-filter", parameters, body)
     }
 
     /**

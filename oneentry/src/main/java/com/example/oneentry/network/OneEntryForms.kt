@@ -84,7 +84,7 @@ class OneEntryForms private constructor() {
 
         val body = OneEntryFormDataRequest(identifier, data)
 
-        return core.requestItems(link = "/form-data", method = HttpMethod.Post, body = body)
+        return core.requestItems(link = "/form-data", body = body)
     }
 
     /**

@@ -1,12 +1,19 @@
 package com.example.oneentry.network.core
 
+import com.example.oneentry.model.OneEntryException
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.plugins.HttpResponseValidator
+import io.ktor.client.plugins.ResponseException
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.defaultRequest
+import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.request
-import io.ktor.client.request.setBody
 import io.ktor.client.statement.bodyAsText
-import io.ktor.http.ContentType
-import io.ktor.http.HeadersBuilder
 import io.ktor.http.HttpMethod
-import io.ktor.http.contentType
+import io.ktor.http.URLProtocol
+import io.ktor.http.path
+import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
 internal val Map<String, Any?>.query: String
@@ -21,92 +28,90 @@ internal val Map<String, Any?>.query: String
 
 class OneEntryCore private constructor() {
 
-    internal var domain: String? = null
+    private var client: HttpClient? = null
+//    private var domain: String? = null
     internal val api = "/api/content"
     val serializer = Json {
         ignoreUnknownKeys = true
         encodeDefaults = true
     }
 
+    private val defaultRequestBuilder: HttpRequestBuilder.() -> Unit = {
+        method = HttpMethod.Get
+    }
+
     companion object {
 
         val instance: OneEntryCore = OneEntryCore()
-        var credential = OneEntryCredential.instance
-        private lateinit var headers: HeadersBuilder
 
-        fun initializeApp(domain: String, token: String) {
+        fun initializeApp(domain: String, credential: OneEntryCredential) {
 
-            instance.domain = domain
-            headers = credential.credentialToken(token)
-            credential.generateHttpClient()
-        }
+//            instance.domain = domain
+            instance.client = credential.client.config {
 
-        fun initializeApp(domain: String, certificateName: String, password: String, filePath: String) {
+                expectSuccess = true
 
-            instance.domain = domain
-            headers = credential.credentialAuth(certificateName, password, filePath)
-            credential.generateHttpClient()
+                defaultRequest {
+                    url {
+                        host = domain
+                        protocol = URLProtocol.HTTPS
+                        path(instance.api)
+                    }
+                }
+
+                install(ContentNegotiation) {
+                    json(instance.serializer)
+                }
+
+                HttpResponseValidator {
+                    handleResponseExceptionWithRequest { exception, _ ->
+                        val responseException = exception as? ResponseException ?: return@handleResponseExceptionWithRequest
+                        val response = responseException.response
+                        val oneEntryException = instance.serializer.decodeFromString<OneEntryException>(response.bodyAsText())
+                        throw oneEntryException
+                    }
+                }
+            }
         }
     }
 
     internal suspend inline fun <reified T>requestItems(
         link: String,
         parameters: Map<String, Any?> = mapOf(),
-        method: HttpMethod = HttpMethod.Get
+        noinline block: HttpRequestBuilder.() -> Unit = defaultRequestBuilder
     ): T {
 
-        if (domain == null)
-            throw RuntimeException("OneEntry application has not been initialized")
+        val client = client ?: throw RuntimeException("OneEntry application has not been initialized")
+        val url = link + parameters.query
+        println("Url: $url")
+        val response = client.request(url, block)
 
-        val url = domain + api + link + parameters.query
-        val headers = headers.build()
+        println("Response: " + response.bodyAsText())
 
-        val response = credential.client.request(url) {
-            this.method = method
-            this.headers.appendAll(headers)
-        }
-
-        return serializer.decodeFromString(response.bodyAsText())
+        return response.body()
     }
 
     internal suspend inline fun <reified T, reified G>requestItems(
         link: String,
         parameters: Map<String, Any?> = mapOf(),
-        method: HttpMethod,
-        body: G
+        body: G,
+        noinline block: HttpRequestBuilder.() -> Unit = defaultRequestBuilder
     ): T {
 
-        if (domain == null)
-            throw RuntimeException("OneEntry application has not been initialized")
-
-        val url = domain + api + link + parameters.query
-        val headers = headers.build()
-
-        val response = credential.client.request(url) {
-            contentType(ContentType.Application.Json)
-            setBody(body)
-            this.method = method
-            this.headers.appendAll(headers)
-        }
+        val client = client ?: throw RuntimeException("OneEntry application has not been initialized")
+        val response = client.request(link + parameters.query, block)
 
         return serializer.decodeFromString(response.bodyAsText())
     }
 
-    internal suspend fun requestData(
+    internal suspend inline fun requestData(
         link: String,
         parameters: Map<String, Any?> = mapOf(),
-        method: HttpMethod = HttpMethod.Get
+        noinline block: HttpRequestBuilder.() -> Unit = defaultRequestBuilder
     ) {
 
-        if (domain == null)
-            throw RuntimeException("OneEntry application has not been initialized")
+        val client = client ?: throw RuntimeException("OneEntry application has not been initialized")
 
-        val url = domain + api + link + parameters.query
-        val headers = headers.build()
-
-        credential.client.request(url) {
-            this.method = method
-            this.headers.appendAll(headers)
-        }
+        client.request(link + parameters.query, block)
     }
 }

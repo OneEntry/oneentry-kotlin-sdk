@@ -1,6 +1,6 @@
 package com.example.oneentry.model
 
-import com.example.oneentry.network.OneEntryCore.Companion.instance
+import com.example.oneentry.network.core.OneEntryCore.Companion.instance
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonElement
 
