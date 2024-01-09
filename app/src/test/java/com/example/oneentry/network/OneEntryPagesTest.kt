@@ -3,7 +3,8 @@ package com.example.oneentry.network
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
 
 class OneEntryPagesTest {
 
@@ -12,10 +13,7 @@ class OneEntryPagesTest {
     @Before
     fun setUp() {
 
-        OneEntryCore.initializeApp(
-            "https://hummel-mobile.oneentry.cloud",
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiS290bGluIFNkayIsInNlcmlhbE51bWJlciI6MiwiaWF0IjoxNzAwMjE3ODU2LCJleHAiOjE3MzE3NTM4NDR9.0F4D0rgAM9nqpFEpbJqxiUaNNxik_wpI70QPFXoYSzk"
-        )
+        TestConfig().configure(TestConfig.AuthType.CERTIFICATE)
     }
 
     @Test

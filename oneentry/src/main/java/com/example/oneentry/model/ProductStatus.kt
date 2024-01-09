@@ -19,3 +19,4 @@ data class ProductStatus(
     val identifier: String,
     val localizeInfos: Map<String, LocalizeInfo>
 )
+
