@@ -31,6 +31,26 @@ data class OneEntryPage(
 )
 
 /**
+ * OneEntry menu page object
+ *
+ * @param id Page id
+ * @param parentId Page parent id
+ * @param pageUrl Page url
+ * @param position Page position
+ * @param localizeInfos Page localize content
+ * @param children Child pages
+ */
+@Serializable
+data class OneEntryMenuPage(
+    val id: Int,
+    val parentId: Int? = null,
+    val pageUrl: String,
+    val position: Int,
+    val localizeInfos: Map<String, LocalizeInfo>? = null,
+    val children: List<OneEntryMenuPage>? = null
+)
+
+/**
  * OneEntry page search model
  *
  * @param id Page id
@@ -41,3 +61,4 @@ data class OneEntrySearchPage(
     val id: Int,
     val title: String
 )
+

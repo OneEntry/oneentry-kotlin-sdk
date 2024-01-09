@@ -15,5 +15,5 @@ data class OneEntryMenu(
     val id: Int,
     val identifier: String,
     val localizeInfos: Map<String, LocalizeInfo>,
-    val pages: List<OneEntryPage>
+    val pages: List<OneEntryMenuPage>
 )
