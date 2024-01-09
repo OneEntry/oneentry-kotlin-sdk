@@ -9,28 +9,29 @@ import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.request
+import io.ktor.client.request.setBody
+import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.bodyAsText
+import io.ktor.http.ContentType
 import io.ktor.http.HttpMethod
+import io.ktor.http.ParametersBuilder
+import io.ktor.http.URLBuilder
 import io.ktor.http.URLProtocol
+import io.ktor.http.contentType
 import io.ktor.http.path
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
-internal val Map<String, Any?>.query: String
-    get() {
-        val parameters = this
-            .filterValues { it != null }
-            .map { (key, value) -> "$key=$value" }
-            .joinToString("&")
+fun ParametersBuilder.append(name: String, value: Any?) {
 
-        return if (parameters.isEmpty()) "" else "?$parameters"
-    }
+    val textValue = value?.toString() ?: return
+
+    append(name, textValue)
+}
 
 class OneEntryCore private constructor() {
 
     private var client: HttpClient? = null
-//    private var domain: String? = null
-    internal val api = "/api/content"
     val serializer = Json {
         ignoreUnknownKeys = true
         encodeDefaults = true
@@ -46,16 +47,15 @@ class OneEntryCore private constructor() {
 
         fun initializeApp(domain: String, credential: OneEntryCredential) {
 
-//            instance.domain = domain
             instance.client = credential.client.config {
 
                 expectSuccess = true
 
                 defaultRequest {
                     url {
-                        host = domain
                         protocol = URLProtocol.HTTPS
-                        path(instance.api)
+                        host = domain
+                        path("api/content/")
                     }
                 }
 
@@ -75,43 +75,13 @@ class OneEntryCore private constructor() {
         }
     }
 
-    internal suspend inline fun <reified T>requestItems(
+    internal suspend fun requestItems(
         link: String,
-        parameters: Map<String, Any?> = mapOf(),
-        noinline block: HttpRequestBuilder.() -> Unit = defaultRequestBuilder
-    ): T {
-
-        val client = client ?: throw RuntimeException("OneEntry application has not been initialized")
-        val url = link + parameters.query
-        println("Url: $url")
-        val response = client.request(url, block)
-
-        println("Response: " + response.bodyAsText())
-
-        return response.body()
-    }
-
-    internal suspend inline fun <reified T, reified G>requestItems(
-        link: String,
-        parameters: Map<String, Any?> = mapOf(),
-        body: G,
-        noinline block: HttpRequestBuilder.() -> Unit = defaultRequestBuilder
-    ): T {
-
-        val client = client ?: throw RuntimeException("OneEntry application has not been initialized")
-        val response = client.request(link + parameters.query, block)
-
-        return serializer.decodeFromString(response.bodyAsText())
-    }
-
-    internal suspend inline fun requestData(
-        link: String,
-        parameters: Map<String, Any?> = mapOf(),
-        noinline block: HttpRequestBuilder.() -> Unit = defaultRequestBuilder
-    ) {
+        block: HttpRequestBuilder.() -> Unit = defaultRequestBuilder
+    ): HttpResponse {
 
         val client = client ?: throw RuntimeException("OneEntry application has not been initialized")
 
-        client.request(link + parameters.query, block)
+        return client.request(link, block)
     }
 }

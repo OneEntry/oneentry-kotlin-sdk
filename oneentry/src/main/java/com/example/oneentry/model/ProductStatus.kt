@@ -1,5 +1,9 @@
 package com.example.oneentry.model
 
+import com.example.oneentry.network.OneEntryProducts
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 
 /**
@@ -19,3 +23,4 @@ data class ProductStatus(
     val identifier: String,
     val localizeInfos: Map<String, LocalizeInfo>
 )
+

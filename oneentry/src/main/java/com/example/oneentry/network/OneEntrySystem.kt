@@ -21,7 +21,7 @@ class OneEntrySystem private constructor() {
      */
     suspend fun test404() {
 
-        core.requestData("/system/test404")
+        core.requestItems("system/test404")
     }
 
     /**
@@ -33,6 +33,6 @@ class OneEntrySystem private constructor() {
      */
     suspend fun test500() {
 
-        core.requestData("/system/test500")
+        core.requestItems("system/test500")
     }
 }

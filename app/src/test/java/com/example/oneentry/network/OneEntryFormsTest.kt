@@ -8,7 +8,7 @@ import org.junit.Test
 
 class OneEntryFormsTest {
 
-    private lateinit var provider: OneEntryForms
+    private val provider = OneEntryForms.instance
 
     @Before
     fun setUp() {
@@ -43,6 +43,8 @@ class OneEntryFormsTest {
         )
 
         val result = provider.sendData("auth", data)
+
+        assertEquals(result.total, result.items.count())
     }
 
     @Test

@@ -4,6 +4,8 @@ import com.example.oneentry.model.OneEntryPage
 import com.example.oneentry.model.PageConfig
 import com.example.oneentry.model.SearchPage
 import com.example.oneentry.network.core.OneEntryCore
+import com.example.oneentry.network.core.append
+import io.ktor.client.call.body
 
 class OneEntryPages private constructor() {
 
@@ -26,11 +28,13 @@ class OneEntryPages private constructor() {
      */
     suspend fun rootPages(langCode: String): List<OneEntryPage> {
 
-        val parameters: Map<String, Any?> = mapOf(
-            "langCode" to langCode
-        )
+        val response = core.requestItems("pages/root") {
+            url {
+                parameters.append("langCode", langCode)
+            }
+        }
 
-        return core.requestItems("/pages/root", parameters)
+        return response.body()
     }
 
     /**
@@ -51,13 +55,15 @@ class OneEntryPages private constructor() {
         offset: Int? = null
     ): List<OneEntryPage> {
 
-        val parameters: Map<String, Any?> = mapOf(
-            "langCode" to langCode,
-            "limit" to limit,
-            "offset" to offset
-        )
+        val response = core.requestItems("pages/catalog") {
+            url {
+                parameters.append("langCode", langCode)
+                parameters.append("limit", limit)
+                parameters.append("offset", offset)
+            }
+        }
 
-        return core.requestItems("/pages/catalog", parameters)
+        return response.body()
     }
 
     /**
@@ -72,11 +78,13 @@ class OneEntryPages private constructor() {
      */
     suspend fun pages(langCode: String): List<OneEntryPage> {
 
-        val parameters: Map<String, Any?> = mapOf(
-            "langCode" to langCode
-        )
+        val response = core.requestItems("pages") {
+            url {
+                parameters.append("langCode", langCode)
+            }
+        }
 
-        return core.requestItems("/pages", parameters)
+        return response.body()
     }
 
     /**
@@ -95,11 +103,13 @@ class OneEntryPages private constructor() {
         langCode: String
     ): OneEntryPage {
 
-        val parameters: Map<String, Any?> = mapOf(
-            "langCode" to langCode
-        )
+        val response = core.requestItems("pages/$id") {
+            url {
+                parameters.append("langCode", langCode)
+            }
+        }
 
-        return core.requestItems("/pages/$id", parameters)
+        return response.body()
     }
 
     /**
@@ -118,11 +128,13 @@ class OneEntryPages private constructor() {
         langCode: String
     ): List<OneEntryPage> {
 
-        val parameters: Map<String, Any?> = mapOf(
-            "langCode" to langCode
-        )
+        val response = core.requestItems("pages/$url/children") {
+            url {
+                parameters.append("langCode", langCode)
+            }
+        }
 
-        return core.requestItems("/pages/$url/children", parameters)
+        return response.body()
     }
 
     /**
@@ -141,11 +153,13 @@ class OneEntryPages private constructor() {
         langCode: String
     ): OneEntryPage {
 
-        val parameters: Map<String, Any?> = mapOf(
-            "langCode" to langCode
-        )
+        val response = core.requestItems("pages/url/$url") {
+            url {
+                parameters.append("langCode", langCode)
+            }
+        }
 
-        return core.requestItems("/pages/url/$url", parameters)
+        return response.body()
     }
 
     /**
@@ -164,11 +178,13 @@ class OneEntryPages private constructor() {
         langCode: String
     ): List<OneEntryPage> {
 
-        val parameters: Map<String, Any?> = mapOf(
-            "langCode" to langCode
-        )
+        val response = core.requestItems("pages/$url/forms") {
+            url {
+                parameters.append("langCode", langCode)
+            }
+        }
 
-        return core.requestItems("/pages/$url/forms", parameters)
+        return response.body()
     }
 
     /**
@@ -187,11 +203,13 @@ class OneEntryPages private constructor() {
         langCode: String
     ): List<OneEntryPage> {
 
-        val parameters: Map<String, Any?> = mapOf(
-            "langCode" to langCode
-        )
+        val response = core.requestItems("pages/$url/blocks") {
+            url {
+                parameters.append("langCode", langCode)
+            }
+        }
 
-        return core.requestItems("/pages/$url/blocks", parameters)
+        return response.body()
     }
 
     /**
@@ -206,7 +224,7 @@ class OneEntryPages private constructor() {
      */
     suspend fun config(url: String): PageConfig {
 
-        return core.requestItems("/pages/$url/config")
+        return core.requestItems("pages/$url/config").body()
     }
 
     /**
@@ -225,11 +243,13 @@ class OneEntryPages private constructor() {
         langCode: String
     ): List<SearchPage> {
 
-        val parameters: Map<String, Any?> = mapOf(
-            "name" to name,
-            "langCode" to langCode
-        )
+        val response = core.requestItems("pages/quick/search") {
+            url {
+                parameters.append("name", name)
+                parameters.append("langCode", langCode)
+            }
+        }
 
-        return core.requestItems("/pages/quick/search", parameters)
+        return response.body()
     }
 }

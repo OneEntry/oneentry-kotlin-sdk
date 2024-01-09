@@ -2,6 +2,7 @@ package com.example.oneentry.network
 
 import com.example.oneentry.model.OneEntryTemplatePreview
 import com.example.oneentry.network.core.OneEntryCore
+import io.ktor.client.call.body
 
 class OneEntryTemplatePreviews private constructor() {
 
@@ -22,7 +23,7 @@ class OneEntryTemplatePreviews private constructor() {
      */
     suspend fun templates(): List<OneEntryTemplatePreview> {
 
-        return core.requestItems("/template-previews")
+        return core.requestItems("template-previews").body()
     }
 
     /**
@@ -37,7 +38,7 @@ class OneEntryTemplatePreviews private constructor() {
      */
     suspend fun template(id: Int): OneEntryTemplatePreview {
 
-        return core.requestItems("/template-previews/$id")
+        return core.requestItems("template-previews/$id").body()
     }
 
     /**
@@ -52,6 +53,6 @@ class OneEntryTemplatePreviews private constructor() {
      */
     suspend fun template(marker: String): OneEntryTemplatePreview {
 
-        return core.requestItems("/template-previews/marker/$marker")
+        return core.requestItems("template-previews/marker/$marker").body()
     }
 }
