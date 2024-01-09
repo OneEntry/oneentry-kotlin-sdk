@@ -1,9 +1,5 @@
 package com.example.oneentry.model
 
-import com.example.oneentry.network.OneEntryProducts
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 
 /**

@@ -7,7 +7,6 @@ import io.ktor.client.request.header
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.network.tls.addKeyStore
-import java.io.File
 import java.io.FileInputStream
 import java.security.KeyStore
 
@@ -32,8 +31,6 @@ class CertificateCredential(
     override val client: HttpClient = HttpClient(CIO) {
         engine {
             https {
-                println("KeyStore: $keyStore")
-                println("Password: $password")
                 addKeyStore(keyStore, password.toCharArray())
             }
         }

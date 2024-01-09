@@ -3,7 +3,6 @@ package com.example.oneentry.network
 import com.example.oneentry.model.ProductsFilter
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 

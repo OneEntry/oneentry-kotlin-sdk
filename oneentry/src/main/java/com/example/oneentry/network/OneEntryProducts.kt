@@ -13,7 +13,6 @@ import io.ktor.client.call.body
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpMethod
-import kotlinx.serialization.json.Json
 
 class OneEntryProducts private constructor() {
 
