@@ -1,11 +1,12 @@
 package com.example.oneentry.network
 
 import com.example.oneentry.model.OneEntryPage
-import com.example.oneentry.model.PageConfig
+import com.example.oneentry.model.OneEntryPageConfig
 import com.example.oneentry.model.OneEntrySearchPage
 import com.example.oneentry.network.core.OneEntryCore
 import com.example.oneentry.network.core.append
 import io.ktor.client.call.body
+import com.example.oneentry.model.OneEntryException
 
 class OneEntryPages private constructor() {
 
@@ -24,7 +25,7 @@ class OneEntryPages private constructor() {
      * @return List<Page>
      * @throws RuntimeException if OneEntry application has not been initialized
      * @throws IllegalArgumentException if the decoded input is not a valid instance of T or serializer error
-     * @throws OneEntryError in case of OneEntry errors
+     * @throws OneEntryException in case of OneEntry errors
      */
     suspend fun rootPages(langCode: String): List<OneEntryPage> {
 
@@ -47,7 +48,7 @@ class OneEntryPages private constructor() {
      * @return List<Page>
      * @throws RuntimeException if OneEntry application has not been initialized
      * @throws IllegalArgumentException if the decoded input is not a valid instance of T or serializer error
-     * @throws OneEntryError in case of OneEntry errors
+     * @throws OneEntryException in case of OneEntry errors
      */
     suspend fun catalogPages(
         langCode: String,
@@ -74,7 +75,7 @@ class OneEntryPages private constructor() {
      * @return List<Page>
      * @throws RuntimeException if OneEntry application has not been initialized
      * @throws IllegalArgumentException if the decoded input is not a valid instance of T or serializer error
-     * @throws OneEntryError in case of OneEntry errors
+     * @throws OneEntryException in case of OneEntry errors
      */
     suspend fun pages(langCode: String): List<OneEntryPage> {
 
@@ -96,7 +97,7 @@ class OneEntryPages private constructor() {
      * @return List<Page>
      * @throws RuntimeException if OneEntry application has not been initialized
      * @throws IllegalArgumentException if the decoded input is not a valid instance of T or serializer error
-     * @throws OneEntryError in case of OneEntry errors
+     * @throws OneEntryException in case of OneEntry errors
      */
     suspend fun page(
         id: Int,
@@ -121,7 +122,7 @@ class OneEntryPages private constructor() {
      * @return List<Page>
      * @throws RuntimeException if OneEntry application has not been initialized
      * @throws IllegalArgumentException if the decoded input is not a valid instance of T or serializer error
-     * @throws OneEntryError in case of OneEntry errors
+     * @throws OneEntryException in case of OneEntry errors
      */
     suspend fun pagesChildren(
         url: String,
@@ -146,7 +147,7 @@ class OneEntryPages private constructor() {
      * @return List<Page>
      * @throws RuntimeException if OneEntry application has not been initialized
      * @throws IllegalArgumentException if the decoded input is not a valid instance of T or serializer error
-     * @throws OneEntryError in case of OneEntry errors
+     * @throws OneEntryException in case of OneEntry errors
      */
     suspend fun page(
         url: String,
@@ -171,7 +172,7 @@ class OneEntryPages private constructor() {
      * @return List<Page>
      * @throws RuntimeException if OneEntry application has not been initialized
      * @throws IllegalArgumentException if the decoded input is not a valid instance of T or serializer error
-     * @throws OneEntryError in case of OneEntry errors
+     * @throws OneEntryException in case of OneEntry errors
      */
     suspend fun pagesForms(
         url: String,
@@ -196,7 +197,7 @@ class OneEntryPages private constructor() {
      * @return List<Page>
      * @throws RuntimeException if OneEntry application has not been initialized
      * @throws IllegalArgumentException if the decoded input is not a valid instance of T or serializer error
-     * @throws OneEntryError in case of OneEntry errors
+     * @throws OneEntryException in case of OneEntry errors
      */
     suspend fun pagesBlocks(
         url: String,
@@ -220,7 +221,7 @@ class OneEntryPages private constructor() {
      * @return List<Page>
      * @throws RuntimeException if OneEntry application has not been initialized
      * @throws IllegalArgumentException if the decoded input is not a valid instance of T or serializer error
-     * @throws OneEntryError in case of OneEntry errors
+     * @throws OneEntryException in case of OneEntry errors
      */
     suspend fun config(url: String): OneEntryPageConfig {
 
@@ -236,7 +237,7 @@ class OneEntryPages private constructor() {
      * @return List<Page>
      * @throws RuntimeException if OneEntry application has not been initialized
      * @throws IllegalArgumentException if the decoded input is not a valid instance of T or serializer error
-     * @throws OneEntryError in case of OneEntry errors
+     * @throws OneEntryException in case of OneEntry errors
      */
     suspend fun quickSearch(
         name: String,

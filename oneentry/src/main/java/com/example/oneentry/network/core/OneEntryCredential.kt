@@ -14,7 +14,7 @@ interface OneEntryCredential {
     val client: HttpClient
 }
 
-class TokenCredential(private val token: String): OneEntryCredential {
+class OneEntryTokenCredential(private val token: String): OneEntryCredential {
 
     override val client: HttpClient = HttpClient(CIO) {
         defaultRequest {
@@ -23,7 +23,7 @@ class TokenCredential(private val token: String): OneEntryCredential {
     }
 }
 
-class CertificateCredential(
+class OneEntryCertificateCredential(
     private val path: String,
     private val password: String
 ): OneEntryCredential {

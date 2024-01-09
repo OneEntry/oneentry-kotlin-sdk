@@ -9,6 +9,7 @@ import com.example.oneentry.network.core.OneEntryCore
 import com.example.oneentry.network.core.append
 import io.ktor.client.call.body
 import io.ktor.client.statement.bodyAsText
+import com.example.oneentry.model.OneEntryException
 
 class OneEntryProject private constructor() {
 
@@ -25,7 +26,7 @@ class OneEntryProject private constructor() {
      * @return List<Locale>
      * @throws RuntimeException if OneEntry application has not been initialized
      * @throws IllegalArgumentException if the decoded input is not a valid instance of T or serializer error
-     * @throws OneEntryError in case of OneEntry errors
+     * @throws OneEntryException in case of OneEntry errors
      */
     suspend fun locales(): List<OneEntryLocale> {
 
@@ -38,7 +39,7 @@ class OneEntryProject private constructor() {
      * @return List<OneEntryGeneralType>
      * @throws RuntimeException if OneEntry application has not been initialized
      * @throws IllegalArgumentException if the decoded input is not a valid instance of T or serializer error
-     * @throws OneEntryError in case of OneEntry errors
+     * @throws OneEntryException in case of OneEntry errors
      */
     suspend fun generalTypes(): List<OneEntryGeneralType> {
 
@@ -55,7 +56,7 @@ class OneEntryProject private constructor() {
      * @return List<OneEntryBlock>
      * @throws RuntimeException if OneEntry application has not been initialized
      * @throws IllegalArgumentException if the decoded input is not a valid instance of T or serializer error
-     * @throws OneEntryError in case of OneEntry errors
+     * @throws OneEntryException in case of OneEntry errors
      */
     suspend fun blocks(
         offset: Int = 0,
@@ -83,7 +84,7 @@ class OneEntryProject private constructor() {
      * @return OneEntryBlock
      * @throws RuntimeException if OneEntry application has not been initialized
      * @throws IllegalArgumentException if the decoded input is not a valid instance of T or serializer error
-     * @throws OneEntryError in case of OneEntry errors
+     * @throws OneEntryException in case of OneEntry errors
      */
     suspend fun block(
         marker: String,
@@ -111,7 +112,7 @@ class OneEntryProject private constructor() {
      * @return List<OneEntryAdmins>
      * @throws RuntimeException if OneEntry application has not been initialized
      * @throws IllegalArgumentException if the decoded input is not a valid instance of T or serializer error
-     * @throws OneEntryError in case of OneEntry errors
+     * @throws OneEntryException in case of OneEntry errors
      */
     suspend fun admins(
         offset: Int = 0,
@@ -138,7 +139,7 @@ class OneEntryProject private constructor() {
      * @return OneEntryMenu
      * @throws RuntimeException if OneEntry application has not been initialized
      * @throws IllegalArgumentException if the decoded input is not a valid instance of T or serializer error
-     * @throws OneEntryError in case of OneEntry errors
+     * @throws OneEntryException in case of OneEntry errors
      */
     suspend fun menu(marker: String): OneEntryMenu {
 

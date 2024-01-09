@@ -3,6 +3,7 @@ package com.example.oneentry.network
 import com.example.oneentry.model.OneEntryTemplatePreview
 import com.example.oneentry.network.core.OneEntryCore
 import io.ktor.client.call.body
+import com.example.oneentry.model.OneEntryException
 
 class OneEntryTemplatePreviews private constructor() {
 
@@ -19,7 +20,7 @@ class OneEntryTemplatePreviews private constructor() {
      * @return List<OneEntryTemplatePreview>
      * @throws RuntimeException if OneEntry application has not been initialized
      * @throws IllegalArgumentException if the decoded input is not a valid instance of T or serializer error
-     * @throws OneEntryError in case of OneEntry errors
+     * @throws OneEntryException in case of OneEntry errors
      */
     suspend fun templates(): List<OneEntryTemplatePreview> {
 
@@ -34,7 +35,7 @@ class OneEntryTemplatePreviews private constructor() {
      * @return OneEntryTemplatePreview
      * @throws RuntimeException if OneEntry application has not been initialized
      * @throws IllegalArgumentException if the decoded input is not a valid instance of T or serializer error
-     * @throws OneEntryError in case of OneEntry errors
+     * @throws OneEntryException in case of OneEntry errors
      */
     suspend fun template(id: Int): OneEntryTemplatePreview {
 
@@ -49,7 +50,7 @@ class OneEntryTemplatePreviews private constructor() {
      * @return OneEntryTemplatePreview
      * @throws RuntimeException if OneEntry application has not been initialized
      * @throws IllegalArgumentException if the decoded input is not a valid instance of T or serializer error
-     * @throws OneEntryError in case of OneEntry errors
+     * @throws OneEntryException in case of OneEntry errors
      */
     suspend fun template(marker: String): OneEntryTemplatePreview {
 

@@ -8,7 +8,7 @@ import com.example.oneentry.network.core.OneEntryCore
 import com.example.oneentry.network.core.append
 import io.ktor.client.call.body
 import io.ktor.client.request.setBody
-import io.ktor.client.statement.bodyAsText
+import com.example.oneentry.model.OneEntryException
 import io.ktor.http.HttpMethod
 
 class OneEntryForms private constructor() {
@@ -30,7 +30,7 @@ class OneEntryForms private constructor() {
      * @return List<OneEntryForm>
      * @throws RuntimeException if OneEntry application has not been initialized
      * @throws IllegalArgumentException if the decoded input is not a valid instance of T or serializer error
-     * @throws OneEntryError in case of OneEntry errors
+     * @throws OneEntryException in case of OneEntry errors
      */
     suspend fun forms(
         offset: Int = 0,
@@ -58,7 +58,7 @@ class OneEntryForms private constructor() {
      * @return OneEntryForm
      * @throws RuntimeException if OneEntry application has not been initialized
      * @throws IllegalArgumentException if the decoded input is not a valid instance of T or serializer error
-     * @throws OneEntryError in case of OneEntry errors
+     * @throws OneEntryException in case of OneEntry errors
      */
     suspend fun form(
         marker: String,
@@ -83,7 +83,7 @@ class OneEntryForms private constructor() {
      * @return OneEntryFormDataResponse
      * @throws RuntimeException if OneEntry application has not been initialized
      * @throws IllegalArgumentException if the decoded input is not a valid instance of T or serializer error
-     * @throws OneEntryError in case of OneEntry errors
+     * @throws OneEntryException in case of OneEntry errors
      */
     suspend fun sendData(
         identifier: String,
@@ -107,7 +107,7 @@ class OneEntryForms private constructor() {
      * @return List<OneEntryFormDataResponse>
      * @throws RuntimeException if OneEntry application has not been initialized
      * @throws IllegalArgumentException if the decoded input is not a valid instance of T or serializer error
-     * @throws OneEntryError in case of OneEntry errors
+     * @throws OneEntryException in case of OneEntry errors
      */
     suspend fun data(): OneEntryFormDataResponse {
 
@@ -124,7 +124,7 @@ class OneEntryForms private constructor() {
      * @return OneEntryFormDataResponse
      * @throws RuntimeException if OneEntry application has not been initialized
      * @throws IllegalArgumentException if the decoded input is not a valid instance of T or serializer error
-     * @throws OneEntryError in case of OneEntry errors
+     * @throws OneEntryException in case of OneEntry errors
      */
     suspend fun data(
         marker: String,
