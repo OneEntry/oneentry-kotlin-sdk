@@ -8,16 +8,12 @@ import org.junit.Test
 
 class OneEntryFormsTest {
 
-    private lateinit var provider: OneEntryForms
+    private val provider = OneEntryForms.instance
 
     @Before
     fun setUp() {
 
-        OneEntryCore.initializeApp(
-            "https://hummel-mobile.oneentry.cloud",
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiS290bGluIFNkayIsInNlcmlhbE51bWJlciI6MiwiaWF0IjoxNzAwMjE3ODU2LCJleHAiOjE3MzE3NTM4NDR9.0F4D0rgAM9nqpFEpbJqxiUaNNxik_wpI70QPFXoYSzk"
-        )
-        provider = OneEntryForms.instance
+        TestConfig().configure(TestConfig.AuthType.CERTIFICATE)
     }
 
     @Test
@@ -47,6 +43,8 @@ class OneEntryFormsTest {
         )
 
         val result = provider.sendData("auth", data)
+
+        assertEquals(result.total, result.items.count())
     }
 
     @Test

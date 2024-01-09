@@ -19,19 +19,19 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class OneEntryPage(
     val id: Int,
-    val parentId: Int?,
+    val parentId: Int? = null,
     val pageUrl: String,
-    val depth: Int?,
-    val isVisible: Boolean?,
+    val depth: Int? = null,
+    val isVisible: Boolean? = null,
     val position: Int? = null,
-    val type: String?,
-    val templateIdentifier: String?,
-    val localizeInfos: Map<String, LocalizeInfo>?,
-    val attributeValues: Map<String, Map<String, AttributeModel>>?
+    val type: String? = null,
+    val templateIdentifier: String? = null,
+    val localizeInfos: Map<String, LocalizeInfo>? = null,
+    val attributeValues: Map<String, Map<String, AttributeModel>>?= null
 )
 
 /**
- * OneEntry page search dto
+ * OneEntry page search model
  *
  * @param id Page id
  * @param title Page title

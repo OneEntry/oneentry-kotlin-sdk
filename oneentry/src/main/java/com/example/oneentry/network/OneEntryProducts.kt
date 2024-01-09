@@ -7,6 +7,11 @@ import com.example.oneentry.model.ProductsFilter
 import com.example.oneentry.model.ProductsResult
 import com.example.oneentry.model.SearchProduct
 import com.example.oneentry.model.SortDirection
+import com.example.oneentry.network.core.OneEntryCore
+import com.example.oneentry.network.core.append
+import io.ktor.client.call.body
+import io.ktor.client.request.setBody
+import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpMethod
 
 class OneEntryProducts private constructor() {
@@ -48,19 +53,21 @@ class OneEntryProducts private constructor() {
         sortOrder: SortDirection? = null
     ): ProductsResult {
 
-        val parameters: Map<String, Any?> = mapOf(
-            "offset" to offset,
-            "limit" to limit,
-            "langCode" to langCode,
-            "statusMarker" to statusMarker,
-            "conditionValue" to conditionValue,
-            "conditionMarker" to conditionMarker,
-            "attributeMarker" to attributeMarker,
-            "sortKey" to sortKey,
-            "sortOrder" to sortOrder
-        )
+        val response = core.requestItems("products") {
+            url {
+                parameters.append("offset", offset)
+                parameters.append("limit", limit)
+                parameters.append("langCode", langCode)
+                parameters.append("statusMarker", statusMarker)
+                parameters.append("conditionValue", conditionValue)
+                parameters.append("conditionMarker", conditionMarker)
+                parameters.append("attributeMarker", attributeMarker)
+                parameters.append("sortKey", sortKey)
+                parameters.append("sortOrder", sortOrder)
+            }
+        }
 
-        return core.requestItems("/products", parameters)
+        return response.body()
     }
 
     /**
@@ -85,15 +92,17 @@ class OneEntryProducts private constructor() {
         sortOrder: SortDirection? = null
     ): ProductsResult {
 
-        val parameters: Map<String, Any?> = mapOf(
-            "offset" to offset,
-            "limit" to limit,
-            "langCode" to langCode,
-            "sortKey" to sortKey,
-            "sortOrder" to sortOrder
-        )
+        val response = core.requestItems("products/empty-page") {
+            url {
+                parameters.append("offset", offset)
+                parameters.append("limit", limit)
+                parameters.append("langCode", langCode)
+                parameters.append("sortKey", sortKey)
+                parameters.append("sortOrder", sortOrder)
+            }
+        }
 
-        return core.requestItems("/products/empty-page", parameters)
+        return response.body()
     }
 
     /**
@@ -120,15 +129,17 @@ class OneEntryProducts private constructor() {
         sortOrder: SortDirection? = null
     ): ProductsResult {
 
-        val parameters: Map<String, Any?> = mapOf(
-            "offset" to offset,
-            "limit" to limit,
-            "langCode" to langCode,
-            "sortKey" to sortKey,
-            "sortOrder" to sortOrder
-        )
+        val response = core.requestItems("products/page/$pageId") {
+            url {
+                parameters.append("offset", offset)
+                parameters.append("limit", limit)
+                parameters.append("langCode", langCode)
+                parameters.append("sortKey", sortKey)
+                parameters.append("sortOrder", sortOrder)
+            }
+        }
 
-        return core.requestItems("/products/page/$pageId", parameters)
+        return response.body()
     }
 
     /**
@@ -155,15 +166,17 @@ class OneEntryProducts private constructor() {
         sortOrder: SortDirection? = null
     ): ProductsResult {
 
-        val parameters: Map<String, Any?> = mapOf(
-            "offset" to offset,
-            "limit" to limit,
-            "langCode" to langCode,
-            "sortKey" to sortKey,
-            "sortOrder" to sortOrder
-        )
+        val response = core.requestItems("products/page/url/$url") {
+            url {
+                parameters.append("offset", offset)
+                parameters.append("limit", limit)
+                parameters.append("langCode", langCode)
+                parameters.append("sortKey", sortKey)
+                parameters.append("sortOrder", sortOrder)
+            }
+        }
 
-        return core.requestItems("/products/page/url/$url", parameters)
+        return response.body()
     }
 
     /**
@@ -190,15 +203,17 @@ class OneEntryProducts private constructor() {
         sortOrder: SortDirection? = null
     ): ProductsResult {
 
-        val parameters: Map<String, Any?> = mapOf(
-            "offset" to offset,
-            "limit" to limit,
-            "langCode" to langCode,
-            "sortKey" to sortKey,
-            "sortOrder" to sortOrder
-        )
+        val response = core.requestItems("products/$id/related") {
+            url {
+                parameters.append("offset", offset)
+                parameters.append("limit", limit)
+                parameters.append("langCode", langCode)
+                parameters.append("sortKey", sortKey)
+                parameters.append("sortOrder", sortOrder)
+            }
+        }
 
-        return core.requestItems("/products/$id/related", parameters)
+        return response.body()
     }
 
     /**
@@ -217,11 +232,13 @@ class OneEntryProducts private constructor() {
         langCode: String
     ): ProductModel {
 
-        val parameters: Map<String, Any?> = mapOf(
-            "langCode" to langCode
-        )
+        val response = core.requestItems("products/$id") {
+            url {
+                parameters.append("langCode", langCode)
+            }
+        }
 
-        return core.requestItems("/products/$id", parameters)
+        return response.body()
     }
 
     /**
@@ -248,15 +265,19 @@ class OneEntryProducts private constructor() {
         sortOrder: SortDirection? = null
     ): ProductsResult {
 
-        val parameters: Map<String, Any?> = mapOf(
-            "offset" to offset,
-            "limit" to limit,
-            "langCode" to langCode,
-            "sortKey" to sortKey,
-            "sortOrder" to sortOrder
-        )
+        val response = core.requestItems("products/conditions-filter") {
+            method = HttpMethod.Post
+            url {
+                parameters.append("offset", offset)
+                parameters.append("limit", limit)
+                parameters.append("langCode", langCode)
+                parameters.append("sortKey", sortKey)
+                parameters.append("sortOrder", sortOrder)
+            }
+            setBody(body)
+        }
 
-        return core.requestItems("/products/conditions-filter", parameters, HttpMethod.Post, body)
+        return response.body()
     }
 
     /**
@@ -275,12 +296,14 @@ class OneEntryProducts private constructor() {
         langCode: String
     ): List<SearchProduct> {
 
-        val parameters: Map<String, Any?> = mapOf(
-            "name" to name,
-            "langCode" to langCode
-        )
+        val response = core.requestItems("products/quick/search") {
+            url {
+                parameters.append("name", name)
+                parameters.append("langCode", langCode)
+            }
+        }
 
-        return core.requestItems("/products/quick/search", parameters)
+        return response.body()
     }
 
     /**
@@ -293,7 +316,7 @@ class OneEntryProducts private constructor() {
      */
     suspend fun productStatuses(): List<ProductStatus> {
 
-        return core.requestItems("/product-statuses")
+        return core.requestItems("product-statuses").body()
     }
 
     /**
@@ -308,7 +331,7 @@ class OneEntryProducts private constructor() {
      */
     suspend fun productStatus(id: Int): ProductStatus {
 
-        return core.requestItems("/product-statuses/$id")
+        return core.requestItems("product-statuses/$id").body()
     }
 
     /**
@@ -323,7 +346,7 @@ class OneEntryProducts private constructor() {
      */
     suspend fun productStatus(marker: String): ProductStatus {
 
-        return core.requestItems("/product-statuses/marker/$marker")
+        return core.requestItems("product-statuses/marker/$marker").body()
     }
 
     /**
@@ -338,6 +361,10 @@ class OneEntryProducts private constructor() {
      */
     suspend fun productStatusMarkerValidation(marker: String): Boolean {
 
-        return core.requestItems("/product-statuses/marker-validation/$marker")
+        val response = core.requestItems("product-statuses/marker-validation/$marker")
+
+        println(response.bodyAsText())
+
+        return core.serializer.decodeFromString(response.bodyAsText())
     }
 }

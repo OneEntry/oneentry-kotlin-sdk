@@ -4,6 +4,11 @@ import com.example.oneentry.model.OneEntryForm
 import com.example.oneentry.model.OneEntryFormData
 import com.example.oneentry.model.OneEntryFormDataRequest
 import com.example.oneentry.model.OneEntryFormDataResponse
+import com.example.oneentry.network.core.OneEntryCore
+import com.example.oneentry.network.core.append
+import io.ktor.client.call.body
+import io.ktor.client.request.setBody
+import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpMethod
 
 class OneEntryForms private constructor() {
@@ -33,13 +38,15 @@ class OneEntryForms private constructor() {
         langCode: String
     ): List<OneEntryForm> {
 
-        val parameters: Map<String, Any?> = mapOf(
-            "offset" to offset,
-            "limit" to limit,
-            "langCode" to langCode
-        )
+        val response = core.requestItems("forms") {
+            url {
+                parameters.append("offset", offset)
+                parameters.append("limit", limit)
+                parameters.append("langCode", langCode)
+            }
+        }
 
-        return core.requestItems("/forms", parameters)
+        return response.body()
     }
 
     /**
@@ -58,11 +65,13 @@ class OneEntryForms private constructor() {
         langCode: String
     ): OneEntryForm {
 
-        val parameters: Map<String, Any?> = mapOf(
-            "langCode" to langCode
-        )
+        val response = core.requestItems("forms/marker/$marker") {
+            url {
+                parameters.append("langCode", langCode)
+            }
+        }
 
-        return core.requestItems("/forms/marker/$marker", parameters)
+        return response.body()
     }
 
     /**
@@ -82,8 +91,14 @@ class OneEntryForms private constructor() {
     ): OneEntryFormDataResponse {
 
         val body = OneEntryFormDataRequest(identifier, data)
+        val response = core.requestItems("form-data") {
+            url {
+                method = HttpMethod.Post
+                setBody(body)
+            }
+        }
 
-        return core.requestItems(link = "/form-data", method = HttpMethod.Post, body = body)
+        return response.body()
     }
 
     /**
@@ -96,7 +111,7 @@ class OneEntryForms private constructor() {
      */
     suspend fun data(): OneEntryFormDataResponse {
 
-        return core.requestItems("/form-data")
+        return core.requestItems("form-data").body()
     }
 
     /**
@@ -117,11 +132,13 @@ class OneEntryForms private constructor() {
         limit: Int = 30
     ): OneEntryFormDataResponse {
 
-        val parameters: Map<String, Any?> = mapOf(
-            "offset" to offset,
-            "limit" to limit
-        )
+        val response = core.requestItems("form-data/marker/$marker") {
+            url {
+                parameters.append("offset", offset)
+                parameters.append("limit", limit)
+            }
+        }
 
-        return core.requestItems("/form-data/marker/$marker", parameters)
+        return response.body()
     }
 }
