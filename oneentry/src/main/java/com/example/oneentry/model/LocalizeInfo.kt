@@ -23,7 +23,7 @@ data class LocalizeInfo(
 ) {
 
     val contentAsLocalizeInfo: InfoContent?
-        get() = instance.serializer.decodeFromJsonElementOrNull(content)
+        get() = OneEntryCore.instance.serializer.decodeFromJsonElementOrNull(content)
 }
 
 /**

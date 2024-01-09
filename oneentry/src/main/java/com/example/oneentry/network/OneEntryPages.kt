@@ -222,7 +222,7 @@ class OneEntryPages private constructor() {
      * @throws IllegalArgumentException if the decoded input is not a valid instance of T or serializer error
      * @throws OneEntryError in case of OneEntry errors
      */
-    suspend fun config(url: String): PageConfig {
+    suspend fun config(url: String): OneEntryPageConfig {
 
         return core.requestItems("pages/$url/config").body()
     }
