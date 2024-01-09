@@ -15,7 +15,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class OneEntryBlock(
     val id: Int,
-    val attributeSetId: Int,
+    val attributeSetId: Int?,
     val localizeInfos: Map<String, LocalizeInfo>,
     val version: Int,
     val identifier: String,

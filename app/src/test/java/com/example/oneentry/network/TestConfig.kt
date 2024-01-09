@@ -23,8 +23,6 @@ class TestConfig {
             AuthType.CERTIFICATE -> CertificateCredential(filePath, password)
         }
 
-        println("Credential: $credential")
-
         OneEntryCore.initializeApp(domain, credential)
     }
 }

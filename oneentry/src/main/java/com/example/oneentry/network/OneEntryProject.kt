@@ -4,6 +4,10 @@ import com.example.oneentry.model.OneEntryAdmin
 import com.example.oneentry.model.OneEntryBlock
 import com.example.oneentry.model.OneEntryGeneralType
 import com.example.oneentry.model.OneEntryLocale
+import com.example.oneentry.network.core.OneEntryCore
+import com.example.oneentry.network.core.append
+import io.ktor.client.call.body
+import io.ktor.client.statement.bodyAsText
 
 class OneEntryProject private constructor() {
 
@@ -24,7 +28,7 @@ class OneEntryProject private constructor() {
      */
     suspend fun locales(): List<OneEntryLocale> {
 
-        return core.requestItems("/locales/active/all")
+        return core.requestItems("locales/active/all").body()
     }
 
     /**
@@ -37,7 +41,7 @@ class OneEntryProject private constructor() {
      */
     suspend fun generalTypes(): List<OneEntryGeneralType> {
 
-        return core.requestItems("/general-types")
+        return core.requestItems("general-types").body()
     }
 
     /**
@@ -58,13 +62,15 @@ class OneEntryProject private constructor() {
         langCode: String
     ): List<OneEntryBlock> {
 
-        val parameters: Map<String, Any?> = mapOf(
-            "offset" to offset,
-            "limit" to limit,
-            "langCode" to langCode
-        )
+        val response = core.requestItems("blocks") {
+            url {
+                parameters.append("offset", offset)
+                parameters.append("limit", limit)
+                parameters.append("langCode", langCode)
+            }
+        }
 
-        return core.requestItems("/blocks", parameters)
+        return response.body()
     }
 
     /**
@@ -83,11 +89,15 @@ class OneEntryProject private constructor() {
         langCode: String
     ): OneEntryBlock {
 
-        val parameters: Map<String, Any?> = mapOf(
-            "langCode" to langCode
-        )
+        val response = core.requestItems("blocks/marker/$marker") {
+            url {
+                parameters.append("langCode", langCode)
+            }
+        }
 
-        return core.requestItems("/blocks/marker/$marker", parameters)
+        println(response.bodyAsText())
+
+        return response.body()
     }
 
     /**
@@ -108,12 +118,14 @@ class OneEntryProject private constructor() {
         langCode: String
     ): List<OneEntryAdmin> {
 
-        val parameters: Map<String, Any?> = mapOf(
-            "offset" to offset,
-            "limit" to limit,
-            "langCode" to langCode
-        )
+        val response = core.requestItems("admins") {
+            url {
+                parameters.append("offset", offset)
+                parameters.append("limit", limit)
+                parameters.append("langCode", langCode)
+            }
+        }
 
-        return core.requestItems("/admins", parameters)
+        return response.body()
     }
 }
