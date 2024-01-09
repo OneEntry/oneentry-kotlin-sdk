@@ -55,12 +55,13 @@
       - [Receiving by URL](#receiving-by-url)
     - [Quick search page](#quick-search-page)
   - [OneEntryProject](#oneentryproject)
-    - [File uploading](#file-uploading)
-    - [Deleting files](#deleting-files)
     - [Getting all administrators](#getting-all-administrators)
     - [Getting all active locales](#getting-all-active-locales)
     - [Getting all general types](#getting-all-general-types)
     - [Getting a menu item by its marker](#getting-a-menu-item-by-its-marker)
+  - [OneEntryFiles](#oneentryfiles)
+    - [File uploading](#file-uploading)
+    - [Deleting files](#deleting-files)
   - [OneEntrySystem](#oneentrysystem)
     - [Testing error 404](#testing-error-404)
     - [Testing error 500](#testing-error-500)
@@ -1094,6 +1095,138 @@ data class OneEntrySearchPage(
 
 ### OneEntryProject
 
+#### Getting all administrators
+
+```kotlin
+val admins = OneEntryProject.instance.admins(langCode = "en_US")
+```
+
+The answer will be array of `OneEntryAdmin`
+
+```kotlin
+/**
+ * Admin model
+ *
+ * @param id Admin id
+ * @param identifier Admin marker
+ * @param position Admin position
+ */
+@Serializable
+data class OneEntryAdmin(
+    val id: Int,
+    val identifier: String,
+    val position: Int?
+)
+```
+
+#### Getting all active locales
+
+```kotlin
+val locales = OneEntryProject.instance.locales()
+```
+
+The answer will be array of `OneEntryLocale`
+
+```kotlin
+/**
+ * Localization model
+ *
+ * @param id Locale id
+ * @param shortCode Locale short code
+ * @param code Locale full code
+ * @param name Locale name
+ * @param nativeName Locale native name
+ * @param isActive Is locale active
+ * @param image Locale icon
+ * @param position Locale position
+ */
+@Serializable
+data class OneEntryLocale(
+    val id: Int,
+    val shortCode: String,
+    val code: String,
+    val name: String,
+    val nativeName: String,
+    val isActive: Boolean,
+    val image: String?,
+    val position: Int?
+)
+```
+
+#### Getting all general types
+
+```kotlin
+val types = OneEntryProject.instance.generalTypes()
+```
+
+The answer will be array of `OneEntryGeneralType`
+
+```kotlin
+/**
+ * OneEntry general type
+ *
+ * @param id Generale type id
+ * @param type General type string value
+ */
+@Serializable
+data class OneEntryGeneralType(
+    val id: Int,
+    val type: String
+)
+```
+
+#### Getting a menu item by its marker
+
+The menu is a very important essence of OneEntry. It allows you to group pages by features. These pages will be returned as a tree, and you can easily get all the subpages (children) of each page
+
+```kotlin
+val menu = OneEntryProject.instance.menu("dev")
+```
+
+The answer will be the `OneEntryMenu` structure
+
+```kotlin
+/**
+ * Structure of the OneEntry menu item
+ *
+ * @param id Menu id
+ * @param identifier Menu marker
+ * @param localizeInfos Menu localize info
+ * @param pages Pages inside the menu item
+ */
+@Serializable
+data class OneEntryMenu(
+    val id: Int,
+    val identifier: String,
+    val localizeInfos: Map<String, LocalizeInfo>,
+    val pages: List<OneEntryMenuPage>
+)
+```
+
+```kotlin
+/**
+ * OneEntry menu page object
+ *
+ * @param id Page id
+ * @param parentId Page parent id
+ * @param pageUrl Page url
+ * @param position Page position
+ * @param localizeInfos Page localize content
+ * @param children Child pages
+ */
+@Serializable
+data class OneEntryMenuPage(
+    val id: Int,
+    val parentId: Int? = null,
+    val pageUrl: String,
+    val position: Int,
+    val localizeInfos: Map<String, LocalizeInfo>? = null,
+    val children: List<OneEntryMenuPage>? = null
+)
+```
+
+### OneEntryFiles
+
 #### File uploading
 
 OneEntry supports the ability to save your files to storage. To do this, you need to specify additional information about the file.
@@ -1120,24 +1253,6 @@ This SDK method allows you to delete saved files. Additional fields must also be
 | type   | Type, determines the folder name in the storage                                                     |
 | entity | Entity name from which the file is uploaded, determines the folder name in the storage              |
 | id     | Identifier of the object from which the file is uploaded, determines the folder name in the storage |
-
-
-
-#### Getting all administrators
-
-
-
-#### Getting all active locales
-
-
-
-#### Getting all general types
-
-
-
-#### Getting a menu item by its marker
-
-
 
 ### OneEntrySystem
 
