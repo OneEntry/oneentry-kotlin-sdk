@@ -4,6 +4,7 @@ import com.example.oneentry.model.OneEntryAdmin
 import com.example.oneentry.model.OneEntryBlock
 import com.example.oneentry.model.OneEntryGeneralType
 import com.example.oneentry.model.OneEntryLocale
+import com.example.oneentry.model.OneEntryMenu
 import com.example.oneentry.network.core.OneEntryCore
 import com.example.oneentry.network.core.append
 import io.ktor.client.call.body
@@ -125,6 +126,25 @@ class OneEntryProject private constructor() {
                 parameters.append("langCode", langCode)
             }
         }
+
+        return response.body()
+    }
+
+    /**
+     * Get pages included in menu by marker
+     *
+     * @param marker Menu marker
+     *
+     * @return OneEntryMenu
+     * @throws RuntimeException if OneEntry application has not been initialized
+     * @throws IllegalArgumentException if the decoded input is not a valid instance of T or serializer error
+     * @throws OneEntryError in case of OneEntry errors
+     */
+    suspend fun menu(marker: String): OneEntryMenu {
+
+        val response = core.requestItems("menus/marker/$marker")
+
+        println(response.bodyAsText())
 
         return response.body()
     }

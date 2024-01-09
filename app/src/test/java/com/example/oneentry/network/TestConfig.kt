@@ -1,8 +1,8 @@
 package com.example.oneentry.network
 
-import com.example.oneentry.network.core.CertificateCredential
+import com.example.oneentry.network.core.OneEntryCertificateCredential
 import com.example.oneentry.network.core.OneEntryCore
-import com.example.oneentry.network.core.TokenCredential
+import com.example.oneentry.network.core.OneEntryTokenCredential
 
 class TestConfig {
 
@@ -19,8 +19,8 @@ class TestConfig {
     fun configure(authType: AuthType) {
 
         val credential = when(authType) {
-            AuthType.TOKEN -> TokenCredential(token)
-            AuthType.CERTIFICATE -> CertificateCredential(filePath, password)
+            AuthType.TOKEN -> OneEntryTokenCredential(token)
+            AuthType.CERTIFICATE -> OneEntryCertificateCredential(filePath, password)
         }
 
         OneEntryCore.initializeApp(domain, credential)

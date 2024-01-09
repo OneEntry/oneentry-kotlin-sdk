@@ -2,7 +2,7 @@ package com.example.oneentry.network
 
 import com.example.oneentry.model.OneEntryPage
 import com.example.oneentry.model.PageConfig
-import com.example.oneentry.model.SearchPage
+import com.example.oneentry.model.OneEntrySearchPage
 import com.example.oneentry.network.core.OneEntryCore
 import com.example.oneentry.network.core.append
 import io.ktor.client.call.body
@@ -241,7 +241,7 @@ class OneEntryPages private constructor() {
     suspend fun quickSearch(
         name: String,
         langCode: String
-    ): List<SearchPage> {
+    ): List<OneEntrySearchPage> {
 
         val response = core.requestItems("pages/quick/search") {
             url {
