@@ -26,7 +26,7 @@ fun ParametersBuilder.append(name: String, value: Any?) {
 
 class OneEntryCore private constructor() {
 
-    private var client: HttpClient? = null
+    var client: HttpClient? = null
     val serializer = Json {
         ignoreUnknownKeys = true
         encodeDefaults = true
