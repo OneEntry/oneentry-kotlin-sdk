@@ -69,7 +69,8 @@ class OneEntryTemplates private constructor() {
     suspend fun templates(): OneEntryAllTemplates {
 
         val response = core.requestItems("templates/all")
+        val templateDictionary = core.serializer.decodeFromString<Map<String, List<OneEntryTemplate>>>(response.bodyAsText())
 
-        return core.serializer.decodeFromString<OneEntryAllTemplates>(response.bodyAsText())
+        return OneEntryAllTemplates(templateDictionary)
     }
 }

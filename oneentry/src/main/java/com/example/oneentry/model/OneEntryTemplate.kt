@@ -27,42 +27,42 @@ data class OneEntryTemplate(
  */
 @Serializable
 data class OneEntryAllTemplates(
-    val asDictionary: Map<String, List<OneEntryTemplate>>
+    var templateDictionary: Map<String, List<OneEntryTemplate>>
 ) {
     val forCatalogProducts: List<OneEntryTemplate>
-        get() = asDictionary["forCatalogProducts"] ?: emptyList()
+        get() = templateDictionary["forCatalogProducts"] ?: emptyList()
     val forBasketPage: List<OneEntryTemplate>
-        get() = asDictionary["forBasketPage"] ?: emptyList()
+        get() = templateDictionary["forBasketPage"] ?: emptyList()
     val forErrorPage: List<OneEntryTemplate>
-        get() = asDictionary["forErrorPage"] ?: emptyList()
+        get() = templateDictionary["forErrorPage"] ?: emptyList()
     val forCatalogPages: List<OneEntryTemplate>
-        get() = asDictionary["forCatalogPages"] ?: emptyList()
+        get() = templateDictionary["forCatalogPages"] ?: emptyList()
     val forProductPreview: List<OneEntryTemplate>
-        get() = asDictionary["forProductPreview"] ?: emptyList()
+        get() = templateDictionary["forProductPreview"] ?: emptyList()
     val forProductPage: List<OneEntryTemplate>
-        get() = asDictionary["forProductPage"] ?: emptyList()
+        get() = templateDictionary["forProductPage"] ?: emptyList()
     val forSimilarProductBlock: List<OneEntryTemplate>
-        get() = asDictionary["forSimilarProductBlock"] ?: emptyList()
+        get() = templateDictionary["forSimilarProductBlock"] ?: emptyList()
     val forStatisticProductBlock: List<OneEntryTemplate>
-        get() = asDictionary["forStatisticProductBlock"] ?: emptyList()
+        get() = templateDictionary["forStatisticProductBlock"] ?: emptyList()
     val forProductBlock: List<OneEntryTemplate>
-        get() = asDictionary["forProductBlock"] ?: emptyList()
+        get() = templateDictionary["forProductBlock"] ?: emptyList()
     val forForm: List<OneEntryTemplate>
-        get() = asDictionary["forForm"] ?: emptyList()
+        get() = templateDictionary["forForm"] ?: emptyList()
     val forFormField: List<OneEntryTemplate>
-        get() = asDictionary["forFormField"] ?: emptyList()
+        get() = templateDictionary["forFormField"] ?: emptyList()
     val forNewsPage: List<OneEntryTemplate>
-        get() = asDictionary["forNewsPage"] ?: emptyList()
+        get() = templateDictionary["forNewsPage"] ?: emptyList()
     val forNewsBlock: List<OneEntryTemplate>
-        get() = asDictionary["forNewsBlock"] ?: emptyList()
+        get() = templateDictionary["forNewsBlock"] ?: emptyList()
     val forNewsPreview: List<OneEntryTemplate>
-        get() = asDictionary["forNewsPreview"] ?: emptyList()
+        get() = templateDictionary["forNewsPreview"] ?: emptyList()
     val forOneNewsPage: List<OneEntryTemplate>
-        get() = asDictionary["forOneNewsPage"] ?: emptyList()
+        get() = templateDictionary["forOneNewsPage"] ?: emptyList()
     val forUsualPage: List<OneEntryTemplate>
-        get() = asDictionary["forUsualPage"] ?: emptyList()
+        get() = templateDictionary["forUsualPage"] ?: emptyList()
     val forTextBlock: List<OneEntryTemplate>
-        get() = asDictionary["forTextBlock"] ?: emptyList()
+        get() = templateDictionary["forTextBlock"] ?: emptyList()
     val forSliderBlock: List<OneEntryTemplate>
-        get() = asDictionary["forSliderBlock"] ?: emptyList()
+        get() = templateDictionary["forSliderBlock"] ?: emptyList()
 }

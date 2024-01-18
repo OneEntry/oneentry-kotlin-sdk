@@ -28,6 +28,6 @@ class OneEntryTemplatesTest {
 
         val result = provider.templates()
 
-        assertEquals("forCatalogProducts", result.forCatalogProducts.first().generalTypeName)
+        assertEquals("forCatalogProducts", result.forCatalogProducts!!.first().generalTypeName)
     }
 }
