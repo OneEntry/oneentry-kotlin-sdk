@@ -1280,6 +1280,24 @@ try {
 
 #### Getting all templates
 
+```kotlin
+val templates = OneEntryTemplates.instance.templates()
+```
+
+This property returns an array of `OneEntryAllTemplates`. This model contains the `templateDictionary` field, which stores the data of all templates by key.
+
+```kotlin
+val templates = OneEntryTemplates.instance.templates()
+templates.templateDictionary["forCatalogProducts"] // forCatalogProducts templates as array of OneEntryTemplate
+```
+
+There are also have properties to quickly get basic templates
+
+```kotlin
+val templates = OneEntryTemplates.instance.templates()
+templates.forCatalogProducts // forCatalogProducts templates as array of OneEntryTemplate
+```
+
 ##### Available types by properties
 
 * forCatalogProducts
@@ -1304,7 +1322,11 @@ try {
 
 #### Request templates by type
 
+In order not to request all the templates from the server and search for the right one among them, you can immediately send the data according to the desired type.
 
+```kotlin
+val templates = OneEntryTemplates.instance.templates("forCatalogProducts")
+```
 
 ### OneEntryTemplatePreviews
 
