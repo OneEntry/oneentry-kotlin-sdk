@@ -2,6 +2,7 @@ package com.example.oneentry.network
 
 import com.example.oneentry.model.OneEntryFile
 import kotlinx.coroutines.runBlocking
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertNotNull
@@ -37,8 +38,8 @@ class OneEntryFilesTest {
         assertNotNull(result)
     }
 
-    @Test
-    fun testDeleteFile() = runBlocking {
+    @After
+    fun tearDown() = runBlocking {
 
         val result = provider.deleteFile(filename, type, entity, id)
 
