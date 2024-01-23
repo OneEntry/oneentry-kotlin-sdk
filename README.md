@@ -71,8 +71,8 @@
     - [Request templates by type](#request-templates-by-type)
   - [OneEntryTemplatePreviews](#oneentrytemplatepreviews)
     - [Getting all preview templates](#getting-all-preview-templates)
-    - [Getting a preview template by its id](#getting-preview-template-by-its-id)
-    - [Getting a preview template by its marker](#getting-preview-template-by-its-marker)
+    - [Getting a preview template by its id](#getting-a-preview-template-by-its-id)
+    - [Getting a preview template by its marker](#getting-a-preview-template-by-its-marker)
 
 
 ### Step 1: Create OneEntry project
@@ -148,7 +148,7 @@ OneEntry forms allow you to send all kinds of data to the admin application
 val forms: List<OneEntryForm> = OneEntryForms.instance.forms(langCode = "en_US")
 ```
 
-**OneEntryForm** array will return as a result`
+`OneEntryForm` array will return as a result`
 
 ```kotlin
 /**
@@ -177,7 +177,7 @@ data class OneEntryForm(
 val form: OneEntryForm = OneEntryForms.instance.form(marker = "auth", langCode = "en_US")
 ```
 
-**OneEntryForm** array will return as a result`
+`OneEntryForm` array will return as a result`
 
 ```kotlin
 /**
@@ -213,7 +213,7 @@ val data: Map<String, List<OneEntryFormData>> = mapOf(
 val response = OneEntryForms.instance.sendData(identifier = "auth", data = data)
 ```
 
-**OneEntryFormDataResponse** will return as a response
+`OneEntryFormDataResponse` will return as a response
 
 ```kotlin
 @Serializable
@@ -245,7 +245,7 @@ data class OneEntryFormDataResponseBody(
 val data: OneEntryFormDataResponse = OneEntryForms.instance.data()
 ```
 
-**OneEntryFormDataResponse** array will return as a response
+`OneEntryFormDataResponse` array will return as a response
 
 ```kotlin
 @Serializable
@@ -277,7 +277,7 @@ data class OneEntryFormDataResponseBody(
 val data: OneEntryFormDataResponse = OneEntryForms.instance.data(marker = "marker")
 ```
 
-**OneEntryFormDataResponse** array will return as a response
+`OneEntryFormDataResponse` array will return as a response
 
 ```kotlin
 @Serializable
@@ -342,8 +342,8 @@ data class AttributeModel(
 }
 ```
 
-**value** - Attribute value
-**type** - Attribute data type
+`value` - Attribute value
+`type` - Attribute data type
 
 #### Available data types
 
@@ -411,7 +411,159 @@ enum class AttributeType {
 Let's try to get the attributes from the page, for products and other entities the process will be similar
 
 ```kotlin
-val page = OneEntryPages.instance.rootPages("en_US")
+val page = OneEntryPages.instance.page("dev", "en_US")
+val attribute = page.attributeValues?.get("en_US")?.get("int")
+```
+
+#### Custom processing
+
+If you are sure that your attribute has accepted a specific data type, you can process `value` yourself
+
+```kotlin
+val value = attribute?.value as? Int
+```
+
+#### Processing of numerical values
+
+All numeric OneEntry values (`real`, `integer`, `float`) can be easily converted to Swift data types
+
+```kotlin
+val attribute = page.attributeValues?.get("en_US")?.get("int")
+val intAttribute  = attribute?.asInt
+val doubleAttribute  = attribute?.asDouble
+val stringAttribute  = attribute?.asString
+
+println(intAttribute) // 500
+println(doubleAttribute) // 500.0
+println(stringAttribute) // "500"
+```
+
+#### Date and time processing
+
+OneEntry has several types of date and time data:
+
+* `Date`
+* `Time`
+* `DateTime`
+
+All of them will eventually be converted to a Kotlin `Date` object
+
+```kotlin
+val date = page.attributeValues?.get("en_US")?.get("date").asDate
+val time = page.attributeValues?.get("en_US")?.get("time").asDate
+val dateTime = page.attributeValues?.get("en_US")?.get("date_time").asDateTime
+```
+
+#### Files processing
+
+```kotlin
+val attribute = page.attributeValues?.get("en_US")?.get("file").asFile
+```
+
+The `OneEntryFile` array will be returned as a response
+
+```kotlin
+/**
+ * Represents a file associated with a single entry
+ *
+ * @param filename The full path to the file
+ * @param downloadLink The download link or URL for accessing the file
+ * @param size The size of the file in bytes
+ */
+@Serializable
+data class OneEntryFile(
+    val filename: String,
+    val downloadLink: String,
+    val size: Int
+)
+```
+
+#### Images processing
+
+Attribute types such as `image` and `groupOfImages` are treated by sdk in the same way
+
+```kotlin
+val attributes = page.attributeValues?.get("en_US")?.get("file").asImage
+```
+
+The `OneEntryImage` array will be returned as an answer
+
+```kotlin
+/**
+ * OneEntry image model
+ *
+ * @param size Image size
+ * @param filename Full path to image
+ * @param previewLink Preview link
+ * @param downloadLink Link to download the image
+ */
+@Serializable
+data class OneEntryImage(
+  val size: Int,
+  val filename: String,
+  val previewLink: String,
+  val downloadLink: String
+)
+```
+
+#### Text data types
+
+##### String
+
+Most types of attributes can be obtained as a string
+
+```kotlin
+val value = page.attributeValues?.get("en_US")?.get("string").asString
+```
+
+##### Text
+
+```kotlin
+val attribute = page.attributeValues?.get("en_US")?.get("text").asText
+```
+
+The `OneEntryText` structure will be returned as an answer
+
+```kotlin
+/**
+ * Object of text
+ *
+ * @param htmlValue String value
+ * @param plainValue The plain text value associated with the object
+ */
+@Serializable
+data class OneEntryText(
+    @Serializable(with = HTMLParsingSerializer::class)
+    val htmlValue: String,
+    val plainValue: String
+)
+```
+
+##### Text with header
+
+```kotlin
+val attribute = page.attributeValues?.get("en_US")?.get("header_text").asTextWithHeader
+```
+
+The array of `OneEntryTextWithHeader` structures will return as an answer
+
+```kotlin
+/**
+ * @param id The unique identifier for the object
+ * @param index The unique identifier for the object
+ * @param header The header information for the object
+ * @param htmlValue The HTML value associated with the object
+ * @param plainValue The plain text value associated with the object
+ */
+@Serializable
+data class OneEntryTextWithHeader(
+    val id: String,
+    val index: String,
+    val header: String,
+    val htmlValue: String,
+    val plainValue: String
+)
+
 ```
 
 ### OneEntryProducts

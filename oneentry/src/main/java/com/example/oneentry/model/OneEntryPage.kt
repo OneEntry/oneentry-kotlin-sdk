@@ -27,7 +27,7 @@ data class OneEntryPage(
     val type: String? = null,
     val templateIdentifier: String? = null,
     val localizeInfos: Map<String, LocalizeInfo>? = null,
-    val attributeValues: Map<String, Map<String, AttributeModel>>?= null
+    val attributeValues: Map<String, Map<String, AttributeModel>>? = null
 )
 
 /**

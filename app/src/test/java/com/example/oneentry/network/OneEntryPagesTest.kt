@@ -37,15 +37,17 @@ class OneEntryPagesTest {
 
         val result = provider.pages("en_US")
 
+        println(result)
+
         assertEquals("xml", result.first().pageUrl)
     }
 
     @Test
     fun testPageId() = runBlocking {
 
-        val result = provider.page(1, "en_US")
+        val result = provider.page(9, "en_US")
 
-        assertEquals(null, result.localizeInfos?.get("en_US")?.contentAsLocalizeInfo)
+        assertEquals("space", result.pageUrl)
     }
 
     @Test

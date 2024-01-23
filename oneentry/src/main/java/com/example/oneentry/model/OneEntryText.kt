@@ -6,10 +6,12 @@ import kotlinx.serialization.Serializable
 /**
  * Object of text
  *
- * @param value String value
+ * @param htmlValue String value
+ * @param plainValue The plain text value associated with the object
  */
 @Serializable
 data class OneEntryText(
     @Serializable(with = HTMLParsingSerializer::class)
-    val htmlValue: String
+    val htmlValue: String,
+    val plainValue: String
 )

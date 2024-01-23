@@ -6,6 +6,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.decodeFromJsonElement
+import java.util.Date
 
 /**
  * OneEntry entity attribute
@@ -22,6 +23,9 @@ data class AttributeModel(
     val asInt: Int?
         get() = instance.serializer.decodeFromJsonElementOrNull(value)
 
+    val asDouble: Double?
+        get() = instance.serializer.decodeFromJsonElementOrNull(value)
+
     val asString: String?
         get() = instance.serializer.decodeFromJsonElementOrNull(value)
 
@@ -31,10 +35,16 @@ data class AttributeModel(
     val asImage: List<OneEntryImage>?
         get() = instance.serializer.decodeFromJsonElementOrNull(value)
 
+    val asDate: Date?
+        get() = instance.serializer.decodeFromJsonElementOrNull(value)
+
     val asDateTime: OneEntryDateTime?
         get() = instance.serializer.decodeFromJsonElementOrNull(value)
 
     val asTextWithHeader: List<OneEntryTextWithHeader>?
+        get() = instance.serializer.decodeFromJsonElementOrNull(value)
+
+    val asFile: List<OneEntryFile>?
         get() = instance.serializer.decodeFromJsonElementOrNull(value)
 }
 
