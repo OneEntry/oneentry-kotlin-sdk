@@ -28,7 +28,7 @@ class OneEntryProjectTest {
 
         val result = provider.blocks(langCode = "en_US")
 
-        assertFalse(result.isNotEmpty())
+        assertFalse(result.isEmpty())
     }
 
     @Test

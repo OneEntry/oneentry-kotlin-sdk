@@ -28,8 +28,8 @@ data class OneEntryFormData(
 
 @Serializable
 data class OneEntryFormDataResponse(
-    val items: List<OneEntryFormDataResponseBody>,
-    val total: Int
+    val items: List<OneEntryFormDataResponseBody>? = null,
+    val total: Int? = null
 )
 
 /**

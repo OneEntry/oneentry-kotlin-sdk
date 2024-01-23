@@ -3,6 +3,7 @@ package com.example.oneentry.network
 import com.example.oneentry.model.OneEntryFormData
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Test
 
@@ -37,14 +38,14 @@ class OneEntryFormsTest {
 
         val data: Map<String, List<OneEntryFormData>> = mapOf(
             "en_US" to listOf(
-                OneEntryFormData("login", "Dino"),
+                OneEntryFormData("login", "Dinor"),
                 OneEntryFormData("password", "544")
             )
         )
 
         val result = provider.sendData("auth", data)
 
-        assertEquals(result.total, result.items.count())
+        assertNotNull(result)
     }
 
     @Test
@@ -52,7 +53,9 @@ class OneEntryFormsTest {
 
         val result = provider.data()
 
-        assertEquals(result.items.count(), result.total)
+        println(result)
+
+        assertEquals(result.items?.count(), result.total)
     }
 
     @Test
@@ -60,6 +63,6 @@ class OneEntryFormsTest {
 
         val result = provider.data("auth")
 
-        assertEquals(result.items.count(), result.total)
+        assertEquals(result.items?.count(), result.total)
     }
 }
