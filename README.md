@@ -1241,7 +1241,32 @@ OneEntry supports the ability to save your files to storage. To do this, you nee
 | height   | Height parameter                                                                                    |
 | compress | Boolean flag of optimization (compression) for images                                               |
 
+```kotlin
+val fileUrl = ".../dev.png"
+val type = "page"
+val entity = "editor"
+val id = 3787
 
+val result = provider.uploadFile(fileUrl, type, entity, id)
+```
+
+The `OneEntryFile` array will be returned as a response
+
+```kotlin
+/**
+ * Represents a file associated with a single entry
+ *
+ * @param filename The full path to the file
+ * @param downloadLink The download link or URL for accessing the file
+ * @param size The size of the file in bytes
+ */
+@Serializable
+data class OneEntryFile(
+    val filename: String,
+    val downloadLink: String,
+    val size: Int
+)
+```
 
 #### Deleting files
 
@@ -1253,6 +1278,15 @@ This SDK method allows you to delete saved files. Additional fields must also be
 | type   | Type, determines the folder name in the storage                                                     |
 | entity | Entity name from which the file is uploaded, determines the folder name in the storage              |
 | id     | Identifier of the object from which the file is uploaded, determines the folder name in the storage |
+
+```kotlin
+val filename = "dev.png"
+val type = "page"
+val entity = "editor"
+val id = 3787
+
+val result = provider.deleteFile(filename, type, entity, id)
+```
 
 ### OneEntrySystem
 
