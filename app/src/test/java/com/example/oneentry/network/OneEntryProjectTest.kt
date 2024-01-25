@@ -2,8 +2,9 @@ package com.example.oneentry.network
 
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
-import org.junit.jupiter.api.Assertions.*
 import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
 
 class OneEntryProjectTest {
 
@@ -58,8 +59,8 @@ class OneEntryProjectTest {
     @Test
     fun testMenu() = runBlocking {
 
-        val result = provider.menu("categories")
+        val result = provider.menu("dev")
 
-        assertEquals("categories", result.identifier)
+        assertEquals("dev", result.identifier)
     }
 }
