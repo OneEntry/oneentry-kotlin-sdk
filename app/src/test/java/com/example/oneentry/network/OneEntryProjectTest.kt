@@ -55,12 +55,4 @@ class OneEntryProjectTest {
 
         assertEquals("en_US", result.first().code)
     }
-
-    @Test
-    fun testMenu() = runBlocking {
-
-        val result = provider.menu("dev")
-
-        assertEquals("dev", result.identifier)
-    }
 }

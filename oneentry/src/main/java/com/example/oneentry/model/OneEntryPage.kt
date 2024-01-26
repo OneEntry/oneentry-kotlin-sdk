@@ -24,7 +24,6 @@ data class OneEntryPage(
     val depth: Int? = null,
     val isVisible: Boolean? = null,
     val position: Int? = null,
-    val childrenCount: Int,
     val type: String? = null,
     val templateIdentifier: String? = null,
     val localizeInfos: Map<String, LocalizeInfo>? = null,
@@ -48,7 +47,7 @@ data class OneEntryMenuPage(
     val pageUrl: String,
     val position: Int,
     val localizeInfos: Map<String, LocalizeInfo>? = null,
-    val children: List<OneEntryMenuPage>? = null
+    var children: List<OneEntryMenuPage>? = null
 )
 
 /**

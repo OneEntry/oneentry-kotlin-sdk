@@ -20,6 +20,7 @@ class OneEntryTree(private val pages: List<OneEntryMenuPage>) {
         data.add(parent)
 
         val childPages = pages.filter { it.parentId == parent.id }
+        parent.children = childPages
 
         childPages.forEach { child ->
             buildSubtree(child)
