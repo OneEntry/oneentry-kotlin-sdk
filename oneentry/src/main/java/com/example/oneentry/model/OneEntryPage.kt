@@ -47,7 +47,7 @@ data class OneEntryMenuPage(
     val pageUrl: String,
     val position: Int,
     val localizeInfos: Map<String, LocalizeInfo>? = null,
-    val children: List<OneEntryMenuPage>? = null
+    var children: List<OneEntryMenuPage>? = null
 )
 
 /**

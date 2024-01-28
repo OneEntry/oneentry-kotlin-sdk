@@ -37,8 +37,6 @@ class OneEntryPagesTest {
 
         val result = provider.pages("en_US")
 
-        println(result)
-
         assertEquals("xml", result.first().pageUrl)
     }
 

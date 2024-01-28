@@ -1,12 +1,12 @@
 package com.example.oneentry.network
 
+import com.example.oneentry.model.OneEntryException
 import com.example.oneentry.model.OneEntryPage
 import com.example.oneentry.model.OneEntryPageConfig
 import com.example.oneentry.model.OneEntrySearchPage
 import com.example.oneentry.network.core.OneEntryCore
 import com.example.oneentry.network.core.append
 import io.ktor.client.call.body
-import com.example.oneentry.model.OneEntryException
 
 class OneEntryPages private constructor() {
 

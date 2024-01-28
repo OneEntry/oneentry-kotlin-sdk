@@ -1,5 +1,6 @@
 package com.example.oneentry.network
 
+import com.example.oneentry.config.OneEntryTree
 import com.example.oneentry.model.OneEntryAdmin
 import com.example.oneentry.model.OneEntryBlock
 import com.example.oneentry.model.OneEntryGeneralType
@@ -143,10 +144,10 @@ class OneEntryProject private constructor() {
      */
     suspend fun menu(marker: String): OneEntryMenu {
 
-        val response = core.requestItems("menus/marker/$marker")
+        val response = core.requestItems("menus/marker/$marker").body<OneEntryMenu>()
 
-        println(response.bodyAsText())
+        OneEntryTree(response.pages).buildTree()
 
-        return response.body()
+        return response
     }
 }
