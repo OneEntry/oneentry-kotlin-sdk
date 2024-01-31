@@ -5,17 +5,25 @@ plugins {
     id("maven-publish")
 }
 
+group = "com.oneentry"
+version = "1.0.0"
+
+repositories {
+    mavenCentral()
+}
+
+kotlin {
+    tasks.withType<Jar> {
+        if (name.endsWith("sources")) {
+            enabled = false
+        }
+    }
+}
+
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
 }
-
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-    kotlinOptions.jvmTarget = "1.8"
-}
-
-group = "org.example"
-version = "1.0-SNAPSHOT"
 
 val ktor_version: String by project
 
@@ -28,16 +36,7 @@ dependencies {
     implementation("org.apache.logging.log4j:log4j-slf4j2-impl:2.20.0")
     implementation("io.ktor:ktor-client-cio-jvm:$ktor_version")
 
-    implementation("org.jsoup:jsoup:1.16.1")
+    implementation("org.jsoup:jsoup:1.17.2")
 
     testImplementation(kotlin("test"))
 }
-
-tasks.test {
-    useJUnitPlatform()
-}
-
-kotlin {
-    jvmToolchain(8)
-}
-
