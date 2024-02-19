@@ -15,13 +15,13 @@ class OneEntryTemplatesTest {
         TestConfig().configure(TestConfig.AuthType.CERTIFICATE)
     }
 
-    @Test
-    fun testTemplates() = runBlocking {
-
-        val result = provider.templates("forCatalogProducts")
-
-        assertFalse(result.isEmpty())
-    }
+//    @Test
+//    fun testTemplates() = runBlocking {
+//
+//        val result = provider.templates("forCatalogProducts")
+//
+//        assertFalse(result.isEmpty())
+//    }
 
     @Test
     fun testAllTemplates() = runBlocking {

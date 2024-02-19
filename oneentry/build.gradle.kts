@@ -6,10 +6,34 @@ plugins {
 }
 
 group = "com.oneentry"
-version = "1.0.0"
+version = "1.0.7"
 
 repositories {
     mavenCentral()
+}
+
+publishing {
+
+    publications {
+        create<MavenPublication>("bar") {
+            groupId = project.group.toString()
+            artifactId = "oneentry"
+            version = project.version.toString()
+
+            from(components["java"])
+        }
+    }
+
+    repositories {
+        maven {
+            name = "MyRepo"
+            url = uri("https://maven.pkg.github.com/OneEntry/oneentry-android-sdk")
+            credentials {
+                name = "DinarBes"
+                password = "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"
+            }
+        }
+    }
 }
 
 kotlin {
@@ -18,6 +42,7 @@ kotlin {
             enabled = false
         }
     }
+    jvmToolchain(8)
 }
 
 java {

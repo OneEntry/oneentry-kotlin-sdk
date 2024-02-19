@@ -35,9 +35,9 @@ class OneEntryProjectTest {
     @Test
     fun testBlockWithMarker() = runBlocking {
 
-        val result = provider.block("test", "en_US")
+        val result = provider.block("dev", "en_US")
 
-        assertEquals("test", result.identifier)
+        assertEquals("dev", result.identifier)
     }
 
     @Test

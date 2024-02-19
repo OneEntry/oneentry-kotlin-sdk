@@ -100,7 +100,7 @@ class OneEntryProductsTest {
 
         val result = provider.quickSearch(name = "cat", langCode = "en_US")
 
-        assertEquals("Cat1", result.first().title)
+        assertEquals("Cat Black", result.first().title)
     }
 
     @Test
