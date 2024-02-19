@@ -29,7 +29,7 @@ publishing {
             name = "MyRepo"
             url = uri("https://maven.pkg.github.com/OneEntry/oneentry-android-sdk")
             credentials {
-                name = "DinarBes"
+                username = "DinarBes"
                 password = "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"
             }
         }
