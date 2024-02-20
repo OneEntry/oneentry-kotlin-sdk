@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "com.oneentry"
-version = "1.0.7"
+version = "1.0.0"
 
 repositories {
     mavenCentral()
