@@ -1,0 +1,138 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "com.oneentry",
+    "module": "oneentry",
+    "version": "1.2.0",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "8.0"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.environment": "standard-jvm",
+        "org.gradle.jvm.version": 8,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api",
+        "org.jetbrains.kotlin.platform.type": "jvm"
+      },
+      "dependencies": [
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib",
+          "version": {
+            "requires": "1.9.21"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "oneentry-1.2.0.jar",
+          "url": "oneentry-1.2.0.jar",
+          "size": 407450,
+          "sha512": "f6b070feea59674680e369f5c86d5cd5ab78693175f1e0f42f816654a621c4fe2553aed535311a1961c68ca511ee78f01315dc1946fcc542786eec105cbce9cc",
+          "sha256": "1ff9fbf7355b2695ea955694e557e6e62c4fe7a926e1c2e5bd891c9558e4578b",
+          "sha1": "930c8c0e9ba23b59979000b639623e934219c559",
+          "md5": "eaef8d7ef6329b012fb59665d3fe04cc"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.environment": "standard-jvm",
+        "org.gradle.jvm.version": 8,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime",
+        "org.jetbrains.kotlin.platform.type": "jvm"
+      },
+      "dependencies": [
+        {
+          "group": "io.ktor",
+          "module": "ktor-client-core",
+          "version": {
+            "requires": "2.3.7"
+          }
+        },
+        {
+          "group": "io.ktor",
+          "module": "ktor-client-content-negotiation",
+          "version": {
+            "requires": "2.3.7"
+          }
+        },
+        {
+          "group": "io.ktor",
+          "module": "ktor-serialization-kotlinx-json",
+          "version": {
+            "requires": "2.3.7"
+          }
+        },
+        {
+          "group": "io.ktor",
+          "module": "ktor-client-cio",
+          "version": {
+            "requires": "2.3.7"
+          }
+        },
+        {
+          "group": "org.slf4j",
+          "module": "slf4j-api",
+          "version": {
+            "requires": "2.0.7"
+          }
+        },
+        {
+          "group": "org.apache.logging.log4j",
+          "module": "log4j-slf4j2-impl",
+          "version": {
+            "requires": "2.20.0"
+          }
+        },
+        {
+          "group": "io.ktor",
+          "module": "ktor-client-cio-jvm",
+          "version": {
+            "requires": "2.3.7"
+          }
+        },
+        {
+          "group": "org.jsoup",
+          "module": "jsoup",
+          "version": {
+            "requires": "1.17.2"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib",
+          "version": {
+            "requires": "1.9.21"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "oneentry-1.2.0.jar",
+          "url": "oneentry-1.2.0.jar",
+          "size": 407450,
+          "sha512": "f6b070feea59674680e369f5c86d5cd5ab78693175f1e0f42f816654a621c4fe2553aed535311a1961c68ca511ee78f01315dc1946fcc542786eec105cbce9cc",
+          "sha256": "1ff9fbf7355b2695ea955694e557e6e62c4fe7a926e1c2e5bd891c9558e4578b",
+          "sha1": "930c8c0e9ba23b59979000b639623e934219c559",
+          "md5": "eaef8d7ef6329b012fb59665d3fe04cc"
+        }
+      ]
+    }
+  ]
+}
