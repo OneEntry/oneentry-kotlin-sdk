@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "com.oneentry"
-version = "1.0.0"
+version = "1.2.0"
 
 repositories {
     mavenCentral()
@@ -27,10 +27,10 @@ publishing {
     repositories {
         maven {
             name = "MyRepo"
-            url = uri("https://maven.pkg.github.com/OneEntry/oneentry-android-sdk")
+            url = uri("https://maven.pkg.github.com/OneEntry/oneentry-kotlin-sdk")
             credentials {
                 username = "DinarBes"
-                password = "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"
+                password = "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"
             }
         }
     }
