@@ -3,7 +3,7 @@
   "component": {
     "group": "com.oneentry",
     "module": "oneentry",
-    "version": "1.2.0",
+    "version": "1.2.1",
     "attributes": {
       "org.gradle.status": "release"
     }
@@ -36,13 +36,13 @@
       ],
       "files": [
         {
-          "name": "oneentry-1.2.0.jar",
-          "url": "oneentry-1.2.0.jar",
+          "name": "oneentry-1.2.1.jar",
+          "url": "oneentry-1.2.1.jar",
           "size": 407450,
-          "sha512": "f6b070feea59674680e369f5c86d5cd5ab78693175f1e0f42f816654a621c4fe2553aed535311a1961c68ca511ee78f01315dc1946fcc542786eec105cbce9cc",
-          "sha256": "1ff9fbf7355b2695ea955694e557e6e62c4fe7a926e1c2e5bd891c9558e4578b",
-          "sha1": "930c8c0e9ba23b59979000b639623e934219c559",
-          "md5": "eaef8d7ef6329b012fb59665d3fe04cc"
+          "sha512": "4aa1233f7b98700d739762022f47f8ef158955a10d1cd845d56b23430d419c314f0bf65b7bf60ad458d1b148b85ef53fe8d2b78dd1db81df2ce697e96fad994d",
+          "sha256": "7f2c1cfaffd891044dd528393e9093f95b3cce00b7cf4cd66de1c991cbd95e6f",
+          "sha1": "10f36337af946b74af3f0905ea0a8750e1724996",
+          "md5": "7fb15fdcdd8cdb2b4800198fd8d45a91"
         }
       ]
     },
@@ -124,13 +124,13 @@
       ],
       "files": [
         {
-          "name": "oneentry-1.2.0.jar",
-          "url": "oneentry-1.2.0.jar",
+          "name": "oneentry-1.2.1.jar",
+          "url": "oneentry-1.2.1.jar",
           "size": 407450,
-          "sha512": "f6b070feea59674680e369f5c86d5cd5ab78693175f1e0f42f816654a621c4fe2553aed535311a1961c68ca511ee78f01315dc1946fcc542786eec105cbce9cc",
-          "sha256": "1ff9fbf7355b2695ea955694e557e6e62c4fe7a926e1c2e5bd891c9558e4578b",
-          "sha1": "930c8c0e9ba23b59979000b639623e934219c559",
-          "md5": "eaef8d7ef6329b012fb59665d3fe04cc"
+          "sha512": "4aa1233f7b98700d739762022f47f8ef158955a10d1cd845d56b23430d419c314f0bf65b7bf60ad458d1b148b85ef53fe8d2b78dd1db81df2ce697e96fad994d",
+          "sha256": "7f2c1cfaffd891044dd528393e9093f95b3cce00b7cf4cd66de1c991cbd95e6f",
+          "sha1": "10f36337af946b74af3f0905ea0a8750e1724996",
+          "md5": "7fb15fdcdd8cdb2b4800198fd8d45a91"
         }
       ]
     }
