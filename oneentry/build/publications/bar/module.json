@@ -2,8 +2,8 @@
   "formatVersion": "1.1",
   "component": {
     "group": "com.oneentry",
-    "module": "oneentry",
-    "version": "1.2.1",
+    "module": "oneentry-kotlin",
+    "version": "1.2.8",
     "attributes": {
       "org.gradle.status": "release"
     }
@@ -36,13 +36,13 @@
       ],
       "files": [
         {
-          "name": "oneentry-1.2.1.jar",
-          "url": "oneentry-1.2.1.jar",
+          "name": "oneentry-kotlin-1.2.8.jar",
+          "url": "oneentry-kotlin-1.2.8.jar",
           "size": 407450,
-          "sha512": "4aa1233f7b98700d739762022f47f8ef158955a10d1cd845d56b23430d419c314f0bf65b7bf60ad458d1b148b85ef53fe8d2b78dd1db81df2ce697e96fad994d",
-          "sha256": "7f2c1cfaffd891044dd528393e9093f95b3cce00b7cf4cd66de1c991cbd95e6f",
-          "sha1": "10f36337af946b74af3f0905ea0a8750e1724996",
-          "md5": "7fb15fdcdd8cdb2b4800198fd8d45a91"
+          "sha512": "b7c5e34de9adc8e63005bf9151f021bdeb8d24d09f825ac3394c024da069f446707c59088c68eb66662347af20254ac61238c97dcbb6f2071e8dfa45ab114493",
+          "sha256": "4cffd45ccdfcb4574532c384d32c66b67f7a7146ead41d8a7c7f069d51d7b4f1",
+          "sha1": "1a5e913e3b79c528cd7c78061d4ce907f0014f3d",
+          "md5": "cce147d7ae9b83b2249125f6aebc2606"
         }
       ]
     },
@@ -90,14 +90,14 @@
           "group": "org.slf4j",
           "module": "slf4j-api",
           "version": {
-            "requires": "2.0.7"
+            "requires": "2.0.9"
           }
         },
         {
           "group": "org.apache.logging.log4j",
           "module": "log4j-slf4j2-impl",
           "version": {
-            "requires": "2.20.0"
+            "requires": "2.22.1"
           }
         },
         {
@@ -124,13 +124,13 @@
       ],
       "files": [
         {
-          "name": "oneentry-1.2.1.jar",
-          "url": "oneentry-1.2.1.jar",
+          "name": "oneentry-kotlin-1.2.8.jar",
+          "url": "oneentry-kotlin-1.2.8.jar",
           "size": 407450,
-          "sha512": "4aa1233f7b98700d739762022f47f8ef158955a10d1cd845d56b23430d419c314f0bf65b7bf60ad458d1b148b85ef53fe8d2b78dd1db81df2ce697e96fad994d",
-          "sha256": "7f2c1cfaffd891044dd528393e9093f95b3cce00b7cf4cd66de1c991cbd95e6f",
-          "sha1": "10f36337af946b74af3f0905ea0a8750e1724996",
-          "md5": "7fb15fdcdd8cdb2b4800198fd8d45a91"
+          "sha512": "b7c5e34de9adc8e63005bf9151f021bdeb8d24d09f825ac3394c024da069f446707c59088c68eb66662347af20254ac61238c97dcbb6f2071e8dfa45ab114493",
+          "sha256": "4cffd45ccdfcb4574532c384d32c66b67f7a7146ead41d8a7c7f069d51d7b4f1",
+          "sha1": "1a5e913e3b79c528cd7c78061d4ce907f0014f3d",
+          "md5": "cce147d7ae9b83b2249125f6aebc2606"
         }
       ]
     }

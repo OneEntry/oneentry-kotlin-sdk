@@ -5,11 +5,15 @@ plugins {
     id("maven-publish")
 }
 
-group = "com.oneentry"
-version = "1.2.1"
+val group: String by project
+val version: String by project
 
-repositories {
-    mavenCentral()
+kotlin {
+    tasks.withType<Jar> {
+        if (name.endsWith("sources")) {
+            enabled = false
+        }
+    }
 }
 
 publishing {
@@ -17,7 +21,7 @@ publishing {
     publications {
         create<MavenPublication>("bar") {
             groupId = project.group.toString()
-            artifactId = "oneentry"
+            artifactId = "oneentry-kotlin"
             version = project.version.toString()
 
             from(components["java"])
@@ -26,28 +30,23 @@ publishing {
 
     repositories {
         maven {
-            name = "MyRepo"
+            name = "OneEntry"
             url = uri("https://maven.pkg.github.com/OneEntry/oneentry-kotlin-sdk")
             credentials {
                 username = "DinarBes"
-                password = "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"
+                password = "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"
             }
         }
     }
 }
 
-kotlin {
-    tasks.withType<Jar> {
-        if (name.endsWith("sources")) {
-            enabled = false
-        }
-    }
-    jvmToolchain(8)
-}
-
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+kotlin {
+    jvmToolchain(8)
 }
 
 val ktor_version: String by project
@@ -57,8 +56,8 @@ dependencies {
     implementation("io.ktor:ktor-client-content-negotiation:$ktor_version")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
     implementation("io.ktor:ktor-client-cio:$ktor_version")
-    implementation("org.slf4j:slf4j-api:2.0.7")
-    implementation("org.apache.logging.log4j:log4j-slf4j2-impl:2.20.0")
+    implementation("org.slf4j:slf4j-api:2.0.9")
+    implementation("org.apache.logging.log4j:log4j-slf4j2-impl:2.22.1")
     implementation("io.ktor:ktor-client-cio-jvm:$ktor_version")
 
     implementation("org.jsoup:jsoup:1.17.2")
