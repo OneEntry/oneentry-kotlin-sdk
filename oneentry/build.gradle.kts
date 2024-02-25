@@ -34,7 +34,7 @@ publishing {
             url = uri("https://maven.pkg.github.com/OneEntry/oneentry-kotlin-sdk")
             credentials {
                 username = "DinarBes"
-                password = "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"
+                password = "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"
             }
         }
     }

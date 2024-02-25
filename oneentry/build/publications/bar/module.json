@@ -3,7 +3,7 @@
   "component": {
     "group": "com.oneentry",
     "module": "oneentry-kotlin",
-    "version": "1.2.8",
+    "version": "1.3.0",
     "attributes": {
       "org.gradle.status": "release"
     }
@@ -36,13 +36,13 @@
       ],
       "files": [
         {
-          "name": "oneentry-kotlin-1.2.8.jar",
-          "url": "oneentry-kotlin-1.2.8.jar",
+          "name": "oneentry-kotlin-1.3.0.jar",
+          "url": "oneentry-kotlin-1.3.0.jar",
           "size": 407450,
-          "sha512": "b7c5e34de9adc8e63005bf9151f021bdeb8d24d09f825ac3394c024da069f446707c59088c68eb66662347af20254ac61238c97dcbb6f2071e8dfa45ab114493",
-          "sha256": "4cffd45ccdfcb4574532c384d32c66b67f7a7146ead41d8a7c7f069d51d7b4f1",
-          "sha1": "1a5e913e3b79c528cd7c78061d4ce907f0014f3d",
-          "md5": "cce147d7ae9b83b2249125f6aebc2606"
+          "sha512": "76e9b69713ce8932c268b639aa25e236da077174cd9f34e75acf616355cd9a79c15253a94d08b789950d9b95fb02feed77ff037e388ae7782a28eb012fd29541",
+          "sha256": "fbd871028193051e4b132222cddfd46d53a077378913299bcafc39cc28f2eae1",
+          "sha1": "46793865f69eeb1b9a9d9e0f506989e44c40906b",
+          "md5": "41bf7ee48249efb435fb55e083555eba"
         }
       ]
     },
@@ -124,13 +124,13 @@
       ],
       "files": [
         {
-          "name": "oneentry-kotlin-1.2.8.jar",
-          "url": "oneentry-kotlin-1.2.8.jar",
+          "name": "oneentry-kotlin-1.3.0.jar",
+          "url": "oneentry-kotlin-1.3.0.jar",
           "size": 407450,
-          "sha512": "b7c5e34de9adc8e63005bf9151f021bdeb8d24d09f825ac3394c024da069f446707c59088c68eb66662347af20254ac61238c97dcbb6f2071e8dfa45ab114493",
-          "sha256": "4cffd45ccdfcb4574532c384d32c66b67f7a7146ead41d8a7c7f069d51d7b4f1",
-          "sha1": "1a5e913e3b79c528cd7c78061d4ce907f0014f3d",
-          "md5": "cce147d7ae9b83b2249125f6aebc2606"
+          "sha512": "76e9b69713ce8932c268b639aa25e236da077174cd9f34e75acf616355cd9a79c15253a94d08b789950d9b95fb02feed77ff037e388ae7782a28eb012fd29541",
+          "sha256": "fbd871028193051e4b132222cddfd46d53a077378913299bcafc39cc28f2eae1",
+          "sha1": "46793865f69eeb1b9a9d9e0f506989e44c40906b",
+          "md5": "41bf7ee48249efb435fb55e083555eba"
         }
       ]
     }

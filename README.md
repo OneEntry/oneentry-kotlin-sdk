@@ -80,28 +80,55 @@
 In order to create a OneEntry project, you need to create an account on our [site](https://account.oneentry.cloud/).
 After that, go to the projects tab and create a new [project](https://account.oneentry.cloud/projects).
 
-### Step 2: Register your app with OneEntry (In Development)
+### Step 2: Add OneEntry SDK to your app
 
-### Step 3: Add OneEntry SDK to your app
+Go to `settings.gradle.kts` and add the following configuration:
+
+```kotlin
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        maven {
+            url = uri("https://maven.pkg.github.com/OneEntry/oneentry-kotlin-sdk")
+        }
+    }
+}
+```
+
+Now go to `build.gradle.kts` and add implementation:
+
+```kotlin
+implementation("com.oneentry:oneentry-kotlin:1.3.0")
+```
+
+### Step 3: Initialize OneEntry in your app
 
 This is the final step you need to take in order to add OneEntry to your application.
 > Before using SDK classes and methods, you need to go through initialization. Otherwise there will be an error
 
 #### Initialization with an authentication token
 
-1. To initialize with an authorization token, you need to get a link to the project and the token. You can do this in the project settings in the tab **App tokens**
-2. Import the OneEntry module: 
+1. To initialize with an authorization token, you need to get a link to the project and the token. You can do this in the project settings in the tab `App tokens`
+2. Import the OneEntry module:
 ```kotlin
-import OneEntry
+import com.example.oneentry.network.OneEntryProducts
 
-// ...
+class Example() {
+
+  val provider = OneEntryProducts.instance
+  
+  /..
+}
 ``` 
 3. Configure a OneEntryCore shared instance, before using SDK methods
 ```kotlin
 val token = "..."
 val domain = "https://sample.oneentry.cloud"
+val credential = OneEntryTokenCredential(token)
 
-OneEntryCore.initializeApp(domain, token)
+OneEntryCore.initializeApp(domain, credential)
 ```
 
 #### Initialization with certificates
@@ -118,24 +145,23 @@ The following files will be inside:
 ##### Using the built-in certificate
 
 1. Move the .p12 file to the project, make sure it is included in Target Membership
-2. Initialize the application
+2. Initialize the application:
 ```kotlin
-private val domain = "https://sample.oneentry.cloud"
-private val certificateName = "sample"
-private val password = "sample"
-private val filePath = "C:\\Users\\..."
+val domain = "https://sample.oneentry.cloud"
+val password = "sample"
+val filePath = "C:\\Users\\...\\certificate.p12"
+val credential = OneEntryCertificateCredential(filePath, password)
 
-OneEntryCore.initializeApp(domain, certificateName, password, filePath)
+OneEntryCore.initializeApp(domain, credential)
 ```
 
 ##### Generation of your .p12 certificate
 
 1. To do this, you will need a key(`.key`) and certificate(`.cert`) file, download them
 2. Generate .p12 with `openSSL`
-..openssl pkcs12 -legacy -export -out certificate.p12 -inkey key.key -in cert.cert
+   ..openssl pkcs12 -legacy -export -out certificate.p12 -inkey key.key -in cert.cert
 3. Move the .p12 file to the project
 4. Using the certificate and password you specified when creating it, initialize the application
-
 ## Using OneEntry Kotlin SDK
 
 ### Working with forms
