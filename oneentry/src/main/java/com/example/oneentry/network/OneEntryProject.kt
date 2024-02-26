@@ -11,6 +11,7 @@ import com.example.oneentry.network.core.append
 import io.ktor.client.call.body
 import io.ktor.client.statement.bodyAsText
 import com.example.oneentry.model.OneEntryException
+import com.example.oneentry.model.ProductsResult
 
 class OneEntryProject private constructor() {
 
@@ -45,6 +46,68 @@ class OneEntryProject private constructor() {
     suspend fun generalTypes(): List<OneEntryGeneralType> {
 
         return core.requestItems("general-types").body()
+    }
+
+    /**
+     * Get similar products (based on conditions in block) attached to the block
+     *
+     * @param marker text marker of block object
+     * @param offset offset parameter for selecting records
+     * @param limit limit parameter for selecting records
+     * @param langCode language code
+     *
+     * @return ProductResult
+     * @throws RuntimeException if OneEntry application has not been initialized
+     * @throws IllegalArgumentException if the decoded input is not a valid instance of T or serializer error
+     * @throws OneEntryException in case of OneEntry errors
+     */
+    suspend fun similarProducts(
+        marker: String,
+        langCode: String,
+        offset: Int = 0,
+        limit: Int = 30
+    ): ProductsResult {
+
+        val response = core.requestItems("blocks/$marker/similar-products") {
+            url {
+                parameters.append("offset", offset)
+                parameters.append("limit", limit)
+                parameters.append("langCode", langCode)
+            }
+        }
+
+        return response.body()
+    }
+
+    /**
+     * Get products from categories attached to the block
+     *
+     * @param marker text marker of block object
+     * @param offset offset parameter for selecting records
+     * @param limit limit parameter for selecting records
+     * @param langCode language code
+     *
+     * @return ProductResult
+     * @throws RuntimeException if OneEntry application has not been initialized
+     * @throws IllegalArgumentException if the decoded input is not a valid instance of T or serializer error
+     * @throws OneEntryException in case of OneEntry errors
+     */
+    suspend fun products(
+        marker: String,
+        langCode: String,
+        offset: Int = 0,
+        limit: Int = 30
+    ): ProductsResult {
+
+        val response = core.requestItems("blocks/$marker/products") {
+            url {
+                parameters.append("offset", offset)
+                parameters.append("limit", limit)
+                parameters.append("langCode", langCode)
+            }
+        }
+
+        return response.body()
     }
 
     /**
