@@ -144,12 +144,36 @@ The following files will be inside:
 
 ##### Using the built-in certificate
 
-1. Move the .p12 file to the project, make sure it is included in Target Membership
+1. Move the .p12 file to the project, make sure it is included in assets
+2. In the onCreate method of your MainActivity do the following:
+
+    > 1. Create an instance of the application context.
+    > 2. Specify the name of the `.p12` file (example: certificate.p12).
+    > 3. Get the AssetManager using `context.assets`. AssetManager allows you to access assets in the assets folder.
+    > 4. Open an inputStream to read the `.p12` file from the assets folder.
+    > 5. Create an outputStream to write the `.p12` file to your application's `filesDir` directory.
+    > 6. Copy the contents of the input stream to the output stream using `inputStream.copyTo(outputStream)`.
+    > 7. Close the input and output streams using `inputStream.close()` and `outputStream.close()` respectively.
+    > 
+    > This way, all the content of the .p12 file from the assets folder is copied to the filesDir directory of your application.
+```kotlin
+val context = App.applicationContext()
+val fileName = "certificate.p12"
+val assetManager = context.assets 
+val inputStream = assetManager.open(fileName) 
+val outputStream = FileOutputStream(File(context.filesDir, fileName)) 
+inputStream.copyTo(outputStream)
+ 
+inputStream.close() 
+outputStream.close()
+```
 2. Initialize the application:
 ```kotlin
-val domain = "https://sample.oneentry.cloud"
+val domain = "sdk-sample.oneentry.cloud"
+val fileName = "certificate.p12"
+val filePath = File(context.filesDir, fileName).absolutePath
 val password = "sample"
-val filePath = "C:\\Users\\...\\certificate.p12"
+
 val credential = OneEntryCertificateCredential(filePath, password)
 
 OneEntryCore.initializeApp(domain, credential)
@@ -158,10 +182,18 @@ OneEntryCore.initializeApp(domain, credential)
 ##### Generation of your .p12 certificate
 
 1. To do this, you will need a key(`.key`) and certificate(`.cert`) file, download them
-2. Generate .p12 with `openSSL`
-   ..openssl pkcs12 -legacy -export -out certificate.p12 -inkey key.key -in cert.cert
-3. Move the .p12 file to the project
-4. Using the certificate and password you specified when creating it, initialize the application
+2. Generate .p12 with `openSSL`:
+
+   ``openssl pkcs12 -export -out certificate.p12 -inkey key.key -in cert.cert  ``
+3. Create export password
+4. Move the .p12 file to the project in assets directory. The assets folder is located inside the `app/src/main` project directory. If this folder does not exist, you can create it manually.
+   
+  Here's how to create the assets folder:
+
+    1. Right-click on the main folder in the app/src/main directory.
+    2. From the context menu, select "New" and then "Directory".
+    3. Enter a name for the assets folder and click Finish.
+5. Using the certificate and password you specified when creating it, initialize the application
 ## Using OneEntry Kotlin SDK
 
 ### Working with forms
@@ -1619,5 +1651,3 @@ data class OneEntryTemplatePreview(
     val localizeInfos: Map<String, LocalizeInfo>?
 )
 ```
-
-
