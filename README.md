@@ -7,6 +7,11 @@
   - [Step 2: Register your app with OneEntry (In Development)](#step-2-register-your-app-with-oneentry)
   - [Step 3: Add OneEntry SDK to your app](#step-3-add-oneentry-sdk-to-your-app)
 - [Using OneEntry Kotlin SDK](#using-oneentry-kotlin-sdk)
+  - [Working with blocks](#working-with-blocks)
+    - [Getting a block by its marker](#getting-a-block-by-its-marker)
+    - [Getting all block objects with pagination](#getting-all-block-objects-with-pagination)
+    - [Get similar products attached to the block](#get-similar-products-attached-to-the-block)
+    - [Get products from categories attached to the block](#get-products-from-categories-attached-to-the-block)
   - [Working with forms](#working-with-forms)
     - [Getting all forms](#getting-all-forms)
     - [Getting a form by its marker](#getting-a-form-by-its-marker)
@@ -86,14 +91,14 @@ Go to `settings.gradle.kts` and add the following configuration:
 
 ```kotlin
 dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        google()
-        mavenCentral()
-        maven {
-            url = uri("https://maven.pkg.github.com/OneEntry/oneentry-kotlin-sdk")
-        }
+  repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+  repositories {
+    google()
+    mavenCentral()
+    maven {
+      url = uri("https://maven.pkg.github.com/OneEntry/oneentry-kotlin-sdk")
     }
+  }
 }
 ```
 
@@ -118,7 +123,7 @@ import com.example.oneentry.network.OneEntryProducts
 class Example() {
 
   val provider = OneEntryProducts.instance
-  
+
   /..
 }
 ``` 
@@ -147,24 +152,24 @@ The following files will be inside:
 1. Move the .p12 file to the project, make sure it is included in assets
 2. In the onCreate method of your MainActivity do the following:
 
-    > 1. Create an instance of the application context.
-    > 2. Specify the name of the `.p12` file (example: certificate.p12).
-    > 3. Get the AssetManager using `context.assets`. AssetManager allows you to access assets in the assets folder.
-    > 4. Open an inputStream to read the `.p12` file from the assets folder.
-    > 5. Create an outputStream to write the `.p12` file to your application's `filesDir` directory.
-    > 6. Copy the contents of the input stream to the output stream using `inputStream.copyTo(outputStream)`.
-    > 7. Close the input and output streams using `inputStream.close()` and `outputStream.close()` respectively.
-    > 
-    > This way, all the content of the .p12 file from the assets folder is copied to the filesDir directory of your application.
+   > 1. Create an instance of the application context.
+   > 2. Specify the name of the `.p12` file (example: certificate.p12).
+   > 3. Get the AssetManager using `context.assets`. AssetManager allows you to access assets in the assets folder.
+   > 4. Open an inputStream to read the `.p12` file from the assets folder.
+   > 5. Create an outputStream to write the `.p12` file to your application's `filesDir` directory.
+   > 6. Copy the contents of the input stream to the output stream using `inputStream.copyTo(outputStream)`.
+   > 7. Close the input and output streams using `inputStream.close()` and `outputStream.close()` respectively.
+   >
+   > This way, all the content of the .p12 file from the assets folder is copied to the filesDir directory of your application.
 ```kotlin
 val context = App.applicationContext()
 val fileName = "certificate.p12"
-val assetManager = context.assets 
-val inputStream = assetManager.open(fileName) 
-val outputStream = FileOutputStream(File(context.filesDir, fileName)) 
+val assetManager = context.assets
+val inputStream = assetManager.open(fileName)
+val outputStream = FileOutputStream(File(context.filesDir, fileName))
 inputStream.copyTo(outputStream)
- 
-inputStream.close() 
+
+inputStream.close()
 outputStream.close()
 ```
 2. Initialize the application:
@@ -187,14 +192,127 @@ OneEntryCore.initializeApp(domain, credential)
    ``openssl pkcs12 -export -out certificate.p12 -inkey key.key -in cert.cert  ``
 3. Create export password
 4. Move the .p12 file to the project in assets directory. The assets folder is located inside the `app/src/main` project directory. If this folder does not exist, you can create it manually.
-   
-  Here's how to create the assets folder:
+
+Here's how to create the assets folder:
 
     1. Right-click on the main folder in the app/src/main directory.
     2. From the context menu, select "New" and then "Directory".
     3. Enter a name for the assets folder and click Finish.
 5. Using the certificate and password you specified when creating it, initialize the application
 ## Using OneEntry Kotlin SDK
+
+### Working with blocks
+
+Controllers for working with block objects
+
+#### Getting a block by its marker
+
+This method automatically detects the type and loads the data of the product blocks.
+If you need manual control to get products, use `OneEntryBlocks.instance.products()` or `OneEntryBlocks.instance.similarProducts()`
+
+```kotlin
+val block = OneEntryBlocks.instance.block(marker = "dev", langCode = "en_US")
+```
+
+`OneEntryBlock` will return as a result
+```kotlin
+/**
+ * Block information about the object
+ *
+ * @param id Block id
+ * @param attributeSetId Identifier for the used attribute set
+ * @param localizeInfos Block localize info
+ * @param version Object version number
+ * @param identifier Block status marker
+ * @param attributeValues Block attributes
+ */
+@Serializable
+data class OneEntryBlock(
+    val id: Int,
+    val attributeSetId: Int?,
+    val localizeInfos: Map<String, LocalizeInfo>,
+    val version: Int,
+    val identifier: String,
+    val attributeValues: Map<String, Map<String, AttributeModel>>?
+)
+```
+
+#### Getting all block objects with pagination
+
+Get all block objects. The result of this method does not include the content of product blocks.
+
+```kotlin
+val blocks = OneEntryBlocks.instance.blocks(langCode = "en_US")
+```
+
+List `OneEntryBlock` will return as a result 
+```kotlin
+/**
+ * Block information about the object
+ *
+ * @param id Block id
+ * @param attributeSetId Identifier for the used attribute set
+ * @param localizeInfos Block localize info
+ * @param version Object version number
+ * @param identifier Block status marker
+ * @param attributeValues Block attributes
+ */
+@Serializable
+data class OneEntryBlock(
+    val id: Int,
+    val attributeSetId: Int?,
+    val localizeInfos: Map<String, LocalizeInfo>,
+    val version: Int,
+    val identifier: String,
+    val attributeValues: Map<String, Map<String, AttributeModel>>?
+)
+```
+
+#### Get similar products attached to the block
+
+Get similar products (based on conditions in block) attached to the block.
+
+```kotlin
+val similarProducts = OneEntryBlocks.instance.similarProducts(marker = "dev", langCode = "en_US")
+```
+
+The `ProductsResult` will come as an response
+```kotlin
+/**
+ * The structure that comes when you request products
+ *
+ * @param items All products
+ * @param total Number of products
+ */
+@Serializable
+data class ProductsResult(
+  val items: List<ProductModel>,
+  val total: Int
+)
+```
+
+#### Get products from categories attached to the block
+
+Get products from categories attached to the block.
+
+```kotlin
+val products = OneEntryBlocks.instance.products(marker = "dev", langCode = "en_US")
+```
+
+The `ProductsResult` will come as an response
+```kotlin
+/**
+ * The structure that comes when you request products
+ *
+ * @param items All products
+ * @param total Number of products
+ */
+@Serializable
+data class ProductsResult(
+  val items: List<ProductModel>,
+  val total: Int
+)
+```
 
 ### Working with forms
 
@@ -220,12 +338,12 @@ val forms: List<OneEntryForm> = OneEntryForms.instance.forms(langCode = "en_US")
  */
 @Serializable
 data class OneEntryForm(
-    val id: Int,
-    val localizeInfos: Map<String, LocalizeInfo>?,
-    val attributeValues: Map<String, Map<String, AttributeModel>>? = null,
-    val version: Int,
-    val identifier: String,
-    val processingType: String?
+  val id: Int,
+  val localizeInfos: Map<String, LocalizeInfo>?,
+  val attributeValues: Map<String, Map<String, AttributeModel>>? = null,
+  val version: Int,
+  val identifier: String,
+  val processingType: String?
 )
 ```
 
@@ -249,12 +367,12 @@ val form: OneEntryForm = OneEntryForms.instance.form(marker = "auth", langCode =
  */
 @Serializable
 data class OneEntryForm(
-    val id: Int,
-    val localizeInfos: Map<String, LocalizeInfo>?,
-    val attributeValues: Map<String, Map<String, AttributeModel>>? = null,
-    val version: Int,
-    val identifier: String,
-    val processingType: String?
+  val id: Int,
+  val localizeInfos: Map<String, LocalizeInfo>?,
+  val attributeValues: Map<String, Map<String, AttributeModel>>? = null,
+  val version: Int,
+  val identifier: String,
+  val processingType: String?
 )
 ```
 
@@ -262,10 +380,10 @@ data class OneEntryForm(
 
 ```kotlin
 val data: Map<String, List<OneEntryFormData>> = mapOf(
-    "en_US" to listOf(
-        OneEntryFormData("login", "Dino"),
-        OneEntryFormData("password", "544")
-    )
+  "en_US" to listOf(
+    OneEntryFormData("login", "Dino"),
+    OneEntryFormData("password", "544")
+  )
 )
 
 val response = OneEntryForms.instance.sendData(identifier = "auth", data = data)
@@ -276,8 +394,8 @@ val response = OneEntryForms.instance.sendData(identifier = "auth", data = data)
 ```kotlin
 @Serializable
 data class OneEntryFormDataResponse(
-    val items: List<OneEntryFormDataResponseBody>,
-    val total: Int
+  val items: List<OneEntryFormDataResponseBody>,
+  val total: Int
 )
 
 /**
@@ -290,10 +408,10 @@ data class OneEntryFormDataResponse(
  */
 @Serializable
 data class OneEntryFormDataResponseBody(
-    val id: Int,
-    val time: String,
-    val formIdentifier: String,
-    val formData: Map<String, List<OneEntryFormData>>
+  val id: Int,
+  val time: String,
+  val formIdentifier: String,
+  val formData: Map<String, List<OneEntryFormData>>
 )
 ```
 
@@ -308,8 +426,8 @@ val data: OneEntryFormDataResponse = OneEntryForms.instance.data()
 ```kotlin
 @Serializable
 data class OneEntryFormDataResponse(
-    val items: List<OneEntryFormDataResponseBody>,
-    val total: Int
+  val items: List<OneEntryFormDataResponseBody>,
+  val total: Int
 )
 
 /**
@@ -322,10 +440,10 @@ data class OneEntryFormDataResponse(
  */
 @Serializable
 data class OneEntryFormDataResponseBody(
-    val id: Int,
-    val time: String,
-    val formIdentifier: String,
-    val formData: Map<String, List<OneEntryFormData>>
+  val id: Int,
+  val time: String,
+  val formIdentifier: String,
+  val formData: Map<String, List<OneEntryFormData>>
 )
 ```
 
@@ -340,8 +458,8 @@ val data: OneEntryFormDataResponse = OneEntryForms.instance.data(marker = "marke
 ```kotlin
 @Serializable
 data class OneEntryFormDataResponse(
-    val items: List<OneEntryFormDataResponseBody>,
-    val total: Int
+  val items: List<OneEntryFormDataResponseBody>,
+  val total: Int
 )
 
 /**
@@ -354,10 +472,10 @@ data class OneEntryFormDataResponse(
  */
 @Serializable
 data class OneEntryFormDataResponseBody(
-    val id: Int,
-    val time: String,
-    val formIdentifier: String,
-    val formData: Map<String, List<OneEntryFormData>>
+  val id: Int,
+  val time: String,
+  val formIdentifier: String,
+  val formData: Map<String, List<OneEntryFormData>>
 )
 ```
 
@@ -376,27 +494,27 @@ The **OneEntryAttribute** data structure is provided to work with attributes in 
  */
 @Serializable
 data class AttributeModel(
-    var type: AttributeType,
-    var value: JsonElement
+  var type: AttributeType,
+  var value: JsonElement
 ) {
 
-    val asInt: Int?
-        get() = instance.serializer.decodeFromJsonElementOrNull(value)
+  val asInt: Int?
+    get() = instance.serializer.decodeFromJsonElementOrNull(value)
 
-    val asString: String?
-        get() = instance.serializer.decodeFromJsonElementOrNull(value)
+  val asString: String?
+    get() = instance.serializer.decodeFromJsonElementOrNull(value)
 
-    val asText: List<OneEntryText>?
-        get() = instance.serializer.decodeFromJsonElementOrNull(value)
+  val asText: List<OneEntryText>?
+    get() = instance.serializer.decodeFromJsonElementOrNull(value)
 
-    val asImage: List<OneEntryImage>?
-        get() = instance.serializer.decodeFromJsonElementOrNull(value)
+  val asImage: List<OneEntryImage>?
+    get() = instance.serializer.decodeFromJsonElementOrNull(value)
 
-    val asDateTime: OneEntryDateTime?
-        get() = instance.serializer.decodeFromJsonElementOrNull(value)
+  val asDateTime: OneEntryDateTime?
+    get() = instance.serializer.decodeFromJsonElementOrNull(value)
 
-    val asTextWithHeader: List<OneEntryTextWithHeader>?
-        get() = instance.serializer.decodeFromJsonElementOrNull(value)
+  val asTextWithHeader: List<OneEntryTextWithHeader>?
+    get() = instance.serializer.decodeFromJsonElementOrNull(value)
 }
 ```
 
@@ -429,38 +547,38 @@ data class AttributeModel(
 @Serializable
 enum class AttributeType {
 
-    @SerialName("integer")
-    INTEGER,
-    @SerialName("date")
-    DATE,
-    @SerialName("file")
-    FILE,
-    @SerialName("list")
-    LIST,
-    @SerialName("real")
-    REAL,
-    @SerialName("spam")
-    SPAM,
-    @SerialName("text")
-    TEXT,
-    @SerialName("time")
-    TIME,
-    @SerialName("float")
-    FLOAT,
-    @SerialName("button")
-    BUTTON,
-    @SerialName("image")
-    IMAGE,
-    @SerialName("string")
-    STRING,
-    @SerialName("dateTime")
-    DATE_TIME,
-    @SerialName("textWithHeader")
-    TEXT_WITH_HEADER,
-    @SerialName("groupOfImages")
-    GROUP_OF_IMAGES,
-    @SerialName("radioButton")
-    RADIO_BUTTON
+  @SerialName("integer")
+  INTEGER,
+  @SerialName("date")
+  DATE,
+  @SerialName("file")
+  FILE,
+  @SerialName("list")
+  LIST,
+  @SerialName("real")
+  REAL,
+  @SerialName("spam")
+  SPAM,
+  @SerialName("text")
+  TEXT,
+  @SerialName("time")
+  TIME,
+  @SerialName("float")
+  FLOAT,
+  @SerialName("button")
+  BUTTON,
+  @SerialName("image")
+  IMAGE,
+  @SerialName("string")
+  STRING,
+  @SerialName("dateTime")
+  DATE_TIME,
+  @SerialName("textWithHeader")
+  TEXT_WITH_HEADER,
+  @SerialName("groupOfImages")
+  GROUP_OF_IMAGES,
+  @SerialName("radioButton")
+  RADIO_BUTTON
 }
 ```
 
@@ -530,9 +648,9 @@ The `OneEntryFile` array will be returned as a response
  */
 @Serializable
 data class OneEntryFile(
-    val filename: String,
-    val downloadLink: String,
-    val size: Int
+  val filename: String,
+  val downloadLink: String,
+  val size: Int
 )
 ```
 
@@ -591,9 +709,9 @@ The `OneEntryText` structure will be returned as an answer
  */
 @Serializable
 data class OneEntryText(
-    @Serializable(with = HTMLParsingSerializer::class)
-    val htmlValue: String,
-    val plainValue: String
+  @Serializable(with = HTMLParsingSerializer::class)
+  val htmlValue: String,
+  val plainValue: String
 )
 ```
 
@@ -615,11 +733,11 @@ The array of `OneEntryTextWithHeader` structures will return as an answer
  */
 @Serializable
 data class OneEntryTextWithHeader(
-    val id: String,
-    val index: String,
-    val header: String,
-    val htmlValue: String,
-    val plainValue: String
+  val id: String,
+  val index: String,
+  val header: String,
+  val htmlValue: String,
+  val plainValue: String
 )
 
 ```
@@ -655,8 +773,8 @@ The **ProductsResult** will come as an response
  */
 @Serializable
 data class ProductsResult(
-    val items: List<ProductModel>,
-    val total: Int
+  val items: List<ProductModel>,
+  val total: Int
 )
 ```
 
@@ -685,8 +803,8 @@ The **ProductsResult** will come as an response
  */
 @Serializable
 data class ProductsResult(
-    val items: List<ProductModel>,
-    val total: Int
+  val items: List<ProductModel>,
+  val total: Int
 )
 ```
 
@@ -716,8 +834,8 @@ The **ProductsResult** will come as an response
  */
 @Serializable
 data class ProductsResult(
-    val items: List<ProductModel>,
-    val total: Int
+  val items: List<ProductModel>,
+  val total: Int
 )
 ```
 
@@ -747,8 +865,8 @@ The **ProductsResult** will come as an response
  */
 @Serializable
 data class ProductsResult(
-    val items: List<ProductModel>,
-    val total: Int
+  val items: List<ProductModel>,
+  val total: Int
 )
 ```
 
@@ -778,8 +896,8 @@ The **ProductsResult** will come as an response
  */
 @Serializable
 data class ProductsResult(
-    val items: List<ProductModel>,
-    val total: Int
+  val items: List<ProductModel>,
+  val total: Int
 )
 ```
 
@@ -807,10 +925,10 @@ The answer will return **ProductModel**
  */
 @Serializable
 data class ProductModel(
-    val id: Int,
-    val localizeInfos: Map<String, LocalizeInfo>,
-    val price: Double?,
-    val attributeValues: Map<String, Map<String, AttributeModel>>?
+  val id: Int,
+  val localizeInfos: Map<String, LocalizeInfo>,
+  val price: Double?,
+  val attributeValues: Map<String, Map<String, AttributeModel>>?
 )
 ```
 
@@ -826,13 +944,13 @@ data class ProductModel(
 
 ```kotlin
 val filter = listOf(
-            ProductsFilter(
-                attributeMarker = "price",
-                conditionMarker = "lth",
-                conditionValue = 260,
-                pageId = 1
-            )
-        )
+  ProductsFilter(
+    attributeMarker = "price",
+    conditionMarker = "lth",
+    conditionValue = 260,
+    pageId = 1
+  )
+)
 
 val result = OneEntryProducts.instance.filterProducts(filter, langCode = "en_US")
 ```
@@ -848,8 +966,8 @@ In all cases of filtering, the answer will be **ProductResult**
  */
 @Serializable
 data class ProductsResult(
-    val items: List<ProductModel>,
-    val total: Int
+  val items: List<ProductModel>,
+  val total: Int
 )
 ```
 
@@ -876,9 +994,9 @@ The answer will be the **SearchProduct** array
  */
 @Serializable
 data class SearchProduct(
-    val id: Int,
-    val title: String,
-    val pageId: Int
+  val id: Int,
+  val title: String,
+  val pageId: Int
 )
 
 ```
@@ -899,11 +1017,11 @@ data class SearchProduct(
  */
 @Serializable
 data class ProductStatus(
-    val id: Int,
-    val updatedDate: String,
-    val version: Int,
-    val identifier: String,
-    val localizeInfos: Map<String, LocalizeInfo>
+  val id: Int,
+  val updatedDate: String,
+  val version: Int,
+  val identifier: String,
+  val localizeInfos: Map<String, LocalizeInfo>
 )
 ```
 
@@ -963,16 +1081,16 @@ The **OneEntryPage** array will be returned as an answer
  */
 @Serializable
 data class OneEntryPage(
-    val id: Int,
-    val parentId: Int?,
-    val pageUrl: String,
-    val depth: Int?,
-    val isVisible: Boolean?,
-    val position: Int? = null,
-    val type: String?,
-    val templateIdentifier: String?,
-    val localizeInfos: Map<String, LocalizeInfo>?,
-    val attributeValues: Map<String, Map<String, AttributeModel>>?
+  val id: Int,
+  val parentId: Int?,
+  val pageUrl: String,
+  val depth: Int?,
+  val isVisible: Boolean?,
+  val position: Int? = null,
+  val type: String?,
+  val templateIdentifier: String?,
+  val localizeInfos: Map<String, LocalizeInfo>?,
+  val attributeValues: Map<String, Map<String, AttributeModel>>?
 )
 ```
 
@@ -1009,16 +1127,16 @@ The **OneEntryPage** array will be returned as an answer
  */
 @Serializable
 data class OneEntryPage(
-    val id: Int,
-    val parentId: Int?,
-    val pageUrl: String,
-    val depth: Int?,
-    val isVisible: Boolean?,
-    val position: Int? = null,
-    val type: String?,
-    val templateIdentifier: String?,
-    val localizeInfos: Map<String, LocalizeInfo>?,
-    val attributeValues: Map<String, Map<String, AttributeModel>>?
+  val id: Int,
+  val parentId: Int?,
+  val pageUrl: String,
+  val depth: Int?,
+  val isVisible: Boolean?,
+  val position: Int? = null,
+  val type: String?,
+  val templateIdentifier: String?,
+  val localizeInfos: Map<String, LocalizeInfo>?,
+  val attributeValues: Map<String, Map<String, AttributeModel>>?
 )
 ```
 
@@ -1049,16 +1167,16 @@ The **OneEntryPage** array will be returned as an answer
  */
 @Serializable
 data class OneEntryPage(
-    val id: Int,
-    val parentId: Int?,
-    val pageUrl: String,
-    val depth: Int?,
-    val isVisible: Boolean?,
-    val position: Int? = null,
-    val type: String?,
-    val templateIdentifier: String?,
-    val localizeInfos: Map<String, LocalizeInfo>?,
-    val attributeValues: Map<String, Map<String, AttributeModel>>?
+  val id: Int,
+  val parentId: Int?,
+  val pageUrl: String,
+  val depth: Int?,
+  val isVisible: Boolean?,
+  val position: Int? = null,
+  val type: String?,
+  val templateIdentifier: String?,
+  val localizeInfos: Map<String, LocalizeInfo>?,
+  val attributeValues: Map<String, Map<String, AttributeModel>>?
 )
 ```
 
@@ -1087,16 +1205,16 @@ The **OneEntryPage** will be returned as an answer
  */
 @Serializable
 data class OneEntryPage(
-    val id: Int,
-    val parentId: Int?,
-    val pageUrl: String,
-    val depth: Int?,
-    val isVisible: Boolean?,
-    val position: Int? = null,
-    val type: String?,
-    val templateIdentifier: String?,
-    val localizeInfos: Map<String, LocalizeInfo>?,
-    val attributeValues: Map<String, Map<String, AttributeModel>>?
+  val id: Int,
+  val parentId: Int?,
+  val pageUrl: String,
+  val depth: Int?,
+  val isVisible: Boolean?,
+  val position: Int? = null,
+  val type: String?,
+  val templateIdentifier: String?,
+  val localizeInfos: Map<String, LocalizeInfo>?,
+  val attributeValues: Map<String, Map<String, AttributeModel>>?
 )
 ```
 
@@ -1125,16 +1243,16 @@ The **OneEntryPage** will be returned as an answer
  */
 @Serializable
 data class OneEntryPage(
-    val id: Int,
-    val parentId: Int?,
-    val pageUrl: String,
-    val depth: Int?,
-    val isVisible: Boolean?,
-    val position: Int? = null,
-    val type: String?,
-    val templateIdentifier: String?,
-    val localizeInfos: Map<String, LocalizeInfo>?,
-    val attributeValues: Map<String, Map<String, AttributeModel>>?
+  val id: Int,
+  val parentId: Int?,
+  val pageUrl: String,
+  val depth: Int?,
+  val isVisible: Boolean?,
+  val position: Int? = null,
+  val type: String?,
+  val templateIdentifier: String?,
+  val localizeInfos: Map<String, LocalizeInfo>?,
+  val attributeValues: Map<String, Map<String, AttributeModel>>?
 )
 ```
 
@@ -1163,16 +1281,16 @@ The **OneEntryPage** will be returned as an answer
  */
 @Serializable
 data class OneEntryPage(
-    val id: Int,
-    val parentId: Int?,
-    val pageUrl: String,
-    val depth: Int?,
-    val isVisible: Boolean?,
-    val position: Int? = null,
-    val type: String?,
-    val templateIdentifier: String?,
-    val localizeInfos: Map<String, LocalizeInfo>?,
-    val attributeValues: Map<String, Map<String, AttributeModel>>?
+  val id: Int,
+  val parentId: Int?,
+  val pageUrl: String,
+  val depth: Int?,
+  val isVisible: Boolean?,
+  val position: Int? = null,
+  val type: String?,
+  val templateIdentifier: String?,
+  val localizeInfos: Map<String, LocalizeInfo>?,
+  val attributeValues: Map<String, Map<String, AttributeModel>>?
 )
 ```
 
@@ -1203,16 +1321,16 @@ The **OneEntryPage** will be returned as an answer
  */
 @Serializable
 data class OneEntryPage(
-    val id: Int,
-    val parentId: Int?,
-    val pageUrl: String,
-    val depth: Int?,
-    val isVisible: Boolean?,
-    val position: Int? = null,
-    val type: String?,
-    val templateIdentifier: String?,
-    val localizeInfos: Map<String, LocalizeInfo>?,
-    val attributeValues: Map<String, Map<String, AttributeModel>>?
+  val id: Int,
+  val parentId: Int?,
+  val pageUrl: String,
+  val depth: Int?,
+  val isVisible: Boolean?,
+  val position: Int? = null,
+  val type: String?,
+  val templateIdentifier: String?,
+  val localizeInfos: Map<String, LocalizeInfo>?,
+  val attributeValues: Map<String, Map<String, AttributeModel>>?
 )
 ```
 
@@ -1241,16 +1359,16 @@ The **OneEntryPage** will be returned as an answer
  */
 @Serializable
 data class OneEntryPage(
-    val id: Int,
-    val parentId: Int?,
-    val pageUrl: String,
-    val depth: Int?,
-    val isVisible: Boolean?,
-    val position: Int? = null,
-    val type: String?,
-    val templateIdentifier: String?,
-    val localizeInfos: Map<String, LocalizeInfo>?,
-    val attributeValues: Map<String, Map<String, AttributeModel>>?
+  val id: Int,
+  val parentId: Int?,
+  val pageUrl: String,
+  val depth: Int?,
+  val isVisible: Boolean?,
+  val position: Int? = null,
+  val type: String?,
+  val templateIdentifier: String?,
+  val localizeInfos: Map<String, LocalizeInfo>?,
+  val attributeValues: Map<String, Map<String, AttributeModel>>?
 )
 ```
 
@@ -1273,8 +1391,8 @@ The **OneEntryPageConfig** will be returned as an answer
  */
 @Serializable
 data class OneEntryPageConfig(
-    val rowsPerPage: Int?,
-    val productsPerRow: Int?
+  val rowsPerPage: Int?,
+  val productsPerRow: Int?
 )
 ```
 
@@ -1297,8 +1415,8 @@ The **OneEntrySearchPage** array will be returned as an answer
  */
 @Serializable
 data class OneEntrySearchPage(
-    val id: Int,
-    val title: String
+  val id: Int,
+  val title: String
 )
 ```
 
@@ -1323,9 +1441,9 @@ The answer will be array of `OneEntryAdmin`
  */
 @Serializable
 data class OneEntryAdmin(
-    val id: Int,
-    val identifier: String,
-    val position: Int?
+  val id: Int,
+  val identifier: String,
+  val position: Int?
 )
 ```
 
@@ -1352,14 +1470,14 @@ The answer will be array of `OneEntryLocale`
  */
 @Serializable
 data class OneEntryLocale(
-    val id: Int,
-    val shortCode: String,
-    val code: String,
-    val name: String,
-    val nativeName: String,
-    val isActive: Boolean,
-    val image: String?,
-    val position: Int?
+  val id: Int,
+  val shortCode: String,
+  val code: String,
+  val name: String,
+  val nativeName: String,
+  val isActive: Boolean,
+  val image: String?,
+  val position: Int?
 )
 ```
 
@@ -1380,8 +1498,8 @@ The answer will be array of `OneEntryGeneralType`
  */
 @Serializable
 data class OneEntryGeneralType(
-    val id: Int,
-    val type: String
+  val id: Int,
+  val type: String
 )
 ```
 
@@ -1406,10 +1524,10 @@ The answer will be the `OneEntryMenu` structure
  */
 @Serializable
 data class OneEntryMenu(
-    val id: Int,
-    val identifier: String,
-    val localizeInfos: Map<String, LocalizeInfo>,
-    val pages: List<OneEntryMenuPage>
+  val id: Int,
+  val identifier: String,
+  val localizeInfos: Map<String, LocalizeInfo>,
+  val pages: List<OneEntryMenuPage>
 )
 ```
 
@@ -1426,12 +1544,12 @@ data class OneEntryMenu(
  */
 @Serializable
 data class OneEntryMenuPage(
-    val id: Int,
-    val parentId: Int? = null,
-    val pageUrl: String,
-    val position: Int,
-    val localizeInfos: Map<String, LocalizeInfo>? = null,
-    val children: List<OneEntryMenuPage>? = null
+  val id: Int,
+  val parentId: Int? = null,
+  val pageUrl: String,
+  val position: Int,
+  val localizeInfos: Map<String, LocalizeInfo>? = null,
+  val children: List<OneEntryMenuPage>? = null
 )
 ```
 
@@ -1472,9 +1590,9 @@ The `OneEntryFile` array will be returned as a response
  */
 @Serializable
 data class OneEntryFile(
-    val filename: String,
-    val downloadLink: String,
-    val size: Int
+  val filename: String,
+  val downloadLink: String,
+  val size: Int
 )
 ```
 
@@ -1503,20 +1621,20 @@ val result = provider.deleteFile(filename, type, entity, id)
 #### Testing error 404
 
 ```kotlin
-try { 
-    OneEntrySystem.instance.test404()
-} catch (error: OneEntryException) { 
-    assertEquals(404, error.statusCode)
+try {
+  OneEntrySystem.instance.test404()
+} catch (error: OneEntryException) {
+  assertEquals(404, error.statusCode)
 }
 ```
 
 #### Testing error 500
 
 ```kotlin
-try { 
-    OneEntrySystem.instance.test500()
-} catch (error: OneEntryException) { 
-    assertEquals(500, error.statusCode)
+try {
+  OneEntrySystem.instance.test500()
+} catch (error: OneEntryException) {
+  assertEquals(500, error.statusCode)
 }
 ```
 
@@ -1593,10 +1711,10 @@ The **OneEntryTemplatePreview** array will be responsed
  */
 @Serializable
 data class OneEntryTemplatePreview(
-    val id: Int,
-    val version: Int,
-    val identifier: String,
-    val localizeInfos: Map<String, LocalizeInfo>?
+  val id: Int,
+  val version: Int,
+  val identifier: String,
+  val localizeInfos: Map<String, LocalizeInfo>?
 )
 ```
 
@@ -1619,10 +1737,10 @@ The **OneEntryTemplatePreview** model will be responsed
  */
 @Serializable
 data class OneEntryTemplatePreview(
-    val id: Int,
-    val version: Int,
-    val identifier: String,
-    val localizeInfos: Map<String, LocalizeInfo>?
+  val id: Int,
+  val version: Int,
+  val identifier: String,
+  val localizeInfos: Map<String, LocalizeInfo>?
 )
 ```
 
@@ -1645,9 +1763,9 @@ The **OneEntryTemplatePreview** model will be responsed
  */
 @Serializable
 data class OneEntryTemplatePreview(
-    val id: Int,
-    val version: Int,
-    val identifier: String,
-    val localizeInfos: Map<String, LocalizeInfo>?
+  val id: Int,
+  val version: Int,
+  val identifier: String,
+  val localizeInfos: Map<String, LocalizeInfo>?
 )
 ```
